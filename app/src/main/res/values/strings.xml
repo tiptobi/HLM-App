@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HackingLab Mobile</string>
+    <!-- Navigation -->
+    <string name="navigationTitle_whatsUp">Whats Up</string>
+    <string name="navigationTitle_conference">Conference</string>
+    <string name="navigationTitle_challenge">Challenge</string>
+    
+    <string name="navigationItem_news">News</string>
+    <string name="navigationItem_share">Share</string>
+    <string name="navigationItem_conference">Conference</string>
+    <string name="navigationItem_agenda">Agenda</string>
+    <string name="navigationItem_speaker">Speaker</string>
+    <string name="navigationItem_voting">Voting</string>
+    <string name="navigationItem_scoring">Scoring</string>
+    <string name="navigationItem_challenges">Challenges</string>
+    <string name="navigationItem_teams">Teams</string>
+
+    <!-- News / Start Activity -->
+    <string name="tabItem_news">News</string>
+    <string name="tabItem_social">Social</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+
+</resources>
