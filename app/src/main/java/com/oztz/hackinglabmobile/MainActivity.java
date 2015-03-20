@@ -1,23 +1,17 @@
 package com.oztz.hackinglabmobile;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -52,19 +46,15 @@ public class MainActivity extends ActionBarActivity implements
 	public void onNavigationDrawerItemSelected(int position) {
 		Log.d("DEBUG", "onNavigationDrawerItemSelected("+ String.valueOf(position) +")");
 		// update the main content by replacing fragments
-        Fragment fragment;
 
-        switch(position){
-            case 0:
-                fragment = PlaceholderFragment.newInstance(position+1, R.layout.fragment_main);
-                break;
-            case 1:
-                fragment = PlaceholderFragment.newInstance(position+1, R.layout.fragment_share);
-                break;
-            default:
-                fragment = PlaceholderFragment.newInstance(position+1, R.layout.fragment_main);
-                break;
-        }
+        int[] layouts = {R.layout.fragment_main,
+                R.layout.fragment_share,
+                R.layout.fragment_conference,
+                R.layout.fragment_agenda,
+                R.layout.fragment_speaker
+        };
+
+        Fragment fragment = PlaceholderFragment.newInstance(position+1, layouts[position]);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager
 				.beginTransaction()
@@ -74,17 +64,13 @@ public class MainActivity extends ActionBarActivity implements
 
 	public void onSectionAttached(int number) {
 		Log.d("DEBUG", "onSectionAttached("+ String.valueOf(number) +")");
-		switch (number) {
-		case 1:
-			mTitle = getString(R.string.navigationItem_news);
-			break;
-		case 2:
-			mTitle = getString(R.string.navigationItem_share);
-			break;
-		case 3:
-			mTitle = getString(R.string.navigationItem_conference);
-			break;
-		}
+        int[] titleArray = {R.string.navigationItem_news,
+                R.string.navigationItem_share,
+                R.string.navigationItem_conference,
+                R.string.navigationItem_agenda,
+                R.string.navigationItem_speaker
+        };
+		mTitle = getResources().getString(titleArray[number-1]);
 	}
 
 	public void restoreActionBar() {
