@@ -1313,7 +1313,7 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f08001f;
         public static final int action_bar_title=0x7f08001e;
         public static final int action_context_bar=0x7f080032;
-        public static final int action_example=0x7f080046;
+        public static final int action_example=0x7f080047;
         public static final int action_menu_divider=0x7f080002;
         public static final int action_menu_presenter=0x7f080003;
         public static final int action_mode_bar=0x7f08002e;
@@ -1370,7 +1370,8 @@ containing a value of this type.
         public static final int tabHost=0x7f080043;
         public static final int tabMode=0x7f08000b;
         public static final int tabNews=0x7f080044;
-        public static final int tabSocial=0x7f080045;
+        public static final int tabSocial=0x7f080046;
+        public static final int textNews=0x7f080045;
         public static final int title=0x7f080027;
         public static final int up=0x7f080008;
         public static final int useLogo=0x7f080012;

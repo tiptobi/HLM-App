@@ -2,8 +2,8 @@ package com.oztz.hackinglabmobile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -13,13 +13,15 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.oztz.hackinglabmobile.fragment.NewsFragment;
+
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
+     * Fragment managing the behaviors, interactions and presentation of the
+     * navigation drawer.
+     */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
@@ -32,7 +34,6 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -47,14 +48,15 @@ public class MainActivity extends ActionBarActivity implements
 		Log.d("DEBUG", "onNavigationDrawerItemSelected("+ String.valueOf(position) +")");
 		// update the main content by replacing fragments
 
-        int[] layouts = {R.layout.fragment_main,
-                R.layout.fragment_share,
-                R.layout.fragment_conference,
-                R.layout.fragment_agenda,
-                R.layout.fragment_speaker
-        };
-
-        Fragment fragment = PlaceholderFragment.newInstance(position+1, layouts[position]);
+        Fragment fragment;
+        switch(position){
+            case 0:
+                fragment = new NewsFragment();
+                break;
+            default:
+                fragment = new NewsFragment();
+        }
+        //= PlaceholderFragment.newInstance(position+1, controllers[position].layout);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager
 				.beginTransaction()
