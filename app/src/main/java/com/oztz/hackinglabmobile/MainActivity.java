@@ -13,7 +13,9 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.oztz.hackinglabmobile.fragment.MainFragment;
 import com.oztz.hackinglabmobile.fragment.NewsFragment;
+import com.oztz.hackinglabmobile.fragment.ShareFragment;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -51,10 +53,13 @@ public class MainActivity extends ActionBarActivity implements
         Fragment fragment;
         switch(position){
             case 0:
-                fragment = new NewsFragment();
+                fragment = MainFragment.newInstance(position+1);
+                break;
+            case 1:
+                fragment = new ShareFragment();
                 break;
             default:
-                fragment = new NewsFragment();
+                fragment = new MainFragment();
         }
         //= PlaceholderFragment.newInstance(position+1, controllers[position].layout);
 		FragmentManager fragmentManager = getSupportFragmentManager();

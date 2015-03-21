@@ -1,35 +1,28 @@
 package com.oztz.hackinglabmobile.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.businessclasses.Speaker;
-import com.oztz.hackinglabmobile.model.NewsModel;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class NewsFragment extends Fragment {
-
-    private NewsModel model;
-    private Speaker[] speakers;
+public class ShareFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = new NewsModel();
-        speakers = model.getSpeaker();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
+        View view = inflater.inflate(R.layout.fragment_share, container, false);
         return view;
     }
 }

@@ -12,6 +12,6 @@
         android:id="@+id/section_label_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="share" />
+        android:text="Social News" />
 
 </RelativeLayout>

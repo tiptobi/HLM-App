@@ -6,54 +6,6 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.oztz.hackinglabmobile.fragment.NewsFragment" >
-
-    <TabHost
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/tabHost"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
-
-            </TabWidget>
-
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-
-                <LinearLayout
-                    android:id="@+id/tabNews"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical"
-                    android:background="#ffff0300">
-                    <TextView
-                        android:id="@+id/textNews"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="bla bla bla"/>
-                    </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tabSocial"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">Social
-                </LinearLayout>
-            </FrameLayout>
-        </LinearLayout>
-    </TabHost>
+    tools:context="com.oztz.hackinglabmobile.fragment.MainFragment" >
 
 </RelativeLayout>
