@@ -2,39 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\libs\gson-2.3.1.jar"
+        jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\libs\gson-2.3.1.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\pre-dexed\debug\gson-2.3.1-f75f9cc1ef9cc7b078e0b42ceea4a13adb24562e.jar" />
-    </item>
-    <item
-        jar="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\pre-dexed\debug\classes-6dbd8a6d26813a6ebbf55323f15596bd76dccecd.jar" />
-    </item>
-    <item
-        jar="C:\Users\Tobi\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-7dcebb9823418d6bed07af6da5c743c07f183db0.jar" />
-    </item>
-    <item
-        jar="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-b581eed0f421bdd97adcb92fced2e95c96276183.jar" />
-    </item>
-    <item
-        jar="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\Tobi\AndroidStudioProjects\HLM-App\app\build\intermediates\pre-dexed\debug\classes-d6cef2f13d08042d7749ab6db4bf9ae1f9341aaa.jar" />
+        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\gson-2.3.1-04b68e5f9e1e74279afcc04018a94f1464b3a68b.jar" />
     </item>
 
 </items>
