@@ -1,12 +1,14 @@
 package com.oztz.hackinglabmobile.helper;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+
+import com.oztz.hackinglabmobile.R;
 
 /**
- * Created by Tobi on 18.03.2015.
+ * Created by Tobi on 25.03.2015.
  */
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
     private Fragment mFragment;
@@ -32,7 +34,7 @@ public class TabListener<T extends Fragment> implements ActionBar.TabListener {
         if (mFragment == null) {
             // If not, instantiate and add it to the activity
             mFragment = Fragment.instantiate(mActivity, mClass.getName());
-            ft.add(android.R.id.content, mFragment, mTag);
+            ft.add(R.id.container, mFragment, mTag);
         } else {
             // If it exists, simply attach it in order to show it
             ft.attach(mFragment);

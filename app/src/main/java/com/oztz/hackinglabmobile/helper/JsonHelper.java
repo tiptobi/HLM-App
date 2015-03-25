@@ -19,11 +19,11 @@ import java.net.URL;
  */
 public class JsonHelper {
 
-    public void getWebsite(String url){
+    /*public void getWebsite(String url){
         new RequestTask().execute(url);
-    }
+    }*/
 
-    private String readUrl(String urlString) throws IOException {
+    public String readUrl(String urlString) throws IOException {
         InputStream inStream = null;
         try{
             URL url = new URL(urlString);
@@ -52,26 +52,6 @@ public class JsonHelper {
             line = bufferedReader.readLine();
         }
         return inputStringBuilder.toString();
-    }
-
-    private class RequestTask extends AsyncTask<String, String, String> {
-        String result;
-        @Override
-        protected String doInBackground(String... uri) {
-            try {
-                result = readUrl(uri[0]);
-            } catch (Exception e){
-                result = "Site not available";
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Speaker[] speakers = new Gson().fromJson(result, Speaker[].class);
-            Log.d("DEBUG", "Name: " + speakers[0].name);
-        }
     }
 }
 
