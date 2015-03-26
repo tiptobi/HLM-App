@@ -1,7 +1,7 @@
 package com.oztz.hackinglabmobile.fragment;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,7 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
  */
 public class NewsFragment extends Fragment implements JsonResult {
 
-    ListView newsListView;
+    private ListView newsListView;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("DEBUG", "NewsFragment.onCreate()");

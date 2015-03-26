@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="246fd881b6edca03120d2b653662664b6c2b35da">
+        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\classes-3464c9938c18b3ec44a63d4a1925ba1a166f3976.jar" />
+    </item>
+    <item
         jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\libs\gson-2.3.1.jar"
         jumboMode="false"
         revision="21.1.2"

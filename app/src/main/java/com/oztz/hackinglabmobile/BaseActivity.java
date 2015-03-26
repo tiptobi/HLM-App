@@ -1,6 +1,5 @@
 package com.oztz.hackinglabmobile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +9,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 
+import com.oztz.hackinglabmobile.fragment.AgendaFragment;
+import com.oztz.hackinglabmobile.fragment.ConferenceFragment;
 import com.oztz.hackinglabmobile.fragment.MainFragment;
 import com.oztz.hackinglabmobile.fragment.ShareFragment;
 
@@ -18,6 +19,16 @@ public class BaseActivity extends ActionBarActivity implements
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private CharSequence mTitle;
+    int[] titleArray = {R.string.navigationItem_news,
+            R.string.navigationItem_share,
+            R.string.navigationItem_conference,
+            R.string.navigationItem_agenda,
+            R.string.navigationItem_speaker,
+            R.string.navigationItem_voting,
+            R.string.navigationItem_scoring,
+            R.string.navigationItem_challenges,
+            R.string.navigationItem_teams
+    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +56,15 @@ public class BaseActivity extends ActionBarActivity implements
             case 1:
                 fragment = ShareFragment.newInstance(position+1);
                 break;
+            case 2:
+                fragment = ConferenceFragment.newInstance(position+1);
+                break;
+            case 3:
+                fragment = AgendaFragment.newInstance(position+1);
+                break;
             default:
                 fragment = new MainFragment();
         }
-        //= PlaceholderFragment.newInstance(position+1, controllers[position].layout);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager
 				.beginTransaction()
@@ -58,12 +74,6 @@ public class BaseActivity extends ActionBarActivity implements
 
 	public void onSectionAttached(int number) {
 		Log.d("DEBUG", "onSectionAttached("+ String.valueOf(number) +")");
-        int[] titleArray = {R.string.navigationItem_news,
-                R.string.navigationItem_share,
-                R.string.navigationItem_conference,
-                R.string.navigationItem_agenda,
-                R.string.navigationItem_speaker
-        };
 		mTitle = getResources().getString(titleArray[number-1]);
 	}
 
@@ -76,6 +86,7 @@ public class BaseActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("DEBUG", "onCreateOptionsMenu()");
 		if (!mNavigationDrawerFragment.isDrawerOpen()) {
 			// Only show items in the action bar relevant to this screen
 			// if the drawer is not showing. Otherwise, let the drawer
