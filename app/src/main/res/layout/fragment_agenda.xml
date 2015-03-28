@@ -24,5 +24,6 @@
         app:dayBackgroundColor="#05000000"
         app:todayBackgroundColor="#1848adff"
         app:hourSeparatorColor="#ffffffff"
+        app:eventMarginVertical="0.5dp"
         app:headerColumnBackground="#ffffffff"/>
 </RelativeLayout>

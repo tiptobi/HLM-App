@@ -61,7 +61,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
-
+        mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/eventitem");
 
         return view;
@@ -83,7 +83,13 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
                 WeekViewEvent e = getEvent(eventItems[i]);
                 eventList.add(e);
             }
+            /*Calendar c1 = Calendar.getInstance();
+            Calendar c2 = (Calendar) c1.clone();
+            c2.add(Calendar.HOUR_OF_DAY, 1);
+            eventList.add(new WeekViewEvent(10, "Testtermin", c1, c2));
+            eventList.add(new WeekViewEvent(11, "Bla Bla Bla", c1, c2));*/
             mWeekView.notifyDatasetChanged();
+            Log.d("DEBUG", "mWeekView.notifyDatasetChanged()");
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT).show();
         }
@@ -101,7 +107,24 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        return eventList;
+        /*Log.d("DEBUG", "onMonthChange(newYear = " + String.valueOf(newYear) + ", new Month = " + String.valueOf(newMonth));
+        return eventList;*/
+        List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, 3);
+        startTime.set(Calendar.MINUTE, 0);
+        startTime.set(Calendar.MONTH, newMonth-1);
+        startTime.set(Calendar.YEAR, newYear);
+        Calendar endTime = (Calendar) startTime.clone();
+        endTime.add(Calendar.HOUR, 1);
+        endTime.set(Calendar.MONTH, newMonth-1);
+        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
+        event.setColor(Color.BLUE);
+        events.add(event);
+        events.add(eventList.get(0));
+        events.add(eventList.get(1));
+        events.add(eventList.get(2));
+        return events;
     }
 
     private WeekViewEvent getEvent(EventItem item){
@@ -110,7 +133,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         try {
             startTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.startTime));
             endTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.endTime));
-            WeekViewEvent event = new WeekViewEvent(1, item.name, startTime, endTime);
+            WeekViewEvent event = new WeekViewEvent(item.eventItemID, item.name, startTime, endTime);
             event.setColor(Color.BLUE);
             return event;
         } catch(Exception e){
