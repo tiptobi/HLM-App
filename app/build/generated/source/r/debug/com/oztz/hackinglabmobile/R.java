@@ -1516,8 +1516,12 @@ containing a value of this type.
         public static final int abc_textfield_search_default_mtrl_alpha=0x7f020031;
         public static final int abc_textfield_search_material=0x7f020032;
         public static final int drawer_shadow=0x7f020033;
-        public static final int ic_drawer=0x7f020034;
-        public static final int ic_launcher=0x7f020035;
+        public static final int flag_ch=0x7f020034;
+        public static final int flag_de=0x7f020035;
+        public static final int flag_us=0x7f020036;
+        public static final int ic_drawer=0x7f020037;
+        public static final int ic_launcher=0x7f020038;
+        public static final int speaker_icon=0x7f020039;
     }
     public static final class id {
         public static final int SocialNews_List_View=0x7f080054;
@@ -1529,7 +1533,7 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f080028;
         public static final int action_bar_title=0x7f080027;
         public static final int action_context_bar=0x7f08003b;
-        public static final int action_example=0x7f080058;
+        public static final int action_example=0x7f08005b;
         public static final int action_menu_divider=0x7f080002;
         public static final int action_menu_presenter=0x7f080003;
         public static final int action_mode_bar=0x7f080037;
@@ -1591,11 +1595,14 @@ containing a value of this type.
         public static final int search_plate=0x7f080042;
         public static final int search_src_text=0x7f080043;
         public static final int search_voice_btn=0x7f080047;
-        public static final int section_label_share=0x7f080055;
         public static final int shortcut=0x7f080033;
         public static final int showCustom=0x7f08000f;
         public static final int showHome=0x7f080010;
         public static final int showTitle=0x7f080011;
+        public static final int speaker_flag=0x7f08005a;
+        public static final int speaker_listview=0x7f080055;
+        public static final int speaker_name=0x7f080059;
+        public static final int speaker_portrait=0x7f080058;
         public static final int split_action_bar=0x7f080007;
         public static final int submit_area=0x7f080045;
         public static final int sunday=0x7f080021;
@@ -1647,7 +1654,8 @@ containing a value of this type.
         public static final int fragment_socialnews=0x7f03001e;
         public static final int fragment_speaker=0x7f03001f;
         public static final int item_article_textonly=0x7f030020;
-        public static final int support_simple_spinner_dropdown_item=0x7f030021;
+        public static final int item_speaker=0x7f030021;
+        public static final int support_simple_spinner_dropdown_item=0x7f030022;
     }
     public static final class menu {
         public static final int global=0x7f0c0000;

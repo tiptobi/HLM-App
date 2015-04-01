@@ -10,9 +10,14 @@ import android.util.Log;
 import android.view.Menu;
 
 import com.oztz.hackinglabmobile.fragment.AgendaFragment;
+import com.oztz.hackinglabmobile.fragment.ChallengesFragment;
 import com.oztz.hackinglabmobile.fragment.ConferenceFragment;
 import com.oztz.hackinglabmobile.fragment.MainFragment;
+import com.oztz.hackinglabmobile.fragment.ScoringFragment;
 import com.oztz.hackinglabmobile.fragment.ShareFragment;
+import com.oztz.hackinglabmobile.fragment.SpeakerFragment;
+import com.oztz.hackinglabmobile.fragment.TeamsFragment;
+import com.oztz.hackinglabmobile.fragment.VotingFragment;
 
 public class BaseActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -46,7 +51,6 @@ public class BaseActivity extends ActionBarActivity implements
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		Log.d("DEBUG", "onNavigationDrawerItemSelected("+ String.valueOf(position) +")");
-		// update the main content by replacing fragments
 
         Fragment fragment;
         switch(position){
@@ -61,6 +65,21 @@ public class BaseActivity extends ActionBarActivity implements
                 break;
             case 3:
                 fragment = AgendaFragment.newInstance(position+1);
+                break;
+            case 4:
+                fragment = SpeakerFragment.newInstance(position+1);
+                break;
+            case 5:
+                fragment = VotingFragment.newInstance(position+1);
+                break;
+            case 6:
+                fragment = ScoringFragment.newInstance(position+1);
+                break;
+            case 7:
+                fragment = ChallengesFragment.newInstance(position+1);
+                break;
+            case 8:
+                fragment = TeamsFragment.newInstance(position+1);
                 break;
             default:
                 fragment = new MainFragment();

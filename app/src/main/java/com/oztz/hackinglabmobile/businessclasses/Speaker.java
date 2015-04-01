@@ -6,7 +6,9 @@ package com.oztz.hackinglabmobile.businessclasses;
 public class Speaker {
     public String description;
     public int mediaIDFK;
+    public String media;
     public String name;
     public int speakerID;
     public String title;
+    public String nationality;
 }
