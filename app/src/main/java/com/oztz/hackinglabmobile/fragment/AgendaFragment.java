@@ -110,20 +110,11 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         /*Log.d("DEBUG", "onMonthChange(newYear = " + String.valueOf(newYear) + ", new Month = " + String.valueOf(newMonth));
         return eventList;*/
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, 3);
-        startTime.set(Calendar.MINUTE, 0);
-        startTime.set(Calendar.MONTH, newMonth-1);
-        startTime.set(Calendar.YEAR, newYear);
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        endTime.set(Calendar.MONTH, newMonth-1);
-        WeekViewEvent event = new WeekViewEvent(1, getEventTitle(startTime), startTime, endTime);
-        event.setColor(Color.BLUE);
-        events.add(event);
-        events.add(eventList.get(0));
-        events.add(eventList.get(1));
-        events.add(eventList.get(2));
+        for(int i=0; i<eventList.size();i++){
+            if(eventList.get(i).getStartTime().get(Calendar.MONTH) == newMonth-1){
+                events.add(eventList.get(i));
+            }
+        }
         return events;
     }
 
