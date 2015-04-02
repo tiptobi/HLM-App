@@ -21,7 +21,7 @@ public class MainFragment extends Fragment {
     private FragmentTabHost mTabHost;
 
     public static MainFragment newInstance(int sectionNumber) {
-        Log.d("DEBUG", "PlaceholderFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
+        Log.d("DEBUG", "MainFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);

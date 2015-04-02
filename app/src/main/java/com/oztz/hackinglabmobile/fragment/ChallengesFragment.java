@@ -43,7 +43,7 @@ public class ChallengesFragment extends Fragment implements JsonResult {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_conference, container, false);
+        View view = inflater.inflate(R.layout.fragment_challenges, container, false);
         titleTextView = (TextView)view.findViewById(R.id.conference_title);
         descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
         new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/event");

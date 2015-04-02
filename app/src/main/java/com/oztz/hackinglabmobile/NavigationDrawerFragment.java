@@ -18,9 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.oztz.hackinglabmobile.adapter.NavigationAdapter;
+import com.oztz.hackinglabmobile.businessclasses.NavigationItem;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -105,18 +106,20 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		mDrawerListView.setAdapter(new ArrayAdapter<String>(getActionBar()
-				.getThemedContext(), android.R.layout.simple_list_item_1,
-				android.R.id.text1, new String[] {
-						getString(R.string.navigationItem_news),
-						getString(R.string.navigationItem_share),
-						getString(R.string.navigationItem_conference),
-						getString(R.string.navigationItem_agenda),
-						getString(R.string.navigationItem_speaker),
-						getString(R.string.navigationItem_voting),
-						getString(R.string.navigationItem_scoring),
-						getString(R.string.navigationItem_challenges),
-						getString(R.string.navigationItem_teams) }));
+		mDrawerListView.setAdapter(new NavigationAdapter(getActionBar()
+				.getThemedContext(), android.R.layout.simple_list_item_1, new NavigationItem[] {
+                new NavigationItem(getString(R.string.navigationTitle_whatsUp), NavigationItem.TYPE_TITLE),
+				new NavigationItem(getString(R.string.navigationItem_news), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_share), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationTitle_conference), NavigationItem.TYPE_TITLE),
+                new NavigationItem(getString(R.string.navigationItem_conference), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_agenda), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_speaker), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationTitle_challenge), NavigationItem.TYPE_TITLE),
+                new NavigationItem(getString(R.string.navigationItem_voting), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_scoring), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_challenges), NavigationItem.TYPE_ITEM),
+                new NavigationItem(getString(R.string.navigationItem_teams), NavigationItem.TYPE_ITEM)}));
 		mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 		return mDrawerListView;
 	}
@@ -277,11 +280,11 @@ public class NavigationDrawerFragment extends Fragment {
 			return true;
 		}
 
-		if (item.getItemId() == R.id.action_example) {
+		/*if (item.getItemId() == R.id.action_example) {
 			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
 					.show();
 			return true;
-		}
+		}*/
 
 		return super.onOptionsItemSelected(item);
 	}

@@ -24,11 +24,15 @@ public class BaseActivity extends ActionBarActivity implements
 
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private CharSequence mTitle;
-    int[] titleArray = {R.string.navigationItem_news,
+    int[] titleArray = {
+            R.string.navigationTitle_whatsUp,
+            R.string.navigationItem_news,
             R.string.navigationItem_share,
+            R.string.navigationTitle_conference,
             R.string.navigationItem_conference,
             R.string.navigationItem_agenda,
             R.string.navigationItem_speaker,
+            R.string.navigationTitle_challenge,
             R.string.navigationItem_voting,
             R.string.navigationItem_scoring,
             R.string.navigationItem_challenges,
@@ -58,27 +62,30 @@ public class BaseActivity extends ActionBarActivity implements
                 fragment = MainFragment.newInstance(position+1);
                 break;
             case 1:
-                fragment = ShareFragment.newInstance(position+1);
+                fragment = MainFragment.newInstance(position+1);
                 break;
             case 2:
-                fragment = ConferenceFragment.newInstance(position+1);
-                break;
-            case 3:
-                fragment = AgendaFragment.newInstance(position+1);
+                fragment = ShareFragment.newInstance(position+1);
                 break;
             case 4:
-                fragment = SpeakerFragment.newInstance(position+1);
+                fragment = ConferenceFragment.newInstance(position+1);
                 break;
             case 5:
-                fragment = VotingFragment.newInstance(position+1);
+                fragment = AgendaFragment.newInstance(position+1);
                 break;
             case 6:
-                fragment = ScoringFragment.newInstance(position+1);
-                break;
-            case 7:
-                fragment = ChallengesFragment.newInstance(position+1);
+                fragment = SpeakerFragment.newInstance(position+1);
                 break;
             case 8:
+                fragment = VotingFragment.newInstance(position+1);
+                break;
+            case 9:
+                fragment = ScoringFragment.newInstance(position+1);
+                break;
+            case 10:
+                fragment = ChallengesFragment.newInstance(position+1);
+                break;
+            case 11:
                 fragment = TeamsFragment.newInstance(position+1);
                 break;
             default:
