@@ -7,28 +7,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.adapter.VotingAdapter;
-import com.oztz.hackinglabmobile.businessclasses.Voting;
+import com.oztz.hackinglabmobile.businessclasses.Event;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class VotingFragment extends Fragment implements JsonResult {
+public class ConferenceFragment extends Fragment implements JsonResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private ListView votingListView;
+    private TextView titleTextView, descriptionTextView;
 
-    public static VotingFragment newInstance(int sectionNumber) {
+    public static ConferenceFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "ConferenceFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
-        VotingFragment fragment = new VotingFragment();
+        ConferenceFragment fragment = new ConferenceFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -44,9 +43,10 @@ public class VotingFragment extends Fragment implements JsonResult {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_voting, container, false);
-        votingListView = (ListView)view.findViewById(R.id.voting_listview);
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/voting");
+        View view = inflater.inflate(R.layout.fragment_conference, container, false);
+        titleTextView = (TextView)view.findViewById(R.id.conference_title);
+        descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
+        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/event");
         return view;
     }
 
@@ -59,10 +59,11 @@ public class VotingFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString) {
-        Voting[] votings = null;
+        Event[] events = null;
         try {
-            votings = new Gson().fromJson(JsonString, Voting[].class);
-            votingListView.setAdapter(new VotingAdapter(getActivity(), R.layout.item_voting, votings));
+            events = new Gson().fromJson(JsonString, Event[].class);
+            titleTextView.setText(events[0].name);
+            descriptionTextView.setText(events[0].description);
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }

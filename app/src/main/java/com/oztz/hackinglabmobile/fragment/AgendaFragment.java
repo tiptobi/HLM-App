@@ -23,6 +23,7 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -32,8 +33,10 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         WeekView.EventClickListener, WeekView.EventLongPressListener {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
     WeekView mWeekView;
     private List<WeekViewEvent> eventList;
+    private HashSet rooms;
 
 
     public static AgendaFragment newInstance(int sectionNumber) {
@@ -49,6 +52,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventList = new ArrayList<WeekViewEvent>();
+        rooms = new HashSet<String>();
     }
 
     @Override
@@ -80,14 +84,10 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         try {
             eventItems = new Gson().fromJson(JsonString, EventItem[].class);
             for(int i=0;i<eventItems.length;i++){
+                rooms.add(String.valueOf(eventItems[i].roomIDFK));
                 WeekViewEvent e = getEvent(eventItems[i]);
                 eventList.add(e);
             }
-            /*Calendar c1 = Calendar.getInstance();
-            Calendar c2 = (Calendar) c1.clone();
-            c2.add(Calendar.HOUR_OF_DAY, 1);
-            eventList.add(new WeekViewEvent(10, "Testtermin", c1, c2));
-            eventList.add(new WeekViewEvent(11, "Bla Bla Bla", c1, c2));*/
             mWeekView.notifyDatasetChanged();
             Log.d("DEBUG", "mWeekView.notifyDatasetChanged()");
         } catch(Exception e){
@@ -107,12 +107,11 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
 
     @Override
     public List<WeekViewEvent> onMonthChange(int newYear, int newMonth) {
-        /*Log.d("DEBUG", "onMonthChange(newYear = " + String.valueOf(newYear) + ", new Month = " + String.valueOf(newMonth));
-        return eventList;*/
         List<WeekViewEvent> events = new ArrayList<WeekViewEvent>();
         for(int i=0; i<eventList.size();i++){
-            if(eventList.get(i).getStartTime().get(Calendar.MONTH) == newMonth-1){
-                events.add(eventList.get(i));
+            WeekViewEvent w = eventList.get(i);
+            if(w.getStartTime().get(Calendar.MONTH) == newMonth-1){
+                events.add(w);
             }
         }
         return events;
@@ -125,7 +124,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
             startTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.startTime));
             endTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.endTime));
             WeekViewEvent event = new WeekViewEvent(item.eventItemID, item.name, startTime, endTime);
-            event.setColor(Color.BLUE);
+            event.setColor(roomColors[new ArrayList<String>(rooms).indexOf(String.valueOf(item.roomIDFK))]);
             return event;
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error Parsing Dates", Toast.LENGTH_SHORT).show();
