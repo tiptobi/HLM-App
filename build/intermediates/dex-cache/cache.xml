@@ -23,6 +23,13 @@
         <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\gson-2.3.1-04b68e5f9e1e74279afcc04018a94f1464b3a68b.jar" />
     </item>
     <item
+        jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\libs\universal-image-loader-1.9.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a85588bec3e2c4584d593d3f15df1677321bca72">
+        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.3-b518c720de1ecbc35faa10750d3772fb008c4011.jar" />
+    </item>
+    <item
         jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"

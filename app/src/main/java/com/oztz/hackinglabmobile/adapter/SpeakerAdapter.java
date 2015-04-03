@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
 
@@ -17,37 +19,55 @@ import com.oztz.hackinglabmobile.businessclasses.Speaker;
  */
 public class SpeakerAdapter extends ArrayAdapter {
 
+    ImageLoader imageLoader;
+    private final Context context;
+
     public SpeakerAdapter(Context context, int resource, Speaker[] speakers) {
         super(context, resource, speakers);
+        this.context = context;
+        imageLoader = ImageLoader.getInstance();
+        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+    }
+
+    private static class ViewHolder {
+        TextView name;
+        ImageView flag;
+        ImageView speakerImage;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        View v = convertView;
-
-        if (v == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.item_speaker, null);
-        }
-
+        ViewHolder holder = new ViewHolder();
+        View v;
         Speaker item = (Speaker)getItem(position);
 
-        if (item != null) {
-            TextView name = (TextView) v.findViewById(R.id.speaker_name);
-            ImageView flag = (ImageView) v.findViewById(R.id.speaker_flag);
+        if(convertView == null){
+            LayoutInflater inflater = LayoutInflater.from(context);
+            v = inflater.inflate(R.layout.item_speaker, null);
 
-            if (name != null) {
-                if(item.title != null){
-                    name.setText(item.title + " " + item.name);
-                } else {
-                    name.setText(item.name);
-                }
+            holder.flag = (ImageView) v.findViewById(R.id.speaker_flag);
+            holder.flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
+                    + item.nationality.toLowerCase()));
+
+            holder.name = (TextView) v.findViewById(R.id.speaker_name);
+            if(item.title != null){
+                holder.name.setText(item.title + " " + item.name);
+            } else {
+                holder.name.setText(item.name);
             }
-            if (flag != null) {
-                flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
-                        + item.nationality.toLowerCase()));
+
+            holder.speakerImage = (ImageView) v.findViewById(R.id.speaker_portrait);
+            if(item.media != null && item.media.length() > 0){
+                imageLoader.displayImage(item.media, holder.speakerImage);
             }
+            else{
+                holder.speakerImage.setImageResource(R.drawable.speaker_icon);
+            }
+
+            v.setTag(holder);
+        }
+        else {
+            v = convertView;
         }
         return v;
     }
