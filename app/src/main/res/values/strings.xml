@@ -2,6 +2,11 @@
 <resources>
 
     <string name="app_name">HackingLab Mobile</string>
+
+    <!-- Register -->
+    <string name="register_chooseNickname">Please choose a nickname:</string>
+    <string name="register_start">Start</string>
+
     <!-- Navigation -->
     <string name="navigationTitle_whatsUp">Whats Up</string>
     <string name="navigationTitle_conference">Conference</string>

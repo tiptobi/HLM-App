@@ -21,6 +21,7 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 public class NewsFragment extends Fragment implements JsonResult {
 
     private ListView newsListView;
+    private RequestTask requestTask;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("DEBUG", "NewsFragment.onCreate()");
@@ -34,8 +35,8 @@ public class NewsFragment extends Fragment implements JsonResult {
         Log.d("DEBUG", "NewsFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         newsListView = (ListView) view.findViewById(R.id.news_listview);
-
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/news");
+        requestTask = new RequestTask(this);
+        requestTask.execute("http://152.96.56.40:8080/hlmng/rest/news");
         return view;
     }
 
@@ -53,5 +54,12 @@ public class NewsFragment extends Fragment implements JsonResult {
         } finally{
             newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
         }
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        Log.d("DEBUG", "NewsFragment.onDestroyView()");
+        requestTask.cancel(true);
     }
 }
