@@ -58,7 +58,7 @@ public class ChallengesFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString) {
+    public void onTaskCompleted(String JsonString, String requestType) {
         Event[] events = null;
         try {
             events = new Gson().fromJson(JsonString, Event[].class);

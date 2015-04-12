@@ -58,7 +58,7 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString) {
+    public void onTaskCompleted(String JsonString, String requestType) {
         Speaker[] speakers = null;
         try {
             speakers = new Gson().fromJson(JsonString, Speaker[].class);

@@ -41,7 +41,7 @@ public class NewsFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String result) {
+    public void onTaskCompleted(String result, String requestType) {
         News[] news = null;
         try {
             news = new Gson().fromJson(result, News[].class);

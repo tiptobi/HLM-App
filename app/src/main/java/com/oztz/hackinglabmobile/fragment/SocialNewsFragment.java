@@ -42,7 +42,7 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString) {
+    public void onTaskCompleted(String JsonString, String requestType) {
         Social[] socialnews = new Gson().fromJson(JsonString, Social[].class);
         SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
     }

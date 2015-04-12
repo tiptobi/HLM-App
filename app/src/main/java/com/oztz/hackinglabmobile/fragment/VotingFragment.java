@@ -58,7 +58,7 @@ public class VotingFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString) {
+    public void onTaskCompleted(String JsonString, String requestType) {
         Voting[] votings = null;
         try {
             votings = new Gson().fromJson(JsonString, Voting[].class);

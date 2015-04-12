@@ -79,7 +79,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
     }
 
     @Override
-    public void onTaskCompleted(String JsonString) {
+    public void onTaskCompleted(String JsonString, String requestType) {
         EventItem[] eventItems = null;
         try {
             eventItems = new Gson().fromJson(JsonString, EventItem[].class);
@@ -91,7 +91,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
             mWeekView.notifyDatasetChanged();
             Log.d("DEBUG", "mWeekView.notifyDatasetChanged()");
         } catch(Exception e){
-            Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 
