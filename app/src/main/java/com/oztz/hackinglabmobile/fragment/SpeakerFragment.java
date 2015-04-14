@@ -46,7 +46,7 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_speaker, container, false);
         speakerListView = (ListView)view.findViewById(R.id.speaker_listview);
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/speaker");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker");
         return view;
     }
 

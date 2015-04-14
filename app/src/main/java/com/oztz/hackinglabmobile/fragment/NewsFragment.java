@@ -36,7 +36,7 @@ public class NewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         newsListView = (ListView) view.findViewById(R.id.news_listview);
         requestTask = new RequestTask(this);
-        requestTask.execute("http://152.96.56.40:8080/hlmng/rest/news");
+        requestTask.execute(getResources().getString(R.string.rootURL) + "news");
         return view;
     }
 

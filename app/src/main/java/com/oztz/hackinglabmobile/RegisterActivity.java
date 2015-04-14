@@ -14,7 +14,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.businessclasses.User;
 import com.oztz.hackinglabmobile.helper.JsonResult;
-import com.oztz.hackinglabmobile.helper.PostTask;
 
 import java.io.IOException;
 
@@ -68,12 +67,12 @@ public class RegisterActivity extends Activity implements JsonResult{
     private void postUser(String msg){
         deviceId = Secure.getString(getApplicationContext().getContentResolver(),
                 Secure.ANDROID_ID);
-        User u = new User(deviceId, nameEditText.getText().toString(), msg, 3);
+        User u = new User(deviceId, nameEditText.getText().toString(), msg, 4);
         String jsonString = new Gson().toJson(u);
 
         Log.d("DEBUG", "POST DATA: " + jsonString);
-        new PostTask(this).execute("http://152.96.56.40:8080/hlmng/rest/user", jsonString);
-
+        //new PostTask(this).execute(getResources().getString(R.string.rootURL) + "user", jsonString);
+        startMainActivity();
     }
 
     private void startMainActivity(){

@@ -3,6 +3,8 @@
 
     <string name="app_name">HackingLab Mobile</string>
 
+    <string name="rootURL">https://152.96.56.40:40010/hlmng/rest/</string>
+
     <!-- Register -->
     <string name="register_chooseNickname">Please choose a nickname:</string>
     <string name="register_start">Start</string>

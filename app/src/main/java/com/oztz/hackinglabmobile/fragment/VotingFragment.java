@@ -46,7 +46,7 @@ public class VotingFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_voting, container, false);
         votingListView = (ListView)view.findViewById(R.id.voting_listview);
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/voting");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting");
         return view;
     }
 

@@ -36,7 +36,7 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
 
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/social");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "social");
 
         return view;
     }

@@ -2415,11 +2415,12 @@ containing a value of this type.
         public static final int navigation_drawer_open=0x7f0b0042;
         public static final int register_chooseNickname=0x7f0b0043;
         public static final int register_start=0x7f0b0044;
-        public static final int store_picture_message=0x7f0b0045;
-        public static final int store_picture_title=0x7f0b0046;
-        public static final int tabItem_news=0x7f0b0047;
-        public static final int tabItem_social=0x7f0b0048;
-        public static final int wallet_buy_button_place_holder=0x7f0b0049;
+        public static final int rootURL=0x7f0b0045;
+        public static final int store_picture_message=0x7f0b0046;
+        public static final int store_picture_title=0x7f0b0047;
+        public static final int tabItem_news=0x7f0b0048;
+        public static final int tabItem_social=0x7f0b0049;
+        public static final int wallet_buy_button_place_holder=0x7f0b004a;
     }
     public static final class style {
         /** 

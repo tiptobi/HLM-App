@@ -66,7 +66,7 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        new RequestTask(this).execute("http://152.96.56.40:8080/hlmng/rest/eventitem");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "eventitem");
 
         return view;
     }
