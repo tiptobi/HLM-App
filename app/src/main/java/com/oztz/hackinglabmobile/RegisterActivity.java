@@ -67,7 +67,7 @@ public class RegisterActivity extends Activity implements JsonResult{
     private void postUser(String msg){
         deviceId = Secure.getString(getApplicationContext().getContentResolver(),
                 Secure.ANDROID_ID);
-        User u = new User(deviceId, nameEditText.getText().toString(), msg, 4);
+        User u = new User(deviceId, nameEditText.getText().toString(), msg, 0);
         String jsonString = new Gson().toJson(u);
 
         Log.d("DEBUG", "POST DATA: " + jsonString);

@@ -13,6 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
+import com.oztz.hackinglabmobile.helper.AuthImageDownloader;
 
 /**
  * Created by Tobi on 25.03.2015.
@@ -26,7 +27,10 @@ public class SpeakerAdapter extends ArrayAdapter {
         super(context, resource, speakers);
         this.context = context;
         imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(context));
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
+                .imageDownloader(new AuthImageDownloader(context, 5000, 20000))
+                .build();
+        imageLoader.init(config);
     }
 
     private static class ViewHolder {

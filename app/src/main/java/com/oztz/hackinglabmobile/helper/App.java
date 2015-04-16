@@ -1,0 +1,21 @@
+package com.oztz.hackinglabmobile.helper;
+
+import android.app.Application;
+import android.content.Context;
+
+/**
+ * Created by Tobi on 16.04.2015.
+ */
+public class App extends Application {
+    private static Context mContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = getApplicationContext();
+    }
+
+    public static Context getContext(){
+        return mContext;
+    }
+}

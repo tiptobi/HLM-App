@@ -19,6 +19,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +27,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * Created by Tobi on 20.03.2015.
@@ -41,13 +47,7 @@ public class JsonHelper {
     public String readUrl(String urlString) throws IOException {
         InputStream inStream = null;
         try{
-            URL url = new URL(urlString);
-            HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-            con.setReadTimeout(5000);
-            con.setConnectTimeout(5000);
-            con.setRequestMethod("GET");
-            con.setDoInput(true);
-            inStream = con.getInputStream();
+            inStream = getURLConnection(urlString);
             String result = readIt(inStream);
             Log.d("DEBUG", result);
             return result;
@@ -55,6 +55,58 @@ public class JsonHelper {
             if(inStream != null){
                 inStream.close();
             }
+        }
+    }
+
+    private String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
+        StringBuilder inputStringBuilder = new StringBuilder();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+        String line = bufferedReader.readLine();
+        while(line != null){
+            inputStringBuilder.append(line);inputStringBuilder.append('\n');
+            line = bufferedReader.readLine();
+        }
+        return inputStringBuilder.toString();
+    }
+
+    public InputStream getURLConnection(String urlString){
+        try {
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            InputStream caInput = new BufferedInputStream(App.getContext().getAssets().open("hlmng.crt"));
+            Certificate ca;
+            try {
+                ca = cf.generateCertificate(caInput);
+                System.out.println("ca=" + ((X509Certificate) ca).getSubjectDN());
+            } finally {
+                caInput.close();
+            }
+
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
+
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
+
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, tmf.getTrustManagers(), null);
+
+            URL url = new URL(urlString);
+            HttpsURLConnection urlConnection =
+                    (HttpsURLConnection) url.openConnection();
+            urlConnection.setSSLSocketFactory(context.getSocketFactory());
+            urlConnection.setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+            urlConnection.setReadTimeout(5000);
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            InputStream in = urlConnection.getInputStream();
+            return in;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -100,16 +152,7 @@ public class JsonHelper {
         }
     }
 
-    private String readIt(InputStream stream) throws IOException, UnsupportedEncodingException {
-        StringBuilder inputStringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-        String line = bufferedReader.readLine();
-        while(line != null){
-            inputStringBuilder.append(line);inputStringBuilder.append('\n');
-            line = bufferedReader.readLine();
-        }
-        return inputStringBuilder.toString();
-    }
+
 }
 
 
