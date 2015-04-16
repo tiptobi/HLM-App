@@ -3,6 +3,7 @@ package com.oztz.hackinglabmobile.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,25 +13,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.PostMediaTask;
 
 import java.util.List;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class ShareFragment extends Fragment {
+public class ShareFragment extends Fragment implements JsonResult{
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_PICK = 2;
 
     private ImageButton cameraButton, galleryButton;
+    private Button shareButton;
     private ImageView thumbnail;
+    private String mediaUri;
 
     public static ShareFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "PlaceholderFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
@@ -52,6 +58,13 @@ public class ShareFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
         thumbnail = (ImageView) view.findViewById(R.id.share_img_thumbnail);
+        shareButton = (Button) view.findViewById(R.id.share_button_share);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadMedia();
+            }
+        });
         cameraButton = (ImageButton) view.findViewById(R.id.share_button_camera);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,11 +92,13 @@ public class ShareFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            mediaUri = getRealPathFromURI(data.getData());
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             thumbnail.setImageBitmap(imageBitmap);
         }
         else if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
+            mediaUri = getRealPathFromURI(data.getData());
             Uri contentUri = Uri.parse(data.getDataString());
             List<String> parts = contentUri.getPathSegments();
             long id = Long.parseLong(parts.get(parts.size() - 1));
@@ -97,6 +112,19 @@ public class ShareFragment extends Fragment {
             );
             thumbnail.setImageBitmap(bitmap);
         }
+    }
+
+    private void uploadMedia(){
+        if(mediaUri != null){
+            new PostMediaTask(this).execute(getResources().getString(R.string.rootURL)+"media/upload", mediaUri);
+        }
+    }
+
+    private String getRealPathFromURI(Uri uri){
+        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 
     private void TakePictureIntent() {
@@ -117,4 +145,8 @@ public class ShareFragment extends Fragment {
         startActivityForResult(photoPickerIntent, REQUEST_IMAGE_PICK);
     }
 
+    @Override
+    public void onTaskCompleted(String JsonString, String requestType) {
+        Log.d("DEBUG", "Media Uploaded: " + JsonString);
+    }
 }

@@ -2,6 +2,7 @@ package com.oztz.hackinglabmobile.helper;
 
 import android.util.Log;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.methods.HttpPost;
@@ -11,6 +12,9 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -21,6 +25,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -124,7 +129,30 @@ public class JsonHelper {
             e.printStackTrace();
             return "ERROR";
         }
+    }
 
+    public String PostMedia(String serverUrl, String mediaPath){
+        DefaultHttpClient httpClient = createHttpClient();
+        HttpPost httpPost = new HttpPost(serverUrl);
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        File file = new File(mediaPath);
+        FileBody fb = new FileBody(file);
+        builder.addPart(file.getName(), fb);
+        final HttpEntity entity = builder.build();
+
+        httpPost.setEntity(entity);
+        Log.d("DEBUG", "POST als String: " + httpPost.toString());
+        try {
+            HttpResponse response = httpClient.execute(httpPost);
+            String resultString = EntityUtils.toString(response.getEntity());
+            Log.d("DEBUG", resultString);
+            return resultString;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
     }
 
     private DefaultHttpClient createHttpClient()

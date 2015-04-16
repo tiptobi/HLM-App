@@ -62,10 +62,10 @@ public class SpeakerFragment extends Fragment implements JsonResult {
         Speaker[] speakers = null;
         try {
             speakers = new Gson().fromJson(JsonString, Speaker[].class);
-            speakerListView.setAdapter(new SpeakerAdapter(getActivity(),R.layout.item_speaker, speakers));
+            speakerListView.setAdapter(new SpeakerAdapter(getActivity(),R.layout.item_speaker,
+                    speakers));
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }
-
     }
 }

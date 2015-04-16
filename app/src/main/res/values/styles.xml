@@ -32,4 +32,9 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="ArticleLayout">
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
 </resources>

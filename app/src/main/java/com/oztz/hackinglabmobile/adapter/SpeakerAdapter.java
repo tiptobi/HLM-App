@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.oztz.hackinglabmobile.R;
@@ -29,6 +30,10 @@ public class SpeakerAdapter extends ArrayAdapter {
         imageLoader = ImageLoader.getInstance();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .imageDownloader(new AuthImageDownloader(context, 5000, 20000))
+                .diskCacheFileCount(50)
+                .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
+                    .cacheInMemory(true)
+                    .cacheOnDisk(true).build())
                 .build();
         imageLoader.init(config);
     }

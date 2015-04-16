@@ -1,6 +1,7 @@
 package com.oztz.hackinglabmobile.helper;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 
@@ -20,6 +21,7 @@ public class AuthImageDownloader extends BaseImageDownloader {
 
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+        Log.d("DEBUG", "Download Image from " + imageUri);
         return new JsonHelper().getURLConnection(imageUri);
     }
 }

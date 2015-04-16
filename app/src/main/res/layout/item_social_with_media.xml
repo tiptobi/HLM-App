@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
-            android:id="@+id/article_textonly_title"
+            android:id="@+id/social_title"
             android:textStyle="bold" />
 
         <TextView
@@ -22,7 +22,14 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
-            android:id="@+id/article_textonly_text" />
+            android:id="@+id/social_text"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="3dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/social_thumbnail" />
     </LinearLayout>
 
 </LinearLayout>
