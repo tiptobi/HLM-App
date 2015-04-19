@@ -135,16 +135,15 @@ public class JsonHelper {
     public String PostMedia(String serverUrl, String mediaPath){
         DefaultHttpClient httpClient = createHttpClient();
         HttpPost httpPost = new HttpPost(serverUrl);
-
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         File file = new File(mediaPath);
         FileBody fb = new FileBody(file, ContentType.create("image/jpeg"));
-        builder.addPart(file.getName(), fb);
+        builder.addPart("file", fb);
         final HttpEntity entity = builder.build();
 
         httpPost.setEntity(entity);
-        Log.d("DEBUG", "POST als String: " + httpPost);
+        Log.d("DEBUG", "POST als String: " + entity.getContentType());
         try {
             HttpResponse response = httpClient.execute(httpPost);
             String resultString = EntityUtils.toString(response.getEntity());
