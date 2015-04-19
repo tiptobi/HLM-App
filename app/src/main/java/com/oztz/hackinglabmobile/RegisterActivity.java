@@ -34,7 +34,8 @@ public class RegisterActivity extends Activity implements JsonResult{
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getRegId();
+                startMainActivity();
+                //getRegId();
             }
         });
     }

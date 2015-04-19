@@ -11,6 +11,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -138,12 +139,12 @@ public class JsonHelper {
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         File file = new File(mediaPath);
-        FileBody fb = new FileBody(file);
+        FileBody fb = new FileBody(file, ContentType.create("image/jpeg"));
         builder.addPart(file.getName(), fb);
         final HttpEntity entity = builder.build();
 
         httpPost.setEntity(entity);
-        Log.d("DEBUG", "POST als String: " + httpPost.toString());
+        Log.d("DEBUG", "POST als String: " + httpPost);
         try {
             HttpResponse response = httpClient.execute(httpPost);
             String resultString = EntityUtils.toString(response.getEntity());
