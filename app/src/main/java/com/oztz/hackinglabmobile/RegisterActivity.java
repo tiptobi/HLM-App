@@ -1,7 +1,9 @@
 package com.oztz.hackinglabmobile;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -14,6 +16,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.businessclasses.User;
 import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.PostTask;
 
 import java.io.IOException;
 
@@ -23,10 +26,13 @@ public class RegisterActivity extends Activity implements JsonResult{
 
     final static String PROJECT_NUMBER = "182393118726";
     private GoogleCloudMessaging gcm;
-    private String regId, deviceId;
+    private String regId, deviceId, userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(userExists()){
+            startMainActivity();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         nameEditText = (EditText) findViewById(R.id.register_editText_name);
@@ -34,8 +40,7 @@ public class RegisterActivity extends Activity implements JsonResult{
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startMainActivity();
-                //getRegId();
+                getRegId();
             }
         });
     }
@@ -54,26 +59,40 @@ public class RegisterActivity extends Activity implements JsonResult{
                 }
                 return regId;
             }
-
             @Override
             protected void onPostExecute(String msg) {
                 if(msg.length() > 1){
                     postUser(msg);
                 }
-
             }
         }.execute(null, null, null);
+    }
+
+    private boolean userExists(){
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preferences_file), Context.MODE_PRIVATE);
+        String username = sharedPref.getString("username", "");
+        return !username.equals("");
+    }
+
+    private void createUser(){
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("username", userName);
+        editor.putString("deviceId", deviceId);
+        editor.commit();
     }
 
     private void postUser(String msg){
         deviceId = Secure.getString(getApplicationContext().getContentResolver(),
                 Secure.ANDROID_ID);
-        User u = new User(deviceId, nameEditText.getText().toString(), msg, 0);
+        userName = nameEditText.getText().toString();
+        User u = new User(deviceId, userName, msg, 0);
         String jsonString = new Gson().toJson(u);
 
         Log.d("DEBUG", "POST DATA: " + jsonString);
-        //new PostTask(this).execute(getResources().getString(R.string.rootURL) + "user", jsonString);
-        startMainActivity();
+        new PostTask(this).execute(getResources().getString(R.string.rootURL) + "user", jsonString);
     }
 
     private void startMainActivity(){
@@ -87,9 +106,9 @@ public class RegisterActivity extends Activity implements JsonResult{
         if(requestType.equals("POST")){
             if(!JsonString.equals("ERROR")){
                 Log.d("DEBUG", "Created User: " + JsonString);
+                createUser();
                 startMainActivity();
             }
         }
-        startMainActivity();
     }
 }

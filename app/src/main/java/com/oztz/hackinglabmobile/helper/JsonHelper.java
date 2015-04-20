@@ -1,6 +1,11 @@
 package com.oztz.hackinglabmobile.helper;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Base64;
 import android.util.Log;
+
+import com.oztz.hackinglabmobile.R;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -135,14 +140,19 @@ public class JsonHelper {
     public String PostMedia(String serverUrl, String mediaPath){
         DefaultHttpClient httpClient = createHttpClient();
         HttpPost httpPost = new HttpPost(serverUrl);
+        httpPost.addHeader("Authorization", getAuthHeader());
+        httpPost.addHeader("Connection", "keep-alive");
+        httpPost.addHeader("Pragma", "no-cache");
+        httpPost.addHeader("Cache-Control", "no-cache");
+
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         File file = new File(mediaPath);
-        FileBody fb = new FileBody(file, ContentType.create("image/jpeg"));
+        FileBody fb = new FileBody(file, ContentType.create(getContentType(file.getName())), file.getName());
         builder.addPart("file", fb);
         final HttpEntity entity = builder.build();
-
         httpPost.setEntity(entity);
+
         Log.d("DEBUG", "POST als String: " + entity.getContentType());
         try {
             HttpResponse response = httpClient.execute(httpPost);
@@ -153,6 +163,28 @@ public class JsonHelper {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private String getContentType(String fileName){
+        String[] parts = fileName.split("\\.");
+        String extension = parts[parts.length - 1].toLowerCase();
+        if(extension.equals("jpg") || extension.equals("jpeg")){
+            return "image/jpeg";
+        }
+        else if(extension.equals("png")){
+            return "image/png";
+        }
+        return "";
+    }
+
+    private String getAuthHeader(){
+        SharedPreferences sharedPref = App.getContext().getSharedPreferences(
+                App.getContext().getString(R.string.preferences_file), Context.MODE_PRIVATE);
+        String user = sharedPref.getString("username", "");
+        String deviceId = sharedPref.getString("deviceId", "");
+
+        String source = user + ":" + deviceId;
+        return "Basic "+ Base64.encodeToString(source.getBytes(), Base64.URL_SAFE|Base64.NO_WRAP);
     }
 
     private DefaultHttpClient createHttpClient()
