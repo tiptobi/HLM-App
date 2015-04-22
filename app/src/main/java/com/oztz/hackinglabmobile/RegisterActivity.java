@@ -27,6 +27,7 @@ public class RegisterActivity extends Activity implements JsonResult{
     final static String PROJECT_NUMBER = "182393118726";
     private GoogleCloudMessaging gcm;
     private String regId, deviceId, userName;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +76,14 @@ public class RegisterActivity extends Activity implements JsonResult{
         return !username.equals("");
     }
 
-    private void createUser(){
+    private void saveUserData(){
         SharedPreferences sharedPref = getSharedPreferences(
                 getString(R.string.preferences_file), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("userId", user.userID);
         editor.putString("username", userName);
         editor.putString("deviceId", deviceId);
+        editor.putInt("eventId", 1);
         editor.commit();
     }
 
@@ -88,8 +91,8 @@ public class RegisterActivity extends Activity implements JsonResult{
         deviceId = Secure.getString(getApplicationContext().getContentResolver(),
                 Secure.ANDROID_ID);
         userName = nameEditText.getText().toString();
-        User u = new User(deviceId, userName, msg, 0);
-        String jsonString = new Gson().toJson(u);
+        user = new User(deviceId, userName, msg, 0);
+        String jsonString = new Gson().toJson(user);
 
         Log.d("DEBUG", "POST DATA: " + jsonString);
         new PostTask(this).execute(getResources().getString(R.string.rootURL) + "user", jsonString);
@@ -106,7 +109,8 @@ public class RegisterActivity extends Activity implements JsonResult{
         if(requestType.equals("POST")){
             if(!JsonString.equals("ERROR")){
                 Log.d("DEBUG", "Created User: " + JsonString);
-                createUser();
+                user = new Gson().fromJson(JsonString, User.class);
+                saveUserData();
                 startMainActivity();
             }
         }

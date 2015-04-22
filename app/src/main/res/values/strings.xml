@@ -33,4 +33,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
 
+    <!-- Social -->
+    <string name="editText_post_hint">Share your status</string>
+
 </resources>

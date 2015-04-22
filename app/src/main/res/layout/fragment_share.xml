@@ -16,10 +16,11 @@
         android:layout_height="match_parent"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/social_post_editText"
         android:gravity="top"
         android:layout_weight="1"
-        android:maxHeight="100dp" />
+        android:maxHeight="100dp"
+        android:hint="@string/editText_post_hint" />
 
     <LinearLayout
         android:orientation="horizontal"

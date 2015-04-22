@@ -19,6 +19,7 @@ import com.oztz.hackinglabmobile.fragment.ShareFragment;
 import com.oztz.hackinglabmobile.fragment.SpeakerFragment;
 import com.oztz.hackinglabmobile.fragment.TeamsFragment;
 import com.oztz.hackinglabmobile.fragment.VotingFragment;
+import com.oztz.hackinglabmobile.helper.App;
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks{
@@ -42,6 +43,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        App.loadVariables();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()

@@ -12,4 +12,13 @@ public class Social {
     public int userIDFK;
     public int mediaIDFK;
     public int eventIDFK;
+
+    public Social(String text, String status, String media, String authorName, int userIDFK, int mediaIDFK, int eventIDFK){
+        this.text = text;
+        this.status = status;
+        this.authorName = authorName;
+        this.userIDFK = userIDFK;
+        this.mediaIDFK = mediaIDFK;
+        this.eventIDFK = eventIDFK;
+    }
 }

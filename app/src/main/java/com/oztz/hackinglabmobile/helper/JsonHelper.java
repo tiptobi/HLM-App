@@ -124,13 +124,16 @@ public class JsonHelper {
     public String doPost(String urlString, String jsonData){
         DefaultHttpClient httpClient = createHttpClient();
         HttpPost httpPost = new HttpPost(urlString);
+        httpPost.addHeader("Authorization", getAuthHeader());
         StringEntity se;
         try {
             se = new StringEntity(jsonData);
             se.setContentType("application/json;charset=UTF-8");
             httpPost.setEntity(se);
             HttpResponse response = httpClient.execute(httpPost);
-            return EntityUtils.toString(response.getEntity());
+            String result = EntityUtils.toString(response.getEntity());
+            Log.d("DEBUG", result);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             return "ERROR";
@@ -141,10 +144,6 @@ public class JsonHelper {
         DefaultHttpClient httpClient = createHttpClient();
         HttpPost httpPost = new HttpPost(serverUrl);
         httpPost.addHeader("Authorization", getAuthHeader());
-        httpPost.addHeader("Connection", "keep-alive");
-        httpPost.addHeader("Pragma", "no-cache");
-        httpPost.addHeader("Cache-Control", "no-cache");
-
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         File file = new File(mediaPath);
@@ -152,8 +151,6 @@ public class JsonHelper {
         builder.addPart("file", fb);
         final HttpEntity entity = builder.build();
         httpPost.setEntity(entity);
-
-        Log.d("DEBUG", "POST als String: " + entity.getContentType());
         try {
             HttpResponse response = httpClient.execute(httpPost);
             String resultString = EntityUtils.toString(response.getEntity());

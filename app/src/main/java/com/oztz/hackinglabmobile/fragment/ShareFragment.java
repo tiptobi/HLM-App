@@ -14,13 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.businessclasses.Media;
+import com.oztz.hackinglabmobile.businessclasses.Social;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.PostMediaTask;
+import com.oztz.hackinglabmobile.helper.PostTask;
 
 import java.util.List;
 
@@ -33,10 +40,13 @@ public class ShareFragment extends Fragment implements JsonResult{
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_IMAGE_PICK = 2;
 
+    private EditText postEditText;
     private ImageButton cameraButton, galleryButton;
     private Button shareButton;
     private ImageView thumbnail;
     private String mediaUri;
+    private String socialPost;
+    private boolean imageUploaded = false;
 
     public static ShareFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "PlaceholderFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
@@ -57,12 +67,13 @@ public class ShareFragment extends Fragment implements JsonResult{
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
+        postEditText = (EditText) view.findViewById(R.id.social_post_editText);
         thumbnail = (ImageView) view.findViewById(R.id.share_img_thumbnail);
         shareButton = (Button) view.findViewById(R.id.share_button_share);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadMedia();
+                share();
             }
         });
         cameraButton = (ImageButton) view.findViewById(R.id.share_button_camera);
@@ -114,9 +125,13 @@ public class ShareFragment extends Fragment implements JsonResult{
         }
     }
 
-    private void uploadMedia(){
+    private void share(){
+        socialPost = postEditText.getText().toString();
         if(mediaUri != null){
             new PostMediaTask(this).execute(getResources().getString(R.string.rootURL)+"media/upload", mediaUri);
+        } else {
+            Social s = new Social(socialPost, "pending", null, App.username, App.userId, 0, App.eventId);
+            new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
         }
     }
 
@@ -147,6 +162,13 @@ public class ShareFragment extends Fragment implements JsonResult{
 
     @Override
     public void onTaskCompleted(String JsonString, String requestType) {
-        Log.d("DEBUG", "Media Uploaded: " + JsonString);
+        if(requestType.equals("POST_MEDIA")){
+            imageUploaded = true;
+            Media m = new Gson().fromJson(JsonString, Media.class);
+            Social s = new Social(socialPost, "pending", m.link, App.username, App.userId, m.mediaID, App.eventId);
+            new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+        } else if(requestType.equals("POST")){
+            Toast.makeText(App.getContext(), "Share successful!", Toast.LENGTH_SHORT).show();
+        }
     }
 }
