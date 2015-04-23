@@ -4,6 +4,7 @@
     <string name="app_name">HackingLab Mobile</string>
 
     <string name="rootURL">https://152.96.56.40:40010/hlmng/rest/</string>
+    <string name="hackingLabUrl">http://dashboard.hacking-lab.com/REST/</string>
     <string name="preferences_file">com.oztz.hackinglabmobile.preferences</string>
 
     <!-- Register -->

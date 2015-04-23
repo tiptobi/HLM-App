@@ -47,7 +47,7 @@ public class SocialAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
         View v = convertView;
-        Social item = (Social)getItem(position);
+        Social item = (Social)getItem(super.getCount() - position - 1);
 
         if (v == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -57,7 +57,6 @@ public class SocialAdapter extends ArrayAdapter {
                     holder.shareImage = (ImageView) v.findViewById(R.id.social_thumbnail);
                     holder.name = (TextView) v.findViewById(R.id.social_title);
                     holder.shareText = (TextView) v.findViewById(R.id.social_text);
-                    imageLoader.displayImage(item.media, holder.shareImage);
                 }
                 else {
                     v = inflater.inflate(R.layout.item_article_textonly, null);
@@ -69,6 +68,9 @@ public class SocialAdapter extends ArrayAdapter {
                 }
                 if (holder.shareText != null) {
                     holder.shareText.setText(item.text);
+                }
+                if(item.media != null){
+                    imageLoader.displayImage(item.media, holder.shareImage);
                 }
             }
             v.setTag(holder);

@@ -7,13 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.businessclasses.Event;
+import com.oztz.hackinglabmobile.adapter.ChallengesAdapter;
+import com.oztz.hackinglabmobile.businessclasses.Challenge;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -23,10 +25,10 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 public class ChallengesFragment extends Fragment implements JsonResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private TextView titleTextView, descriptionTextView;
+    private ListView challengesListView;
 
     public static ChallengesFragment newInstance(int sectionNumber) {
-        Log.d("DEBUG", "ConferenceFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
+        Log.d("DEBUG", "ChallengesFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
         ChallengesFragment fragment = new ChallengesFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -44,9 +46,9 @@ public class ChallengesFragment extends Fragment implements JsonResult {
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_challenges, container, false);
-        titleTextView = (TextView)view.findViewById(R.id.conference_title);
-        descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event");
+        challengesListView = (ListView)view.findViewById(R.id.challenges_listview);
+        new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
+                "SlideService/GetChallenge/" + String.valueOf(App.eventId));
         return view;
     }
 
@@ -59,11 +61,10 @@ public class ChallengesFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestType) {
-        Event[] events = null;
+        Challenge[] challenges = null;
         try {
-            events = new Gson().fromJson(JsonString, Event[].class);
-            titleTextView.setText(events[0].name);
-            descriptionTextView.setText(events[0].description);
+            challenges = new Gson().fromJson(JsonString, Challenge[].class);
+            challengesListView.setAdapter(new ChallengesAdapter(getActivity(), R.layout.item_challenges, challenges));
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }

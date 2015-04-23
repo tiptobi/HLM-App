@@ -83,7 +83,7 @@ public class RegisterActivity extends Activity implements JsonResult{
         editor.putInt("userId", user.userID);
         editor.putString("username", userName);
         editor.putString("deviceId", deviceId);
-        editor.putInt("eventId", 1);
+        editor.putInt("eventId", 786);
         editor.commit();
     }
 

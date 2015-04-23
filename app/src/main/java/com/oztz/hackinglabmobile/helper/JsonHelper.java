@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -82,6 +83,38 @@ public class JsonHelper {
 
     public InputStream getURLConnection(String urlString){
         try {
+            URL url = new URL(urlString);
+            String scheme = url.toURI().getScheme();
+            if(scheme.equals("http")){
+                return getHTTPConnection(url);
+            } else if(scheme.equals("https")){
+                return getHTTPSConnection(url);
+            } else{
+                return null;
+            }
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    public InputStream getHTTPConnection(URL url){
+        try{
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(5000);
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setDoInput(true);
+            InputStream in = urlConnection.getInputStream();
+            return in;
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public InputStream getHTTPSConnection(URL url){
+        try {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             InputStream caInput = new BufferedInputStream(App.getContext().getAssets().open("hlmng.crt"));
             Certificate ca;
@@ -104,7 +137,6 @@ public class JsonHelper {
             SSLContext context = SSLContext.getInstance("TLS");
             context.init(null, tmf.getTrustManagers(), null);
 
-            URL url = new URL(urlString);
             HttpsURLConnection urlConnection =
                     (HttpsURLConnection) url.openConnection();
             urlConnection.setSSLSocketFactory(context.getSocketFactory());

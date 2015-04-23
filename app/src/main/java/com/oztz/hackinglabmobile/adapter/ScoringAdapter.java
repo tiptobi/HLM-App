@@ -10,15 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.businessclasses.Speaker;
+import com.oztz.hackinglabmobile.businessclasses.Team;
 
 /**
  * Created by Tobi on 25.03.2015.
  */
 public class ScoringAdapter extends ArrayAdapter {
 
-    public ScoringAdapter(Context context, int resource, Speaker[] speakers) {
-        super(context, resource, speakers);
+    public ScoringAdapter(Context context, int resource, Team[] teams) {
+        super(context, resource, teams);
     }
 
     @Override
@@ -28,25 +28,24 @@ public class ScoringAdapter extends ArrayAdapter {
 
         if (v == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.item_speaker, null);
+            v = inflater.inflate(R.layout.item_scoring, null);
         }
 
-        Speaker item = (Speaker)getItem(position);
+        Team item = (Team)getItem(position);
 
         if (item != null) {
-            TextView name = (TextView) v.findViewById(R.id.speaker_name);
-            ImageView flag = (ImageView) v.findViewById(R.id.speaker_flag);
-
-            if (name != null) {
-                if(item.title != null){
-                    name.setText(item.title + " " + item.name);
-                } else {
-                    name.setText(item.name);
-                }
+            TextView teamName = (TextView) v.findViewById(R.id.scoring_team_name);
+            ImageView flag = (ImageView) v.findViewById(R.id.scoring_team_flag);
+            TextView score = (TextView) v.findViewById(R.id.scoring_score_batch);
+            if (teamName != null) {
+                teamName.setText(item.groupname);
             }
             if (flag != null) {
                 flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
                         + item.nationality.toLowerCase()));
+            }
+            if(score != null){
+                score.setText(String.valueOf(item.score));
             }
         }
         return v;
