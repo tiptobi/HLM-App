@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private Fragment currentFragment;
+
     private CharSequence mTitle;
     int[] titleArray = {
             R.string.navigationTitle_whatsUp,
@@ -59,46 +61,46 @@ public class MainActivity extends ActionBarActivity implements
     public void onNavigationDrawerItemSelected(int position) {
         Log.d("DEBUG", "onNavigationDrawerItemSelected("+ String.valueOf(position) +")");
 
-        Fragment fragment;
+
         switch(position){
             case 0:
-                fragment = MainFragment.newInstance(position+1);
+                currentFragment = MainFragment.newInstance(position+1);
                 break;
             case 1:
-                fragment = MainFragment.newInstance(position+1);
+                currentFragment = MainFragment.newInstance(position+1);
                 break;
             case 2:
-                fragment = ShareFragment.newInstance(position+1);
+                currentFragment = ShareFragment.newInstance(position+1);
                 break;
             case 4:
-                fragment = ConferenceFragment.newInstance(position + 1);
+                currentFragment = ConferenceFragment.newInstance(position + 1);
                 break;
             case 5:
-                fragment = AgendaFragment.newInstance(position + 1);
+                currentFragment = AgendaFragment.newInstance(position + 1);
                 break;
             case 6:
-                fragment = SpeakerFragment.newInstance(position + 1);
+                currentFragment = SpeakerFragment.newInstance(position + 1);
                 break;
             case 8:
-                fragment = VotingFragment.newInstance(position + 1);
+                currentFragment = VotingFragment.newInstance(position + 1);
                 break;
             case 9:
-                fragment = ScoringFragment.newInstance(position + 1);
+                currentFragment = ScoringFragment.newInstance(position + 1);
                 break;
             case 10:
-                fragment = ChallengesFragment.newInstance(position + 1);
+                currentFragment = ChallengesFragment.newInstance(position + 1);
                 break;
             case 11:
-                fragment = TeamsFragment.newInstance(position + 1);
+                currentFragment = TeamsFragment.newInstance(position + 1);
                 break;
             default:
-                fragment = new MainFragment();
+                currentFragment = new MainFragment();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.container,
-                        fragment).commit();
+                        currentFragment).commit();
     }
 
     public void onSectionAttached(int number) {

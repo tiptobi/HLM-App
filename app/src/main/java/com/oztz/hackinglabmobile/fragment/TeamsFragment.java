@@ -7,13 +7,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.businessclasses.Event;
+import com.oztz.hackinglabmobile.adapter.TeamsAdapter;
+import com.oztz.hackinglabmobile.businessclasses.Team;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -23,10 +25,10 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 public class TeamsFragment extends Fragment implements JsonResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private TextView titleTextView, descriptionTextView;
+    private ListView teamsListView;
 
     public static TeamsFragment newInstance(int sectionNumber) {
-        Log.d("DEBUG", "ConferenceFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
+        Log.d("DEBUG", "TeamsFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
         TeamsFragment fragment = new TeamsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -43,10 +45,10 @@ public class TeamsFragment extends Fragment implements JsonResult {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.fragment_conference, container, false);
-        titleTextView = (TextView)view.findViewById(R.id.conference_title);
-        descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event");
+        View view = inflater.inflate(R.layout.fragment_teams, container, false);
+        teamsListView = (ListView) view.findViewById(R.id.teams_listview);
+        new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
+                "WebService/GetGroups/" + String.valueOf(App.eventId));
         return view;
     }
 
@@ -59,11 +61,10 @@ public class TeamsFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestType) {
-        Event[] events = null;
+        Team[] teams = null;
         try {
-            events = new Gson().fromJson(JsonString, Event[].class);
-            titleTextView.setText(events[0].name);
-            descriptionTextView.setText(events[0].description);
+            teams = new Gson().fromJson(JsonString, Team[].class);
+            teamsListView.setAdapter(new TeamsAdapter(getActivity(), R.layout.item_teams, teams));
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }

@@ -1,18 +1,21 @@
 package com.oztz.hackinglabmobile.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.activity.SpeakerDetailActivity;
 import com.oztz.hackinglabmobile.adapter.SpeakerAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
 import com.oztz.hackinglabmobile.helper.JsonResult;
@@ -59,11 +62,18 @@ public class SpeakerFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestType) {
-        Speaker[] speakers = null;
         try {
-            speakers = new Gson().fromJson(JsonString, Speaker[].class);
+            final Speaker[] speakers = new Gson().fromJson(JsonString, Speaker[].class);
             speakerListView.setAdapter(new SpeakerAdapter(getActivity(),R.layout.item_speaker,
                     speakers));
+            speakerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView parent, View view, int position, long id) {
+                    Intent intent = new Intent(getActivity(), SpeakerDetailActivity.class);
+                    intent.putExtra("speaker", new Gson().toJson(speakers[position], Speaker.class));
+                    startActivity(intent);
+                }
+            });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }
