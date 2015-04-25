@@ -2218,7 +2218,6 @@ containing a value of this type.
         public static final int icon=0x7f090044;
         public static final int ifRoom=0x7f09001e;
         public static final int image=0x7f090041;
-        public static final int imageView=0x7f090065;
         public static final int item_challenge_mainLayout=0x7f090079;
         public static final int item_challenge_name=0x7f09007a;
         public static final int item_challenge_symbol=0x7f09007b;
@@ -2276,6 +2275,7 @@ containing a value of this type.
         public static final int social_thumbnail=0x7f090083;
         public static final int social_title=0x7f090081;
         public static final int speakerDetail_Description_TextView=0x7f090066;
+        public static final int speakerDetail_Flag_ImageView=0x7f090065;
         public static final int speakerDetail_Title_TextView=0x7f090064;
         public static final int speakerDetail_speakerImage=0x7f090063;
         public static final int speaker_flag=0x7f090086;

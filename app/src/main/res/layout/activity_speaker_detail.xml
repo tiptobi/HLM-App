@@ -10,9 +10,14 @@
     tools:context="com.oztz.hackinglabmobile.activity.SpeakerDetailActivity">
 
     <ImageView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/speakerDetail_speakerImage" />
+        android:id="@+id/speakerDetail_speakerImage"
+        android:minHeight="150dp"
+        android:minWidth="150dp"
+        android:maxHeight="150dp"
+        android:maxWidth="150dp"
+        android:adjustViewBounds="true" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -32,7 +37,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageView"
+            android:id="@+id/speakerDetail_Flag_ImageView"
             android:src="@drawable/flag_us" />
     </LinearLayout>
 

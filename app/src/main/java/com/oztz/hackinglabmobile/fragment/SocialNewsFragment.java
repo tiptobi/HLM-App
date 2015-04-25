@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.R;
@@ -43,7 +44,11 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestType) {
-        Social[] socialnews = new Gson().fromJson(JsonString, Social[].class);
-        SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
+        try {
+            Social[] socialnews = new Gson().fromJson(JsonString, Social[].class);
+            SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
+        } catch (Exception e){
+            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);
+        }
     }
 }

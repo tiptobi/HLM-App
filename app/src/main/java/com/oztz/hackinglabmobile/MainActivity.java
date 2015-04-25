@@ -25,7 +25,7 @@ public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private Fragment currentFragment;
+    private int currentFragmentPosition = 0;
 
     private CharSequence mTitle;
     int[] titleArray = {
@@ -60,8 +60,11 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Log.d("DEBUG", "onNavigationDrawerItemSelected("+ String.valueOf(position) +")");
+        loadFragment(position);
+    }
 
-
+    public void loadFragment(int position){
+        Fragment currentFragment;
         switch(position){
             case 0:
                 currentFragment = MainFragment.newInstance(position+1);
@@ -101,6 +104,7 @@ public class MainActivity extends ActionBarActivity implements
                 .beginTransaction()
                 .replace(R.id.container,
                         currentFragment).commit();
+        currentFragmentPosition = position;
     }
 
     public void onSectionAttached(int number) {
@@ -127,6 +131,19 @@ public class MainActivity extends ActionBarActivity implements
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("fragmentPosition", currentFragmentPosition);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentFragmentPosition = savedInstanceState.getInt("fragmentPosition");
+        loadFragment(currentFragmentPosition);
     }
 
     @Override
