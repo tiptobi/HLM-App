@@ -9,7 +9,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.oztz.hackinglabmobile.fragment.AgendaFragment;
 import com.oztz.hackinglabmobile.fragment.ChallengesFragment;
 import com.oztz.hackinglabmobile.fragment.ConferenceFragment;
@@ -21,11 +24,14 @@ import com.oztz.hackinglabmobile.fragment.TeamsFragment;
 import com.oztz.hackinglabmobile.fragment.VotingFragment;
 import com.oztz.hackinglabmobile.helper.App;
 
+import java.util.Calendar;
+
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks{
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private int currentFragmentPosition = 0;
+    private long[] tripleTap;
 
     private CharSequence mTitle;
     int[] titleArray = {
@@ -46,6 +52,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.loadVariables();
+        tripleTap = new long[3];
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
@@ -134,6 +141,32 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if(item.getItemId() == R.id.enable_qrCode){
+            int minIndex = 0;
+            for(int i=1; i<tripleTap.length; i++){
+                if(tripleTap[i] < tripleTap[minIndex]){
+                    minIndex = i;
+                }
+            }
+            tripleTap[minIndex] = Calendar.getInstance().getTimeInMillis();
+            //Java Modulo can produce negative numbers
+            int index = (((minIndex - 2) % tripleTap.length) + tripleTap.length) % tripleTap.length;
+            long diff = tripleTap[minIndex] - tripleTap[index];
+            if(diff < 600){
+                startScan();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void startScan(){
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan();
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("fragmentPosition", currentFragmentPosition);
@@ -149,6 +182,9 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            String key = scanResult.getContents();
+        }
     }
-
 }

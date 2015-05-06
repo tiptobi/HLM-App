@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -22,6 +24,7 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
     TextView title;
     List<TextView> labels;
     List<SeekBar> scrollBars;
+    Button voteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,13 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting_detail);
         title = (TextView) findViewById(R.id.voting_detail_votingName);
+        voteButton = (Button) findViewById(R.id.voting_button_vote);
+        voteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Post Voting
+            }
+        });
 
         labels = new ArrayList<TextView>();
         labels.add((TextView) findViewById(R.id.voting_detail_scroll_label1));
@@ -86,6 +96,7 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(getResources().getString(R.string.navigationItem_voting));
+
     }
 
     @Override

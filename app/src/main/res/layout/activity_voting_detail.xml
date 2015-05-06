@@ -155,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/vote"
-        android:id="@+id/button"
+        android:id="@+id/voting_button_vote"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
