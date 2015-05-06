@@ -48,7 +48,7 @@ public class TeamsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_teams, container, false);
         teamsListView = (ListView) view.findViewById(R.id.teams_listview);
         new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "WebService/GetGroups/" + String.valueOf(App.eventId));
+                "WebService/GetGroups/" + String.valueOf(App.eventId), "teams");
         return view;
     }
 
@@ -60,7 +60,7 @@ public class TeamsFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         Team[] teams = null;
         try {
             teams = new Gson().fromJson(JsonString, Team[].class);

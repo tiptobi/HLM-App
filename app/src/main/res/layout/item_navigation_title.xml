@@ -10,8 +10,7 @@
             android:text="Large Text"
             android:id="@+id/navigation_title"
             android:textStyle="bold"
-            android:textColor="#ffffffff"
-            android:background="#ffa32121"
+            style="@style/HackingLabBackgroundLabel"
             android:padding="5dp" />
 
 </LinearLayout>

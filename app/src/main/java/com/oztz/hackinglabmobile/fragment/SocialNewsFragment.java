@@ -37,13 +37,13 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
 
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "social");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "social", "social");
 
         return view;
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         try {
             Social[] socialnews = new Gson().fromJson(JsonString, Social[].class);
             SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));

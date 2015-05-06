@@ -46,7 +46,7 @@ public class ConferenceFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_conference, container, false);
         titleTextView = (TextView)view.findViewById(R.id.conference_title);
         descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event", "event");
         return view;
     }
 
@@ -58,7 +58,7 @@ public class ConferenceFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         Event[] events = null;
         try {
             events = new Gson().fromJson(JsonString, Event[].class);

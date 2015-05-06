@@ -49,7 +49,7 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_speaker, container, false);
         speakerListView = (ListView)view.findViewById(R.id.speaker_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker", "speaker");
         return view;
     }
 
@@ -61,7 +61,7 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         try {
             final Speaker[] speakers = new Gson().fromJson(JsonString, Speaker[].class);
             speakerListView.setAdapter(new SpeakerAdapter(getActivity(),R.layout.item_speaker,

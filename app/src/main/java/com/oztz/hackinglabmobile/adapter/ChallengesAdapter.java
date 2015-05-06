@@ -37,19 +37,19 @@ public class ChallengesAdapter extends ArrayAdapter {
         if (item != null) {
             TextView challengeName = (TextView) v.findViewById(R.id.item_challenge_name);
             ImageView symbol = (ImageView) v.findViewById(R.id.item_challenge_symbol);
-            LinearLayout main = (LinearLayout) v.findViewById(R.id.item_challenge_mainLayout);
+            LinearLayout difficulty = (LinearLayout) v.findViewById(R.id.item_challenges_difficulty);
             if (challengeName != null) {
                 challengeName.setText(item.title);
             }
             switch(item.level){
                 case 1:
-                    main.setBackgroundColor(Color.parseColor("#FF009B00"));
+                    difficulty.setBackgroundColor(Color.parseColor("#FF009B00"));
                     break;
                 case 2:
-                    main.setBackgroundColor(Color.parseColor("#FFFFB000"));
+                    difficulty.setBackgroundColor(Color.parseColor("#FFFFB000"));
                     break;
                 case 3:
-                    main.setBackgroundColor(Color.RED);
+                    difficulty.setBackgroundColor(Color.RED);
                     break;
             }
 

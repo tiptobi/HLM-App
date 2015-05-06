@@ -52,7 +52,15 @@
         </activity>
         <activity
             android:name=".activity.SpeakerDetailActivity"
-            android:label="@string/title_activity_speaker_detail"
+            android:label="@string/navigationItem_speaker"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.oztz.hackinglabmobile.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.VotingDetailActivity"
+            android:label="@string/navigationItem_voting"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

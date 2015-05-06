@@ -48,7 +48,7 @@ public class ScoringFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
         scoringListView = (ListView) view.findViewById(R.id.scoring_listview);
         new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "SlideService/GetGroupRanking/" + String.valueOf(App.eventId));
+                "SlideService/GetGroupRanking/" + String.valueOf(App.eventId), "groupRanking");
         return view;
     }
 
@@ -60,7 +60,7 @@ public class ScoringFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         Team[] teams = null;
         try {
             teams = new Gson().fromJson(JsonString, Team[].class);

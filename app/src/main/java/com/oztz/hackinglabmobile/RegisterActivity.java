@@ -105,8 +105,8 @@ public class RegisterActivity extends Activity implements JsonResult{
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
-        if(requestType.equals("POST")){
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        if(requestCode.equals("POST")){
             if(!JsonString.equals("ERROR")){
                 Log.d("DEBUG", "Created User: " + JsonString);
                 user = new Gson().fromJson(JsonString, User.class);

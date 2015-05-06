@@ -110,7 +110,6 @@ public class JsonHelper {
             e.printStackTrace();
             return null;
         }
-
     }
 
     public InputStream getHTTPSConnection(URL url){

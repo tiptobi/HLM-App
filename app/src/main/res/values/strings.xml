@@ -36,9 +36,22 @@
 
     <!-- Social -->
     <string name="editText_post_hint">Share your status</string>
-    <string name="title_activity_speaker_detail">SpeakerDetailActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+    <!-- Voting -->
+    <string name="criterion_speech">Speech</string>
+    <string name="criterion_solution">Solution</string>
+    <string name="criterion_presentation">Presentation</string>
+    <string name="vote">Vote!</string>
+
+    <!-- Team -->
+    <string name="name">Name:</string>
+    <string name="nickname">Nickname:</string>
+    <string name="gender">Gender:</string>
+    <string name="age">Age:</string>
+    <string name="nationality">Nationality:</string>
+    <string name="skill">Skill:</string>
+
+    <!-- Action Bar -->
     <string name="action_settings">Settings</string>
 
 </resources>

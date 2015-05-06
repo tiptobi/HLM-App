@@ -36,12 +36,12 @@ public class NewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         newsListView = (ListView) view.findViewById(R.id.news_listview);
         requestTask = new RequestTask(this);
-        requestTask.execute(getResources().getString(R.string.rootURL) + "news");
+        requestTask.execute(getResources().getString(R.string.rootURL) + "news", "news");
         return view;
     }
 
     @Override
-    public void onTaskCompleted(String result, String requestType) {
+    public void onTaskCompleted(String result, String requestCode) {
         News[] news = null;
         try {
             news = new Gson().fromJson(result, News[].class);

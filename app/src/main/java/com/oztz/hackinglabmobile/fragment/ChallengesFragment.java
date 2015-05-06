@@ -48,7 +48,7 @@ public class ChallengesFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_challenges, container, false);
         challengesListView = (ListView)view.findViewById(R.id.challenges_listview);
         new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "SlideService/GetChallenge/" + String.valueOf(App.eventId));
+                "SlideService/GetChallenge/" + String.valueOf(App.eventId), "Challenge");
         return view;
     }
 
@@ -60,7 +60,7 @@ public class ChallengesFragment extends Fragment implements JsonResult {
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
         Challenge[] challenges = null;
         try {
             challenges = new Gson().fromJson(JsonString, Challenge[].class);

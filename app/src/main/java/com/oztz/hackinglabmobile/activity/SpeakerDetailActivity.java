@@ -78,7 +78,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
     }
 
     @Override
-    public void onTaskCompleted(String JsonString, String requestType) {
+    public void onTaskCompleted(String JsonString, String requestCode) {
 
     }
 }

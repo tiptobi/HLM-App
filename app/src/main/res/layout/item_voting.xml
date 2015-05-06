@@ -38,7 +38,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="00:00"
         android:id="@+id/voting_countdown"
-        android:background="#ffff4d48"
+        style="@style/HackingLabBackgroundLabel"
         android:textStyle="bold"
         android:padding="5dp"
         android:nestedScrollingEnabled="false" />
