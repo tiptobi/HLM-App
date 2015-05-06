@@ -66,6 +66,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.oztz.hackinglabmobile.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.TeamDetailActivity"
+            android:label="@string/navigationItem_teams"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.oztz.hackinglabmobile.MainActivity" />
+        </activity>
 
         <receiver
             android:name=".push.GcmBroadcastReceiver"

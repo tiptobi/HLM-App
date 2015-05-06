@@ -1,18 +1,21 @@
 package com.oztz.hackinglabmobile.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.activity.TeamDetailActivity;
 import com.oztz.hackinglabmobile.adapter.TeamsAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Team;
 import com.oztz.hackinglabmobile.helper.App;
@@ -61,10 +64,17 @@ public class TeamsFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
-        Team[] teams = null;
         try {
-            teams = new Gson().fromJson(JsonString, Team[].class);
+            final Team[] teams = new Gson().fromJson(JsonString, Team[].class);
             teamsListView.setAdapter(new TeamsAdapter(getActivity(), R.layout.item_teams, teams));
+            teamsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView parent, View view, int position, long id) {
+                    Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                    intent.putExtra("team", new Gson().toJson(teams[position], Team.class));
+                    startActivity(intent);
+                }
+            });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }

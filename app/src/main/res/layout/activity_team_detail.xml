@@ -12,7 +12,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/SocialNews_List_View"
+        android:id="@+id/Team_Detail_List_View"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:dividerHeight="10dp"

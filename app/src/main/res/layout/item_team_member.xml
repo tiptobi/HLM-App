@@ -11,7 +11,7 @@
 
         <ImageView
             android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_height="100dp"
             android:id="@+id/team_member_portrait"
             android:src="@drawable/speaker_icon"
             android:layout_marginRight="15dp" />
@@ -31,12 +31,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/name"
                 android:id="@+id/textView2"
+                style="@style/ArticleText"
                 android:layout_column="0" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
+                style="@style/ArticleText"
                 android:id="@+id/team_member_name"
                 android:layout_column="1" />
         </TableRow>
@@ -50,14 +52,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/nickname"
                 android:id="@+id/textView3"
-                android:layout_column="0" />
+                android:layout_column="0"
+                style="@style/ArticleText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/team_member_nickname"
-                android:layout_column="1" />
+                android:layout_column="1"
+                style="@style/ArticleText"/>
         </TableRow>
 
         <TableRow
@@ -69,14 +73,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/gender"
                 android:id="@+id/textView4"
-                android:layout_column="0" />
+                android:layout_column="0"
+                style="@style/ArticleText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/team_member_gender"
-                android:layout_column="1" />
+                android:layout_column="1"
+                style="@style/ArticleText"/>
         </TableRow>
 
         <TableRow
@@ -88,33 +94,36 @@
                 android:layout_height="wrap_content"
                 android:text="@string/age"
                 android:id="@+id/textView5"
-                android:layout_column="0" />
+                android:layout_column="0"
+                style="@style/ArticleText"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/team_member_age"
-                android:layout_column="1" />
+                android:layout_column="1"
+                style="@style/ArticleText"/>
         </TableRow>
 
         <TableRow
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/team_member_flag">
+            android:layout_height="fill_parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/nationality"
                 android:id="@+id/textView6"
-                android:layout_column="0" />
+                android:layout_column="0"
+                style="@style/ArticleText"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageView"
-                android:layout_column="1" />
+                android:id="@+id/team_member_flag"
+                android:layout_column="1"
+                style="@style/ArticleText"/>
 
         </TableRow>
     </TableLayout>
