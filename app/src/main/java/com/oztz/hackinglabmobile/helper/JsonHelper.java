@@ -171,6 +171,26 @@ public class JsonHelper {
         }
     }
 
+    public String doPost(String urlString, String jsonData, String header){
+        DefaultHttpClient httpClient = createHttpClient();
+        HttpPost httpPost = new HttpPost(urlString);
+        httpPost.addHeader("Authorization", getAuthHeader());
+        httpPost.addHeader("X-QRCode", header);
+        StringEntity se;
+        try {
+            se = new StringEntity(jsonData);
+            se.setContentType("application/json;charset=UTF-8");
+            httpPost.setEntity(se);
+            HttpResponse response = httpClient.execute(httpPost);
+            String result = EntityUtils.toString(response.getEntity());
+            Log.d("DEBUG", result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
+    }
+
     public String PostMedia(String serverUrl, String mediaPath){
         DefaultHttpClient httpClient = createHttpClient();
         HttpPost httpPost = new HttpPost(serverUrl);

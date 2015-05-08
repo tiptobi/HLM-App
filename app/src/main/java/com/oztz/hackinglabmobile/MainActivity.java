@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.oztz.hackinglabmobile.database.DbOperator;
 import com.oztz.hackinglabmobile.fragment.AgendaFragment;
 import com.oztz.hackinglabmobile.fragment.ChallengesFragment;
 import com.oztz.hackinglabmobile.fragment.ConferenceFragment;
@@ -184,7 +185,8 @@ public class MainActivity extends ActionBarActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
-            String key = scanResult.getContents();
+            String payload = scanResult.getContents();
+            new DbOperator(getApplicationContext()).addQrCode(payload);
         }
     }
 }

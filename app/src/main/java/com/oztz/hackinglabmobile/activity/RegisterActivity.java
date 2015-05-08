@@ -1,4 +1,4 @@
-package com.oztz.hackinglabmobile;
+package com.oztz.hackinglabmobile.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.EditText;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
+import com.oztz.hackinglabmobile.MainActivity;
+import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.User;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.PostTask;

@@ -16,7 +16,11 @@ public class PostTask extends AsyncTask<String, String, String> {
     @Override
     protected String doInBackground(String... uri) {
         try {
-            result = new JsonHelper().doPost(uri[0], uri[1]);
+            if(uri.length == 2) {
+                result = new JsonHelper().doPost(uri[0], uri[1]); //URL & JSONData
+            } else if(uri.length == 3){
+                result = new JsonHelper().doPost(uri[0], uri[1], uri[2]); // Contains QR-Code
+            }
         } catch (Exception e){
             result = "Site not available";
         }
