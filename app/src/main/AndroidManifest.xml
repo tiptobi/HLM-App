@@ -74,6 +74,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.oztz.hackinglabmobile.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.ChallengeDetailActivity"
+            android:label="@string/navigationItem_challenges"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.oztz.hackinglabmobile.MainActivity" />
+        </activity>
 
         <receiver
             android:name=".push.GcmBroadcastReceiver"
