@@ -41,41 +41,38 @@ public class SocialAdapter extends ArrayAdapter {
         TextView name;
         TextView shareText;
         ImageView shareImage;
+        int id;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
-        View v = convertView;
+        View v;
         Social item = (Social)getItem(super.getCount() - position - 1);
 
-        if (v == null) {
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            if (item != null) {
-                if(item.media!= null){
-                    v = inflater.inflate(R.layout.item_social_with_media, null);
-                    holder.shareImage = (ImageView) v.findViewById(R.id.social_thumbnail);
-                    holder.name = (TextView) v.findViewById(R.id.social_title);
-                    holder.shareText = (TextView) v.findViewById(R.id.social_text);
-                }
-                else {
-                    v = inflater.inflate(R.layout.item_article_textonly, null);
-                    holder.name = (TextView) v.findViewById(R.id.article_textonly_title);
-                    holder.shareText = (TextView) v.findViewById(R.id.article_textonly_text);
-                }
-                if (holder.name != null) {
-                    holder.name.setText(String.valueOf(item.authorName));
-                }
-                if (holder.shareText != null) {
-                    holder.shareText.setText(item.text);
-                }
-                if(item.media != null){
-                    imageLoader.displayImage(item.media, holder.shareImage);
-                }
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        v = inflater.inflate(R.layout.item_article_textonly, null);
+        if (item != null) {
+            holder.id = item.socialID;
+            if(item.media!= null){
+                v = inflater.inflate(R.layout.item_social_with_media, null);
+                holder.shareImage = (ImageView) v.findViewById(R.id.social_thumbnail);
+                holder.name = (TextView) v.findViewById(R.id.social_title);
+                holder.shareText = (TextView) v.findViewById(R.id.social_text);
+                imageLoader.displayImage(item.media, holder.shareImage);
             }
-            v.setTag(holder);
+            else {
+                holder.name = (TextView) v.findViewById(R.id.article_textonly_title);
+                holder.shareText = (TextView) v.findViewById(R.id.article_textonly_text);
+            }
+            if (holder.name != null) {
+                holder.name.setText(String.valueOf(item.authorName));
+            }
+            if (holder.shareText != null) {
+                holder.shareText.setText(item.text);
+            }
         }
-
+        v.setTag(holder);
         return v;
     }
 }
