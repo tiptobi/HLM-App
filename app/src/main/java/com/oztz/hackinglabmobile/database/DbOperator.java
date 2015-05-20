@@ -21,7 +21,7 @@ public class DbOperator {
             String[] parts = Payload.split("-");
             if (parts.length == 3) {
                 SQLiteDatabase db = helper.getWritableDatabase();
-                String query = "INSERT INTO " + helper.QR_TABLE_NAME + "" +
+                String query = "INSERT INTO " + HackingLabDbHelper.QR_TABLE_NAME + "" +
                         "(role, eventid, secret) VALUES ('" +
                         parts[0] + "', " + parts[1] + ", '" + parts[2] + "');";
                 db.execSQL(query);
@@ -39,8 +39,8 @@ public class DbOperator {
 
     public String getQrCode(String role, int eventid){
         SQLiteDatabase db = helper.getReadableDatabase();
-        String query = "SELECT * FROM " + HackingLabDbHelper.QR_TABLE_NAME +
-                " WHERE role = '" + role + "' AND eventid = " + String.valueOf(eventid);
+        String query = "SELECT * FROM " + HackingLabDbHelper.QR_TABLE_NAME;/* +
+                " WHERE role = '" + role + "' AND eventid = " + String.valueOf(eventid);*/
         Cursor c = db.rawQuery(query, null);
         if(c.getCount() > 0){
             c.moveToFirst();
@@ -61,7 +61,7 @@ public class DbOperator {
                 query = "UPDATE " + HackingLabDbHelper.CONTENT_TABLE_NAME +
                         " SET content = '" + json + "' WHERE key='" + key + "'";
             } else {
-                query = "INSERT INTO " + helper.CONTENT_TABLE_NAME + "" +
+                query = "INSERT INTO " + HackingLabDbHelper.CONTENT_TABLE_NAME + "" +
                         "(key, content) VALUES ('" +
                         key + "', '" + json + "');";
             }

@@ -42,7 +42,8 @@ public class NewsFragment extends Fragment implements JsonResult {
         updateView(App.db.getContentFromDataBase("news"));
 
         requestTask = new RequestTask(this);
-        requestTask.execute(getResources().getString(R.string.rootURL) + "news", "news");
+        requestTask.execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/news", "news");
 
         return view;
     }

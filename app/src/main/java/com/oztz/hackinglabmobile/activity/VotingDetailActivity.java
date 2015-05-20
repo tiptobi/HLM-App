@@ -60,15 +60,15 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
 
     private void postVoting(){
         DbOperator operator = new DbOperator(getApplicationContext());
-        String qrCode = operator.getQrCode("jury", 1);
+        String qrCode = operator.getQrCode("jury", App.eventId);
         for(int i=0; i<scrollBars.size(); i++){
             SeekBar s = scrollBars.get(i);
             if(qrCode != null){ //Ist ein Jurymitglied
-                Vote v = new Vote(0, s.getProgress(), true, (int)s.getTag(), App.userId);
+                Vote v = new Vote(0, s.getProgress(), false, (int)s.getTag(), App.userId);
                 String json = new Gson().toJson(v, Vote.class);
-                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json, qrCode);
+                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json/*, qrCode*/);
             } else { //Ist kein Jurymitglied
-                Vote v = new Vote(0, s.getProgress(), false, Integer.parseInt((String) s.getTag()), App.userId);
+                Vote v = new Vote(0, s.getProgress(), false, (int)s.getTag(), App.userId);
                 String json = new Gson().toJson(v, Vote.class);
                 new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json);
             }
@@ -154,8 +154,8 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
         try {
-            //Slider[] sliders = new Gson().fromJson(JsonString, Slider[].class);
-            Slider[] sliders = {new Slider(1, 1, 2, "Language"), new Slider(2, 1, 1, "Graphics"), new Slider(3, 1, 3, "Solution")};
+            Slider[] sliders = new Gson().fromJson(JsonString, Slider[].class);
+            //Slider[] sliders = {new Slider(1, 1, 2, "Language"), new Slider(2, 1, 1, "Graphics"), new Slider(3, 1, 3, "Solution")};
             SetupView(sliders);
 
         } catch(Exception e){

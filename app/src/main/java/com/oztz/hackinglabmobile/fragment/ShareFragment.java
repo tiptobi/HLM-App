@@ -164,9 +164,13 @@ public class ShareFragment extends Fragment implements JsonResult{
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(requestCode.equals("POST_MEDIA")){
             imageUploaded = true;
-            Media m = new Gson().fromJson(JsonString, Media.class);
-            Social s = new Social(socialPost, "pending", m.link, App.username, App.userId, m.mediaID, App.eventId);
-            new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+            try {
+                Media m = new Gson().fromJson(JsonString, Media.class);
+                Social s = new Social(socialPost, "pending", m.link, App.username, App.userId, m.mediaID, App.eventId);
+                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+            } catch (Exception e){
+                Log.d("DEBUG", e.getMessage());
+            }
         } else if(requestCode.equals("POST")){
             Toast.makeText(App.getContext(), "Share successful!", Toast.LENGTH_SHORT).show();
         }

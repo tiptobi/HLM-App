@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.EventItem;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -66,7 +67,8 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "eventitem", "eventItem");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/eventitems", "eventItem");
 
         return view;
     }

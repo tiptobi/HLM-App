@@ -18,6 +18,7 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.activity.VotingDetailActivity;
 import com.oztz.hackinglabmobile.adapter.VotingAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Voting;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -59,7 +60,8 @@ public class VotingFragment extends Fragment implements JsonResult {
         votingListView = (ListView)view.findViewById(R.id.voting_listview);
         currentVotings = new ArrayList<Voting>();
         ServerTime = null;
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting", "voting");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "" +
+                "event/" + String.valueOf(App.eventId) + "/votings", "voting");
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "time", "time");
         return view;
     }

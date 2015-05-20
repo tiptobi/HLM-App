@@ -16,6 +16,9 @@ import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChooseEventActivity extends Activity implements JsonResult{
 
     LinearLayout loadingHolder, eventsHolder, tryAgainHolder;
@@ -43,57 +46,68 @@ public class ChooseEventActivity extends Activity implements JsonResult{
         loadingHolder.setVisibility(View.VISIBLE);
     }
 
+    private void showEvents(final List<Event> events){
+        loadingHolder.setVisibility(View.GONE);
+        eventsHolder.setVisibility(View.VISIBLE);
+        for(int i=0; i<events.size(); i++) {
+            final int index = i;
+            Button b = new Button(getApplicationContext());
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = events.get(index).eventID;
+                    App.setEventId(id);
+                    Log.d("DEBUG", "EventId is set to " + String.valueOf(id));
+                    startMainActivity();
+                }
+            });
+            b.setText(events.get(index).name);
+            eventsHolder.addView(b);
+        }
+    }
+
+    private void showRefreshButton(){
+        loadingHolder.setVisibility(View.GONE);
+        tryAgainHolder.setVisibility(View.VISIBLE);
+        tryAgainButton = (Button) findViewById(R.id.choose_event_btn_try_again);
+        tryAgainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refresh();
+            }
+        });
+    }
+
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(JsonString != null && requestCode != null && requestCode.equals("events")){
             try{
                 final Event[] events = new Gson().fromJson(JsonString, Event[].class);
-                if(events != null && events.length > 1){
-                    loadingHolder.setVisibility(View.GONE);
-                    eventsHolder.setVisibility(View.VISIBLE);
+                if(events != null && events.length > 0){
+                    List<Event> activeEvents = new ArrayList<Event>();
                     for(int i=0; i<events.length; i++){
-                        final int index = i;
-                        Button b = new Button(getApplicationContext());
-                        b.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                int id = events[index].eventID;
-                                App.setEventId(id);
-                                Log.d("DEBUG", "EventId is set to " + String.valueOf(id));
-                                startMainActivity();
-                            }
-                        });
-                        b.setText(events[index].name);
-                        eventsHolder.addView(b);
-                    }
-                } else if(events != null && events.length == 1){
-                    App.setEventId(events[0].eventID);
-                    Log.d("DEBUG", "EventId is set to " + String.valueOf(events[0].eventID));
-                    startMainActivity();
-                } else {
-                    loadingHolder.setVisibility(View.GONE);
-                    tryAgainHolder.setVisibility(View.VISIBLE);
-                    tryAgainButton = (Button) findViewById(R.id.choose_event_btn_try_again);
-                    tryAgainButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            refresh();
+                        if(events[i].active == true){
+                            activeEvents.add(events[i]);
                         }
-                    });
+                    }
+
+                    if(activeEvents.size() > 1){ //Multiple active Events
+                        showEvents(activeEvents);
+                    } else if(activeEvents.size() == 1){ //One Active Event
+                        App.setEventId(activeEvents.get(0).eventID);
+                        Log.d("DEBUG", "EventId is set to " + String.valueOf(activeEvents.get(0).eventID));
+                        startMainActivity();
+                    } else { //No Active Events, but has inactive Events
+                        showRefreshButton();
+                    }
+                } else {
+                    showRefreshButton(); //No Events
                 }
             } catch (Exception e){
                 Log.d("DEBUG", e.getMessage());
             }
         } else {
-            loadingHolder.setVisibility(View.GONE);
-            tryAgainHolder.setVisibility(View.VISIBLE);
-            tryAgainButton = (Button) findViewById(R.id.choose_event_btn_try_again);
-            tryAgainButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    refresh();
-                }
-            });
+            showRefreshButton(); //No Connection
         }
     }
 }

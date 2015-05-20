@@ -185,7 +185,7 @@ public class MainActivity extends ActionBarActivity implements
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
-            String payload = scanResult.getContents();
+            String payload = scanResult.getContents().trim();
             new DbOperator(getApplicationContext()).addQrCode(payload);
         }
     }

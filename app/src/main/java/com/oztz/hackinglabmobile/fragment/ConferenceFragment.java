@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Event;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -46,7 +47,8 @@ public class ConferenceFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_conference, container, false);
         titleTextView = (TextView)view.findViewById(R.id.conference_title);
         descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event", "event");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId), "event");
         return view;
     }
 
@@ -59,11 +61,11 @@ public class ConferenceFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
-        Event[] events = null;
+        Event event = null;
         try {
-            events = new Gson().fromJson(JsonString, Event[].class);
-            titleTextView.setText(events[0].name);
-            descriptionTextView.setText(events[0].description);
+            event = new Gson().fromJson(JsonString, Event.class);
+            titleTextView.setText(event.name);
+            descriptionTextView.setText(event.description);
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
         }

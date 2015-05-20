@@ -38,7 +38,8 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
         updateView(App.db.getContentFromDataBase("news"));
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "social", "social");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/socials", "social");
 
         return view;
     }
