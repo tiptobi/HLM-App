@@ -18,7 +18,7 @@ public class PostMediaTask extends AsyncTask<String, String, String> {
         try {
             result = new JsonHelper().PostMedia(uri[0], uri[1]);
         } catch (Exception e){
-            result = "Site not available";
+            result = null;
         }
         return result;
     }

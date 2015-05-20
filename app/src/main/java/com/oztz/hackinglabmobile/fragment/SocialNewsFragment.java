@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.adapter.SocialAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Social;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -35,8 +36,8 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
     {
         Log.d("DEBUG", "SocialNewsFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
-
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
+        updateView(App.db.getContentFromDataBase("news"));
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "social", "social");
 
         return view;
@@ -44,11 +45,22 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
 
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
-        try {
-            Social[] socialnews = new Gson().fromJson(JsonString, Social[].class);
-            SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
-        } catch (Exception e){
-            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);
+        if(JsonString != null) {
+            updateView(JsonString);
+            App.db.saveToDataBase("social", JsonString);
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
+        }
+    }
+
+    private void updateView(String json){
+        if(json != null){
+            try {
+                Social[] socialnews = new Gson().fromJson(json, Social[].class);
+                SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
+            } catch (Exception e){
+                Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);
+            }
         }
     }
 }

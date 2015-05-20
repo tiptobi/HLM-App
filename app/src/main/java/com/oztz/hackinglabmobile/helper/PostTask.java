@@ -22,7 +22,7 @@ public class PostTask extends AsyncTask<String, String, String> {
                 result = new JsonHelper().doPost(uri[0], uri[1], uri[2]); // Contains QR-Code
             }
         } catch (Exception e){
-            result = "Site not available";
+            result = null;
         }
         return result;
     }

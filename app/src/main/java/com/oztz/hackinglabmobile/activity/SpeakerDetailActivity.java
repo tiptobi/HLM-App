@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
+import com.oztz.hackinglabmobile.helper.AuthImageDownloader;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 
 public class SpeakerDetailActivity extends ActionBarActivity implements JsonResult {
@@ -47,14 +48,14 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
         description.setText(speaker.description);
         imageLoader = ImageLoader.getInstance();
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                //.imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
+                .imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
                 .diskCacheFileCount(50)
                 .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
                         .cacheInMemory(true)
                         .cacheOnDisk(true).build())
                 .build();
         imageLoader.init(config);
-        imageLoader.displayImage("http://www.moviepilot.de/files/images/0798/4048/Mr._Bean.jpg", speakerImage);
+        imageLoader.displayImage(speaker.media, speakerImage);
     }
 
     private Speaker loadSpeaker(){

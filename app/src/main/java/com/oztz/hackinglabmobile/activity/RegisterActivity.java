@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
-import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.User;
 import com.oztz.hackinglabmobile.helper.JsonResult;
@@ -34,7 +33,7 @@ public class RegisterActivity extends Activity implements JsonResult{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(userExists()){
-            startMainActivity();
+            chooseEvent();
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -100,8 +99,8 @@ public class RegisterActivity extends Activity implements JsonResult{
         new PostTask(this).execute(getResources().getString(R.string.rootURL) + "user", jsonString);
     }
 
-    private void startMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
+    private void chooseEvent(){
+        Intent intent = new Intent(this, ChooseEventActivity.class);
         startActivity(intent);
         this.finish();
     }
@@ -113,7 +112,7 @@ public class RegisterActivity extends Activity implements JsonResult{
                 Log.d("DEBUG", "Created User: " + JsonString);
                 user = new Gson().fromJson(JsonString, User.class);
                 saveUserData();
-                startMainActivity();
+                chooseEvent();
             }
         }
     }

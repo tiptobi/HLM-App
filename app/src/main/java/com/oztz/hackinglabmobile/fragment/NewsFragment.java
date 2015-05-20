@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.adapter.NewsAdapter;
 import com.oztz.hackinglabmobile.businessclasses.News;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -22,6 +24,7 @@ public class NewsFragment extends Fragment implements JsonResult {
 
     private ListView newsListView;
     private RequestTask requestTask;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Log.d("DEBUG", "NewsFragment.onCreate()");
@@ -35,24 +38,22 @@ public class NewsFragment extends Fragment implements JsonResult {
         Log.d("DEBUG", "NewsFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         newsListView = (ListView) view.findViewById(R.id.news_listview);
+
+        updateView(App.db.getContentFromDataBase("news"));
+
         requestTask = new RequestTask(this);
         requestTask.execute(getResources().getString(R.string.rootURL) + "news", "news");
+
         return view;
     }
 
     @Override
     public void onTaskCompleted(String result, String requestCode) {
-        News[] news = null;
-        try {
-            news = new Gson().fromJson(result, News[].class);
-        } catch(Exception e){
-            News item = new News();
-            item.author = "Error";
-            item.text = "Server not Found";
-            news = new News[1];
-            news[0] = item;
-        } finally{
-            newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+        if(result != null) {
+            updateView(result);
+            App.db.saveToDataBase("news", result);
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
         }
     }
 
@@ -61,5 +62,17 @@ public class NewsFragment extends Fragment implements JsonResult {
         super.onDestroyView();
         Log.d("DEBUG", "NewsFragment.onDestroyView()");
         requestTask.cancel(true);
+    }
+
+    private void updateView(String json){
+        if(json != null){
+            News[] news = null;
+            try {
+                news = new Gson().fromJson(json, News[].class);
+                newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+            } catch(Exception e){
+                Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
+            }
+        }
     }
 }

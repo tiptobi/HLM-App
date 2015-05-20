@@ -51,4 +51,40 @@ public class DbOperator {
             return null;
         }
     }
+
+    public boolean saveToDataBase(String key, String json){
+        try {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            String content = getContentFromDataBase(key);
+            String query;
+            if (content != null) {
+                query = "UPDATE " + HackingLabDbHelper.CONTENT_TABLE_NAME +
+                        " SET content = '" + json + "' WHERE key='" + key + "'";
+            } else {
+                query = "INSERT INTO " + helper.CONTENT_TABLE_NAME + "" +
+                        "(key, content) VALUES ('" +
+                        key + "', '" + json + "');";
+            }
+            db.execSQL(query);
+            Log.d("DEBUG", query);
+            return true;
+        } catch(Exception e){
+            Log.d("DEBUG", e.getMessage());
+            return false;
+        }
+
+    }
+
+    public String getContentFromDataBase(String key){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        String query = "SELECT * FROM " + HackingLabDbHelper.CONTENT_TABLE_NAME +
+                " WHERE key = '" + key + "'";
+        Cursor c = db.rawQuery(query, null);
+        if(c.getCount() > 0){
+            c.moveToFirst();
+            return c.getString(c.getColumnIndex("content"));
+        } else{
+            return null;
+        }
+    }
 }

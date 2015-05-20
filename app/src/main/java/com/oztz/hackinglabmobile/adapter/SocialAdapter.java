@@ -1,6 +1,8 @@
 package com.oztz.hackinglabmobile.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +50,7 @@ public class SocialAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = new ViewHolder();
         View v;
-        Social item = (Social)getItem(super.getCount() - position - 1);
+        final Social item = (Social)getItem(super.getCount() - position - 1);
 
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.item_article_textonly, null);
@@ -60,6 +62,15 @@ public class SocialAdapter extends ArrayAdapter {
                 holder.name = (TextView) v.findViewById(R.id.social_title);
                 holder.shareText = (TextView) v.findViewById(R.id.social_text);
                 imageLoader.displayImage(item.media, holder.shareImage);
+                holder.shareImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(item.media), "image/*");
+                        context.startActivity(intent);
+                    }
+                });
             }
             else {
                 holder.name = (TextView) v.findViewById(R.id.article_textonly_title);

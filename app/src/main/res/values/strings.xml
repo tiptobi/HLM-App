@@ -3,13 +3,19 @@
 
     <string name="app_name">HackingLab Mobile</string>
 
-    <string name="rootURL">https://152.96.56.40:40010/hlmng/rest/</string>
+    <string name="rootURL">https://fix.confoxy.com/hlmng/rest/pub/</string>
     <string name="hackingLabUrl">http://dashboard.hacking-lab.com/REST/</string>
+    <string name="teamMemberImageUrl">http://dashboard.hacking-lab.com/video/users/</string>
     <string name="preferences_file">com.oztz.hackinglabmobile.preferences</string>
 
     <!-- Register -->
     <string name="register_chooseNickname">Please choose a nickname:</string>
     <string name="register_start">Start</string>
+
+    <!-- Choose Event -->
+    <string name="choose_event">Please choose your event:</string>
+    <string name="no_events">No events found</string>
+    <string name="try_again">Try again</string>
 
     <!-- Navigation -->
     <string name="navigationTitle_whatsUp">Whats Up</string>

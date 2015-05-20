@@ -20,7 +20,7 @@ public class RequestTask extends AsyncTask<String, String, String> {
             result = new JsonHelper().readUrl(uri[0]);
             requestCode = uri[1];
         } catch (Exception e){
-            result = "Site not available";
+            result = null;
         }
         return result;
     }

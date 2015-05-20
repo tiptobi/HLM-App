@@ -7,6 +7,7 @@ public class News{
     public int newsId;
     public String text;
     public String author;
+    public String media;
     public int mediaIDFK;
     public int eventIDFK;
 }
