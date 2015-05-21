@@ -66,7 +66,7 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
             if(qrCode != null){ //Ist ein Jurymitglied
                 Vote v = new Vote(0, s.getProgress(), false, (int)s.getTag(), App.userId);
                 String json = new Gson().toJson(v, Vote.class);
-                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json/*, qrCode*/);
+                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json, qrCode);
             } else { //Ist kein Jurymitglied
                 Vote v = new Vote(0, s.getProgress(), false, (int)s.getTag(), App.userId);
                 String json = new Gson().toJson(v, Vote.class);

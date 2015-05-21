@@ -1,6 +1,5 @@
 package com.oztz.hackinglabmobile.fragment;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -14,12 +13,8 @@ import android.widget.Toast;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.google.gson.Gson;
-import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.EventItem;
-import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
-import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,24 +25,14 @@ import java.util.List;
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class AgendaFragment extends Fragment implements JsonResult, WeekView.MonthChangeListener,
+public class AgendaFragment extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener {
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
     WeekView mWeekView;
     private List<WeekViewEvent> eventList;
     private HashSet rooms;
-
-
-    public static AgendaFragment newInstance(int sectionNumber) {
-        Log.d("DEBUG", "AgendaFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
-        AgendaFragment fragment = new AgendaFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    EventItem[] eventItems = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,22 +52,16 @@ public class AgendaFragment extends Fragment implements JsonResult, WeekView.Mon
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/eventitems", "eventItem");
+        if(eventItems == null){
+            loadItems(this.getArguments().getString("eventitems", ""));
+        }
+        /*new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+            String.valueOf(App.eventId) + "/eventitems", "eventItem");*/
 
         return view;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getInt(
-                ARG_SECTION_NUMBER));
-    }
-
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
-        EventItem[] eventItems = null;
+    public void loadItems(String JsonString) {
         try {
             eventItems = new Gson().fromJson(JsonString, EventItem[].class);
             for(int i=0;i<eventItems.length;i++){

@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.oztz.hackinglabmobile.database.DbOperator;
-import com.oztz.hackinglabmobile.fragment.AgendaFragment;
+import com.oztz.hackinglabmobile.fragment.AgendaTabHolderFragment;
 import com.oztz.hackinglabmobile.fragment.ChallengesFragment;
 import com.oztz.hackinglabmobile.fragment.ConferenceFragment;
 import com.oztz.hackinglabmobile.fragment.MainFragment;
@@ -87,7 +87,7 @@ public class MainActivity extends ActionBarActivity implements
                 currentFragment = ConferenceFragment.newInstance(position + 1);
                 break;
             case 5:
-                currentFragment = AgendaFragment.newInstance(position + 1);
+                currentFragment = AgendaTabHolderFragment.newInstance(position + 1);
                 break;
             case 6:
                 currentFragment = SpeakerFragment.newInstance(position + 1);
