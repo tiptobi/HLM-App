@@ -127,11 +127,13 @@ public class ShareFragment extends Fragment implements JsonResult{
 
     private void share(){
         socialPost = postEditText.getText().toString();
-        if(mediaUri != null){
-            new PostMediaTask(this).execute(getResources().getString(R.string.rootURL)+"media/upload", mediaUri);
-        } else {
-            Social s = new Social(socialPost, "pending", null, App.username, App.userId, 0, App.eventId);
-            new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+        if(mediaUri != null || (socialPost != null && socialPost.length() > 0)) { // Avoid empty posts
+            if (mediaUri != null) {
+                new PostMediaTask(this).execute(getResources().getString(R.string.rootURL) + "media/upload", mediaUri);
+            } else {
+                Social s = new Social(socialPost, "pending", null, App.username, App.userId, 0, App.eventId);
+                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+            }
         }
     }
 

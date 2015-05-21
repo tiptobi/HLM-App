@@ -20,5 +20,6 @@ public class Social {
         this.userIDFK = userIDFK;
         this.mediaIDFK = mediaIDFK;
         this.eventIDFK = eventIDFK;
+        this.media = media;
     }
 }

@@ -2,6 +2,8 @@ package com.oztz.hackinglabmobile.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
@@ -20,7 +22,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
@@ -31,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -167,7 +170,7 @@ public class JsonHelper {
             return result;
         } catch (Exception e) {
             e.printStackTrace();
-            return "ERROR";
+            return null;
         }
     }
 
@@ -197,9 +200,8 @@ public class JsonHelper {
         httpPost.addHeader("Authorization", getAuthHeader());
         MultipartEntityBuilder builder = MultipartEntityBuilder.create();
         builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        File file = new File(mediaPath);
-        FileBody fb = new FileBody(file, ContentType.create(getContentType(file.getName())), file.getName());
-        builder.addPart("file", fb);
+        ByteArrayBody bab = getCompressedImage(mediaPath);
+        builder.addPart("file", bab);
         final HttpEntity entity = builder.build();
         httpPost.setEntity(entity);
         try {
@@ -211,6 +213,27 @@ public class JsonHelper {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private ByteArrayBody getCompressedImage(String mediaPath){
+        File file = new File(mediaPath);
+        Bitmap source = BitmapFactory.decodeFile(mediaPath);
+
+        double sourceWidth = source.getWidth();
+        double sourceHeight = source.getHeight();
+        if(sourceWidth > 1000 || sourceHeight > 1000){
+            double max = Math.max(sourceWidth, sourceHeight);
+            double scaleFactor = 1000 / max;
+            int scaledWidth = (int)(sourceWidth * scaleFactor);
+            int scaledHeight = (int)(sourceHeight * scaleFactor);
+            source = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true);
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        source.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String filename = String.valueOf(System.currentTimeMillis()) + ".jpg";
+        return new ByteArrayBody(imageBytes, ContentType.create(getContentType(file.getName())), filename);
     }
 
     private String getContentType(String fileName){
