@@ -1,6 +1,7 @@
 package com.oztz.hackinglabmobile.fragment;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -28,6 +29,7 @@ import java.util.List;
 public class AgendaTabHolderFragment extends Fragment implements JsonResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
     private FragmentTabHost mTabHost;
     private String roomsJson, itemsJson;
 
@@ -50,15 +52,7 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
                 String.valueOf(App.eventId) + "/eventitems", "eventItems");
 
-        /*Bundle arg1 = new Bundle();
-        arg1.putInt("Arg for Frag1", 1);
-        mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("News"),
-                AgendaFragment.class, arg1);
-
-        Bundle arg2 = new Bundle();
-        arg2.putInt("Arg for Frag2", 2);
-*/
-        mTabHost.addTab(mTabHost.newTabSpec("Tab2").setIndicator("Agenda"),
+        mTabHost.addTab(mTabHost.newTabSpec("Tab0").setIndicator("Agenda"),
                 AgendaFragment.class, new Bundle());
         return mTabHost;
     }
@@ -104,13 +98,17 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
             try {
                 EventRoom[] rooms = new Gson().fromJson(roomsJson, EventRoom[].class);
                 EventItem[] items = new Gson().fromJson(itemsJson, EventItem[].class);
+                for (int i = 0; i < rooms.length; i++) {
+                    rooms[i].color = roomColors[i%roomColors.length];
+                }
                 if(mTabHost.getChildCount() != rooms.length + 1) {
                     mTabHost.clearAllTabs();
                     //Load Overview
-                    Bundle OverviewArgs = new Bundle();
-                    OverviewArgs.putString("eventitems", new Gson().toJson(items));
-                    mTabHost.addTab(mTabHost.newTabSpec("Tab" + rooms.length).setIndicator("Overview"),
-                            AgendaFragment.class, OverviewArgs);
+                    Bundle overviewArgs = new Bundle();
+                    overviewArgs.putString("eventitems", itemsJson);
+                    overviewArgs.putString("rooms", new Gson().toJson(rooms));
+                    mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
+                            AgendaFragment.class, overviewArgs);
 
                     //Load room Views if there is more than one room
                     if(rooms.length > 1) {
@@ -119,10 +117,12 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
                             String jsonItems = new Gson().toJson(roomItems);
                             Bundle args = new Bundle();
                             args.putString("eventitems", jsonItems);
-                            mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i)).setIndicator(rooms[i].name),
+                            args.putString("rooms", new Gson().toJson(rooms));
+                            mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i+2)).setIndicator(rooms[i].name),
                                     AgendaFragment.class, args);
                         }
                     }
+
                 }
             } catch(Exception e){
                 Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data", Toast.LENGTH_SHORT);

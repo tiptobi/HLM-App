@@ -86,6 +86,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.oztz.hackinglabmobile.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.EventItemDetailActivity"
+            android:label="@string/event"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.oztz.hackinglabmobile.MainActivity" />
+        </activity>
 
         <receiver
             android:name=".push.GcmBroadcastReceiver"

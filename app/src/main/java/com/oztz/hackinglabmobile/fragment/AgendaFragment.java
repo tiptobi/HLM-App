@@ -1,6 +1,6 @@
 package com.oztz.hackinglabmobile.fragment;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,12 +14,15 @@ import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.activity.EventItemDetailActivity;
 import com.oztz.hackinglabmobile.businessclasses.EventItem;
+import com.oztz.hackinglabmobile.businessclasses.EventRoom;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,17 +31,17 @@ import java.util.List;
 public class AgendaFragment extends Fragment implements WeekView.MonthChangeListener,
         WeekView.EventClickListener, WeekView.EventLongPressListener {
 
-    private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
+    //private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
     WeekView mWeekView;
     private List<WeekViewEvent> eventList;
-    private HashSet rooms;
+    //private HashSet rooms;
     EventItem[] eventItems = null;
+    EventRoom[] eventRooms = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventList = new ArrayList<WeekViewEvent>();
-        rooms = new HashSet<String>();
     }
 
     @Override
@@ -53,19 +56,25 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         mWeekView.setEventLongPressListener(this);
         mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         if(eventItems == null){
-            loadItems(this.getArguments().getString("eventitems", ""));
+            String itemsString = this.getArguments().getString("eventitems", "");
+            String roomsString = this.getArguments().getString("rooms", "");
+            loadItems(itemsString, roomsString);
         }
-        /*new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-            String.valueOf(App.eventId) + "/eventitems", "eventItem");*/
 
         return view;
     }
 
-    public void loadItems(String JsonString) {
+    public void loadItems(String itemsString, String roomsString) {
         try {
-            eventItems = new Gson().fromJson(JsonString, EventItem[].class);
+            eventItems = new Gson().fromJson(itemsString, EventItem[].class);
+            Arrays.sort(eventItems, new Comparator<EventItem>() {
+                @Override
+                public int compare(EventItem lhs, EventItem rhs) {
+                    return lhs.roomIDFK - rhs.roomIDFK;
+                }
+            });
+            eventRooms = new Gson().fromJson(roomsString, EventRoom[].class);
             for(int i=0;i<eventItems.length;i++){
-                rooms.add(String.valueOf(eventItems[i].roomIDFK));
                 WeekViewEvent e = getEvent(eventItems[i]);
                 eventList.add(e);
             }
@@ -78,7 +87,9 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
 
     @Override
     public void onEventClick(WeekViewEvent weekViewEvent, RectF rectF) {
-        Toast.makeText(getActivity(), String.valueOf(weekViewEvent.getColor()), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), EventItemDetailActivity.class);
+        intent.putExtra("eventItem", new Gson().toJson(getEventItem(weekViewEvent.getId()), EventItem.class));
+        startActivity(intent);
     }
 
     @Override
@@ -98,6 +109,24 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         return events;
     }
 
+    private int getColor(int roomID){
+        for(int i=0; i< eventRooms.length; i++){
+            if(roomID == eventRooms[i].eventRoomID){
+                return eventRooms[i].color;
+            }
+        }
+        return eventRooms[0].color;
+    }
+
+    private EventItem getEventItem(long id){
+        for(int i=0; i<eventItems.length; i++){
+            if(eventItems[i].eventItemID == id){
+                return eventItems[i];
+            }
+        }
+        return null;
+    }
+
     private WeekViewEvent getEvent(EventItem item){
         Calendar startTime = Calendar.getInstance();
         Calendar endTime = (Calendar) startTime.clone();
@@ -105,15 +134,11 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
             startTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.startTime));
             endTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.endTime));
             WeekViewEvent event = new WeekViewEvent(item.eventItemID, item.name, startTime, endTime);
-            event.setColor(roomColors[new ArrayList<String>(rooms).indexOf(String.valueOf(item.roomIDFK))]);
+            event.setColor(getColor(item.roomIDFK));
             return event;
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error Parsing Dates", Toast.LENGTH_SHORT).show();
         }
         return null;
-    }
-
-    private String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
     }
 }

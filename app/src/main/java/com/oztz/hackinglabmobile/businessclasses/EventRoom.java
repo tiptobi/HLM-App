@@ -8,4 +8,5 @@ public class EventRoom {
     public int eventRoomID;
     public String location;
     public String name;
+    public int color;
 }

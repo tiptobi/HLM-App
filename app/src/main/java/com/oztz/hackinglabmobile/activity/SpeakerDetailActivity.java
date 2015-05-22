@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -14,9 +16,15 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.businessclasses.EventItem;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.AuthImageDownloader;
 import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.RequestTask;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpeakerDetailActivity extends ActionBarActivity implements JsonResult {
 
@@ -24,6 +32,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
     TextView title, description;
     ImageView flag, speakerImage;
     ImageLoader imageLoader;
+    LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,9 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
         description = (TextView) findViewById(R.id.speakerDetail_Description_TextView);
         flag = (ImageView) findViewById(R.id.speakerDetail_Flag_ImageView);
         speakerImage = (ImageView) findViewById(R.id.speakerDetail_speakerImage);
+        mainLayout = (LinearLayout) findViewById(R.id.speaker_detail_main_layout);
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/eventitems", "eventItems");
         SetupView();
     }
 
@@ -78,8 +90,30 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
         actionBar.setTitle(getResources().getString(R.string.navigationItem_speaker));
     }
 
+    private EventItem[] getSpeakerItems(EventItem[] items, int speakerID){
+        List<EventItem> list = new ArrayList<EventItem>();
+        for(int i=0; i<items.length; i++){
+            if(items[i].speakerIDFK == speakerID){
+                list.add(items[i]);
+            }
+        }
+        return list.toArray(new EventItem[list.size()]);
+    }
+
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
+        if(JsonString != null){
+            if(requestCode.equals("eventItems"))
+            try {
+                EventItem[] eventItems = new Gson().fromJson(JsonString, EventItem[].class);
+                eventItems = getSpeakerItems(eventItems, speaker.speakerID);
 
+                for(int i=0; i<eventItems.length; i++){
+                    Button b = new Button(getApplicationContext());
+                    b.setText(eventItems[i].name);
+                    mainLayout.addView(b);
+                }
+            } catch(Exception e){}
+        }
     }
 }

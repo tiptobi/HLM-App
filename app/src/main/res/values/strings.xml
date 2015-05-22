@@ -57,7 +57,13 @@
     <string name="nationality">Nationality:</string>
     <string name="skill">Skill:</string>
 
+    <!-- EventItemDetail -->
+    <string name="event">Event</string>
+
     <!-- Action Bar -->
     <string name="action_settings">Settings</string>
+
+    <!-- ListView -->
+    <string name="load_more_data">Load more data</string>
 
 </resources>

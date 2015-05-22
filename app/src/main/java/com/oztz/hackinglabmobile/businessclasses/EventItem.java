@@ -11,5 +11,6 @@ public class EventItem {
     public String startTime;
     public String endTime;
     public int roomIDFK;
+    public int speakerIDFK;
     public int eventIDFK;
 }
