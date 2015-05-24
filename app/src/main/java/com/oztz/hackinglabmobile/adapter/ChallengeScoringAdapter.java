@@ -6,42 +6,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oztz.hackinglabmobile.R;
-import com.oztz.hackinglabmobile.businessclasses.Challenge;
+import com.oztz.hackinglabmobile.businessclasses.ChallengeScore;
 
 /**
  * Created by Tobi on 25.03.2015.
  */
-public class ChallengesAdapter extends ArrayAdapter {
+public class ChallengeScoringAdapter extends ArrayAdapter {
 
-    public ChallengesAdapter(Context context, int resource, Challenge[] challenges) {
+    public ChallengeScoringAdapter(Context context, int resource, ChallengeScore[] challenges) {
         super(context, resource, challenges);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         View v = convertView;
 
         if (v == null) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.item_challenges, null);
+            v = inflater.inflate(R.layout.item_challenges_scoring, null);
         }
 
-        Challenge item = (Challenge)getItem(position);
+        ChallengeScore item = (ChallengeScore)getItem(position);
 
         if (item != null) {
-            TextView challengeName = (TextView) v.findViewById(R.id.item_challenge_name);
-            ImageView symbol = (ImageView) v.findViewById(R.id.item_challenge_symbol);
-            LinearLayout difficulty = (LinearLayout) v.findViewById(R.id.item_challenges_difficulty);
+            TextView challengeName = (TextView) v.findViewById(R.id.challenge_scoring_name_textview);
+            TextView score = (TextView) v.findViewById(R.id.challenge_scoring_score_textview);
+            LinearLayout difficulty = (LinearLayout) v.findViewById(R.id.challenge_scoring_difficulty);
             if (challengeName != null) {
-                challengeName.setText(item.title);
+                challengeName.setText(item.ChallengeName);
             }
-            switch(item.level){
+            if(score != null){
+                score.setText(String.valueOf(item.Score));
+            }
+            switch(item.ChallengeLevel){
                 case 1:
                     difficulty.setBackgroundColor(Color.parseColor("#FF70981F"));
                     break;

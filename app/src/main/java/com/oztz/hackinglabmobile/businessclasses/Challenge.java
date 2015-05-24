@@ -15,4 +15,5 @@ public class Challenge {
     public String category;
     public String aboutchallenge;
     public int modulID;
+    public Team[] groupscore;
 }

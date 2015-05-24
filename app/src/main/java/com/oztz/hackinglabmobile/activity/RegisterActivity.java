@@ -7,10 +7,13 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
@@ -24,6 +27,8 @@ import java.io.IOException;
 public class RegisterActivity extends Activity implements JsonResult{
 
     EditText nameEditText;
+    TextView messageTextView;
+    Button startButton;
 
     final static String PROJECT_NUMBER = "182393118726";
     private GoogleCloudMessaging gcm;
@@ -38,13 +43,37 @@ public class RegisterActivity extends Activity implements JsonResult{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         nameEditText = (EditText) findViewById(R.id.register_editText_name);
-        Button startButton = (Button) findViewById(R.id.register_button_start);
+        messageTextView = (TextView) findViewById(R.id.register_username_message_textview);
+        startButton = (Button) findViewById(R.id.register_button_start);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getRegId();
             }
         });
+        nameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!isUsernameValid(nameEditText.getText().toString())){
+                    messageTextView.setText(getResources().getString(R.string.error_invalid_username));
+                    startButton.setEnabled(false);
+                } else{
+                    messageTextView.setText("");
+                    startButton.setEnabled(true);
+                }
+            }
+        });
+
     }
 
     public void getRegId(){
@@ -84,7 +113,6 @@ public class RegisterActivity extends Activity implements JsonResult{
         editor.putInt("userId", user.userID);
         editor.putString("username", userName);
         editor.putString("deviceId", deviceId);
-        editor.putInt("eventId", 786);
         editor.commit();
     }
 
@@ -105,14 +133,30 @@ public class RegisterActivity extends Activity implements JsonResult{
         this.finish();
     }
 
+    private boolean isUsernameValid(String userName){
+        if(userName.matches("[a-zA-Z0-9_]{3,25}")){
+            return true;
+        }
+        return false;
+    }
+
+
+
+
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(requestCode.equals("POST")){
-            if(!JsonString.equals("ERROR")){
-                Log.d("DEBUG", "Created User: " + JsonString);
-                user = new Gson().fromJson(JsonString, User.class);
-                saveUserData();
-                chooseEvent();
+            if(JsonString != null){
+                try{
+                    user = new Gson().fromJson(JsonString, User.class);
+                    saveUserData();
+                    chooseEvent();
+                } catch(Exception e){
+                    messageTextView.setText(getResources().getString(R.string.error_username_already_exists));
+                }
+            }
+            else{
+                messageTextView.setText(getResources().getString(R.string.error_no_server_connection));
             }
         }
     }

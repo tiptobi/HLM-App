@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,11 +109,30 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
                 EventItem[] eventItems = new Gson().fromJson(JsonString, EventItem[].class);
                 eventItems = getSpeakerItems(eventItems, speaker.speakerID);
 
-                for(int i=0; i<eventItems.length; i++){
-                    Button b = new Button(getApplicationContext());
-                    b.setText(eventItems[i].name);
-                    mainLayout.addView(b);
+                if(eventItems.length > 0){
+                    TextView t = new TextView(getApplicationContext());
+                    t.setText(getResources().getString(R.string.speeches_by) + " " +
+                            title.getText().toString() + ":");
+                    t.setTextColor(description.getCurrentTextColor());
+                    mainLayout.addView(t);
+
+                    for(int i=0; i<eventItems.length; i++){
+                        final EventItem item = eventItems[i];
+                        Button b = new Button(getApplicationContext());
+                        b.setText(eventItems[i].name);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), EventItemDetailActivity.class);
+                                intent.putExtra("eventItem", new Gson().toJson(item, EventItem.class));
+                                intent.putExtra("speaker", new Gson().toJson(speaker));
+                                startActivity(intent);
+                            }
+                        });
+                        mainLayout.addView(b);
+                    }
                 }
+
             } catch(Exception e){}
         }
     }

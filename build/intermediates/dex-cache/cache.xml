@@ -51,18 +51,18 @@
         <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\classes-7e6a858525be870ef788631b6e6136c470619dc8.jar" />
     </item>
     <item
-        jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.1\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="246fd881b6edca03120d2b653662664b6c2b35da">
-        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\classes-3464c9938c18b3ec44a63d4a1925ba1a166f3976.jar" />
-    </item>
-    <item
         jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
         <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\classes-cd283cbdb2b7eba25ba6aced752e7e735708f8ec.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.github.alamkanak\android-week-view\1.2.1\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="246fd881b6edca03120d2b653662664b6c2b35da">
+        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\classes-3464c9938c18b3ec44a63d4a1925ba1a166f3976.jar" />
     </item>
     <item
         jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.0.0\classes.jar"
@@ -154,6 +154,13 @@
         revision="21.1.2"
         sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
         <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-d1ef1048be20f61049bff13da215e2dc2563d133.jar" />
+    </item>
+    <item
+        jar="C:\Users\Tobi\.gradle\caches\modules-2\files-2.1\org.apache.commons\commons-lang3\3.1\905075e6c80f206bbe6cf1e809d2caa69f420c76\commons-lang3-3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="905075e6c80f206bbe6cf1e809d2caa69f420c76">
+        <dex dex="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\pre-dexed\debug\commons-lang3-3.1-fe40ba4d8a79b6c29402077ffbc11445fb4abd58.jar" />
     </item>
     <item
         jar="C:\Users\Tobi\AndroidstudioProjects\HackingLabMobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.0.0\classes.jar"

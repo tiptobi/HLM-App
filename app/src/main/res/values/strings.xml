@@ -11,6 +11,10 @@
     <!-- Register -->
     <string name="register_chooseNickname">Please choose a nickname:</string>
     <string name="register_start">Start</string>
+    <string name="error_invalid_username">Invalid username\nusername length should be
+        3-25 characters\nallowed signs are A-Z, a-z, 0-9 and _</string>
+    <string name="error_username_already_exists">This username already exists</string>
+    <string name="error_no_server_connection">No connection to server. Please try again.</string>
 
     <!-- Choose Event -->
     <string name="choose_event">Please choose your event:</string>
@@ -57,8 +61,14 @@
     <string name="nationality">Nationality:</string>
     <string name="skill">Skill:</string>
 
+    <!-- SpeakerDetail -->
+    <string name="speeches_by">Speeches by</string>
+
     <!-- EventItemDetail -->
     <string name="event">Event</string>
+
+    <!-- ScoringDetail -->
+    <string name="solved_challenges">Solved Challenges</string>
 
     <!-- Action Bar -->
     <string name="action_settings">Settings</string>

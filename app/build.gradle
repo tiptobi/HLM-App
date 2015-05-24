@@ -46,6 +46,7 @@ dependencies {
         exclude module: "httpclient"
     }
     compile 'org.apache.httpcomponents:httpcore:4.3'
+    compile 'org.apache.commons:commons-lang3:3.1'
     compile files('libs/gson-2.3.1.jar')
     compile files('libs/universal-image-loader-1.9.3.jar')
 }

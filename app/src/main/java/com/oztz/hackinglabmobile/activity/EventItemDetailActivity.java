@@ -23,46 +23,90 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 public class EventItemDetailActivity extends ActionBarActivity implements JsonResult {
 
     EventItem eventItem;
-    TextView title, date, time, room, speaker, description;
+    EventRoom eventRoom;
+    Speaker speaker;
+    TextView titleTextView, dateTextView, timeTextView, roomTextView, speakerTextView, descriptionTextView;
     ImageView speakerImage;
     ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        eventItem = loadEventItem();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_eventitem_detail);
-        title = (TextView) findViewById(R.id.eventItemDetail_Title_TextView);
-        description = (TextView) findViewById(R.id.eventItemDetail_description);
-        speaker = (TextView) findViewById(R.id.eventItemDetail_speaker);
-        date = (TextView) findViewById(R.id.eventItemDetail_date);
-        time = (TextView) findViewById(R.id.eventItemDetail_time);
-        room = (TextView) findViewById(R.id.eventItemDetail_room);
+        titleTextView = (TextView) findViewById(R.id.eventItemDetail_Title_TextView);
+        descriptionTextView = (TextView) findViewById(R.id.eventItemDetail_description);
+        speakerTextView = (TextView) findViewById(R.id.eventItemDetail_speaker);
+        dateTextView = (TextView) findViewById(R.id.eventItemDetail_date);
+        timeTextView = (TextView) findViewById(R.id.eventItemDetail_time);
+        roomTextView = (TextView) findViewById(R.id.eventItemDetail_room);
         speakerImage = (ImageView) findViewById(R.id.eventItemDetail_speakerImage);
+        loadArguments();
         SetupView();
     }
 
     private void SetupView(){
-        title.setText(eventItem.name);
-        date.setText(eventItem.date);
-        time.setText(eventItem.startTime + " - " + eventItem.endTime);
-        description.setText(eventItem.description);
-
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker/" +
-                String.valueOf(eventItem.speakerIDFK), "speaker");
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "eventroom/" +
-                String.valueOf(eventItem.roomIDFK), "room");
+        if(eventItem != null){
+            showEventItemInfo();
+        }
+        if(speaker != null){
+            showSpeakerInfo();
+        }
+        if(eventRoom != null){
+            roomTextView.setText(eventRoom.name);
+        }
     }
 
-    private EventItem loadEventItem(){
+    private void showEventItemInfo(){
+        titleTextView.setText(eventItem.name);
+        dateTextView.setText(eventItem.date);
+        timeTextView.setText(eventItem.startTime + " - " + eventItem.endTime);
+        descriptionTextView.setText(eventItem.description);
+    }
+
+    private void showSpeakerInfo(){
+        if(speaker.media != null && speaker.media.length() > 1) {
+            imageLoader = ImageLoader.getInstance();
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                    .imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
+                    .diskCacheFileCount(50)
+                    .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true).build())
+                    .build();
+            imageLoader.init(config);
+            imageLoader.displayImage(speaker.media, speakerImage);
+        }
+        if(speaker.title != null){
+            speakerTextView.setText(speaker.title + " " + speaker.name);
+        } else{
+            speakerTextView.setText(speaker.name);
+        }
+    }
+
+    private void loadArguments(){
         Intent intent = getIntent();
         String eventItemJson = intent.getStringExtra("eventItem");
+        String speakerJson = intent.getStringExtra("speaker");
+        String roomJson = intent.getStringExtra("eventRoom");
         if(eventItemJson != null && eventItemJson.length() > 1){
-            return new Gson().fromJson(eventItemJson, EventItem.class);
+            eventItem = new Gson().fromJson(eventItemJson, EventItem.class);
+
+            if(speakerJson != null && speakerJson.length() > 1){
+                speaker = new Gson().fromJson(speakerJson, Speaker.class);
+            } else {
+                new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker/" +
+                        String.valueOf(eventItem.speakerIDFK), "speaker");
+            }
+
+            if(roomJson != null && roomJson.length() > 1){
+                eventRoom = new Gson().fromJson(roomJson, EventRoom.class);
+            } else {
+                new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "eventroom/" +
+                        String.valueOf(eventItem.roomIDFK), "room");
+            }
         }
-        else{
-            return null;
-        }
+
+
     }
 
     @Override
@@ -84,29 +128,13 @@ public class EventItemDetailActivity extends ActionBarActivity implements JsonRe
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(requestCode.equals("speaker")){
             try{
-                Speaker s = new Gson().fromJson(JsonString, Speaker.class);
-                if(s.media != null && s.media.length() > 1) {
-                    imageLoader = ImageLoader.getInstance();
-                    ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                            .imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
-                            .diskCacheFileCount(50)
-                            .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
-                                    .cacheInMemory(true)
-                                    .cacheOnDisk(true).build())
-                            .build();
-                    imageLoader.init(config);
-                    imageLoader.displayImage(s.media, speakerImage);
-                }
-                if(s.title != null){
-                    speaker.setText(s.title + " " + s.name);
-                } else{
-                    speaker.setText(s.name);
-                }
+                speaker = new Gson().fromJson(JsonString, Speaker.class);
+                showSpeakerInfo();
             }catch(Exception e){}
         } else if(requestCode.equals("room")){
             try{
-                EventRoom eventRoom = new Gson().fromJson(JsonString, EventRoom.class);
-                room.setText(eventRoom.name);
+                eventRoom = new Gson().fromJson(JsonString, EventRoom.class);
+                roomTextView.setText(eventRoom.name);
             }catch(Exception e){}
         }
     }

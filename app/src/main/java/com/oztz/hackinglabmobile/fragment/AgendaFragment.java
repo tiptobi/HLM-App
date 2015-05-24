@@ -88,7 +88,9 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
     @Override
     public void onEventClick(WeekViewEvent weekViewEvent, RectF rectF) {
         Intent intent = new Intent(getActivity(), EventItemDetailActivity.class);
-        intent.putExtra("eventItem", new Gson().toJson(getEventItem(weekViewEvent.getId()), EventItem.class));
+        EventItem item = getEventItem(weekViewEvent.getId());
+        intent.putExtra("eventItem", new Gson().toJson(item, EventItem.class));
+        intent.putExtra("eventRoom", new Gson().toJson(getEventRoom(item.roomIDFK)));
         startActivity(intent);
     }
 
@@ -122,6 +124,15 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         for(int i=0; i<eventItems.length; i++){
             if(eventItems[i].eventItemID == id){
                 return eventItems[i];
+            }
+        }
+        return null;
+    }
+
+    private EventRoom getEventRoom(int id){
+        for(int i=0; i<eventRooms.length; i++){
+            if(eventRooms[i].eventRoomID == id){
+                return eventRooms[i];
             }
         }
         return null;
