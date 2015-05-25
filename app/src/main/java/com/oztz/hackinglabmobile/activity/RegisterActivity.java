@@ -152,7 +152,11 @@ public class RegisterActivity extends Activity implements JsonResult{
                     saveUserData();
                     chooseEvent();
                 } catch(Exception e){
-                    messageTextView.setText(getResources().getString(R.string.error_username_already_exists));
+                    if(JsonString.contains("HTTP Status 422")){
+                        messageTextView.setText(getResources().getString(R.string.error_username_already_exists));
+                    } else {
+                        messageTextView.setText(getResources().getString(R.string.error_unknown));
+                    }
                 }
             }
             else{

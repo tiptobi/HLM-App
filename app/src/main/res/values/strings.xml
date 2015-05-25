@@ -15,6 +15,7 @@
         3-25 characters\nallowed signs are A-Z, a-z, 0-9 and _</string>
     <string name="error_username_already_exists">This username already exists</string>
     <string name="error_no_server_connection">No connection to server. Please try again.</string>
+    <string name="error_unknown">Unknown error</string>
 
     <!-- Choose Event -->
     <string name="choose_event">Please choose your event:</string>
