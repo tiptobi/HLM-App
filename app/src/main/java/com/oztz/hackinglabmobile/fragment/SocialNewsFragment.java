@@ -26,6 +26,7 @@ import java.util.Comparator;
 public class SocialNewsFragment extends Fragment implements JsonResult {
 
     ListView SocialNewsListView;
+    View footer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,23 +73,25 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
                         return lhs.socialID - rhs.socialID;
                     }
                 });
-                SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
 
-                LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
-                View v = inflater.inflate(R.layout.item_load_more_data, null);
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loadMoreData();
+                if(requestCode.equals("newest")){
+                    if(SocialNewsListView.getFooterViewsCount() == 0){
+                        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+                        footer = inflater.inflate(R.layout.item_load_more_data, null);
+                        footer.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loadMoreData();
+                            }
+                        });
+                        SocialNewsListView.addFooterView(footer);
                     }
-                });
-                SocialNewsListView.removeFooterView(v);
-
-                if(requestCode.equals("newest") && socialnews.length == 15){
-                    SocialNewsListView.addFooterView(v);
-                }
-                else if(requestCode.equals("all")){
-
+                    SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
+                } else if(requestCode.equals("all")){
+                    int scrollPosition = SocialNewsListView.getFirstVisiblePosition();
+                    SocialNewsListView.removeFooterView(footer);
+                    SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
+                    SocialNewsListView.setSelectionFromTop(scrollPosition+1, 0);
                 }
             } catch (Exception e){
                 Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);

@@ -1,7 +1,9 @@
 package com.oztz.hackinglabmobile.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +14,6 @@ import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Event;
-import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -56,7 +57,7 @@ public class ChooseEventActivity extends Activity implements JsonResult{
                 @Override
                 public void onClick(View v) {
                     int id = events.get(index).eventID;
-                    App.setEventId(id);
+                    setEventId(id);
                     Log.d("DEBUG", "EventId is set to " + String.valueOf(id));
                     startMainActivity();
                 }
@@ -64,6 +65,14 @@ public class ChooseEventActivity extends Activity implements JsonResult{
             b.setText(events.get(index).name);
             eventsHolder.addView(b);
         }
+    }
+
+    private void setEventId(int id){
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("eventId", id);
+        editor.commit();
     }
 
     private void showRefreshButton(){
@@ -94,7 +103,7 @@ public class ChooseEventActivity extends Activity implements JsonResult{
                     if(activeEvents.size() > 1){ //Multiple active Events
                         showEvents(activeEvents);
                     } else if(activeEvents.size() == 1){ //One Active Event
-                        App.setEventId(activeEvents.get(0).eventID);
+                        setEventId(activeEvents.get(0).eventID);
                         Log.d("DEBUG", "EventId is set to " + String.valueOf(activeEvents.get(0).eventID));
                         startMainActivity();
                     } else { //No Active Events, but has inactive Events

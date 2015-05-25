@@ -31,14 +31,11 @@ public class App extends Application {
         username = sharedPref.getString("username", "");
         userId = sharedPref.getInt("userId", 0);
         deviceId = sharedPref.getString("deviceId", "");
+        eventId = sharedPref.getInt("eventId", 0);
 
         db = new DbOperator(mContext);
         Log.d("DEBUG", "username=" + username + "; userId=" + String.valueOf(userId) + "; " +
                 "deviceId=" + String.valueOf(deviceId));
-    }
-
-    public static void setEventId(int id){
-        eventId = id;
     }
 
     public static Context getContext(){
