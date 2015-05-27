@@ -6,6 +6,7 @@ package com.oztz.hackinglabmobile.businessclasses;
 public class News{
     public int newsId;
     public String text;
+    public String title;
     public String author;
     public String media;
     public int mediaIDFK;

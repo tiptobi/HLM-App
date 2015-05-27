@@ -2,8 +2,6 @@ package com.oztz.hackinglabmobile.helper;
 
 import android.os.AsyncTask;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
 /**
  * Created by Tobi on 25.03.2015.
  */
@@ -18,9 +16,11 @@ public class RequestTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... uri) {
+        if(uri.length > 1){
+            requestCode = uri[1];
+        }
         try {
             result = new JsonHelper().readUrl(uri[0]);
-            requestCode = uri[1];
         } catch (Exception e){
             result = null;
         }
@@ -30,6 +30,6 @@ public class RequestTask extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        listener.onTaskCompleted(StringEscapeUtils.unescapeJava(result), requestCode);
+        listener.onTaskCompleted(result, requestCode);
     }
 }

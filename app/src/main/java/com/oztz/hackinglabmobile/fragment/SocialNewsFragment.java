@@ -17,8 +17,10 @@ import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Tobi on 20.03.2015.
@@ -63,10 +65,21 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         }
     }
 
+    private Social[] getPublishedNews(Social[] socials){
+        List<Social> socialList = new ArrayList<Social>();
+        for(int i=0; i<socials.length; i++){
+            if(socials[i].status.equals("accepted") || socials[i].status.equals("published")){
+                socialList.add(socials[i]);
+            }
+        }
+        return socialList.toArray(new Social[socialList.size()]);
+    }
+
     private void updateView(String json, String requestCode){
         if(json != null){
             try {
                 Social[] socialnews = new Gson().fromJson(json, Social[].class);
+                socialnews = getPublishedNews(socialnews);
                 Arrays.sort(socialnews, new Comparator<Social>() {
                     @Override
                     public int compare(Social lhs, Social rhs) {

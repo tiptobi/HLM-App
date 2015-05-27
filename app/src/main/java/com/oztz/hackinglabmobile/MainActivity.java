@@ -63,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        getFragmentFromIntent();
     }
 
     @Override
@@ -72,6 +73,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     public void loadFragment(int position){
+        Log.d("DEBUG", "loadFragment(" + String.valueOf(position) + ")");
         Fragment currentFragment;
         switch(position){
             case 0:
@@ -113,6 +115,12 @@ public class MainActivity extends ActionBarActivity implements
                 .replace(R.id.container,
                         currentFragment).commit();
         currentFragmentPosition = position;
+    }
+
+    private void getFragmentFromIntent(){
+        Intent intent = getIntent();
+        int index = intent.getIntExtra("fragmentIndex", 0);
+        loadFragment(index);
     }
 
     public void onSectionAttached(int number) {

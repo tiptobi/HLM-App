@@ -80,6 +80,7 @@ public class VotingFragment extends Fragment implements JsonResult {
 
             try {
                 votings = new Gson().fromJson(JsonString, Voting[].class);
+                currentVotings.clear();
                 for (int i = 0; i < votings.length; i++) {
                     if (votings[i].status.equals("voting")) {
                         votings[i].votingEnd = getEndTime(votings[i]);

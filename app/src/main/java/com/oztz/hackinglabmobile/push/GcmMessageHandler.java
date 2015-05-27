@@ -14,10 +14,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
-
-import java.util.Set;
+import com.oztz.hackinglabmobile.businessclasses.PushMessage;
 
 public class GcmMessageHandler extends IntentService {
 
@@ -53,16 +53,55 @@ public class GcmMessageHandler extends IntentService {
     }
 
     private void doNotification(Bundle extras){
-        Set<String> keys = extras.keySet();
-        String author = extras.getString("from");
         String title = extras.getString("title");
         String message = extras.getString("message");
-        String collapse_key = extras.getString("collapse_key");
+        if(title.equals("voting")){
+            doVotingNotification(message);
+        } else if(title.equals("presentation_end")){
+            //do nothing at the moment...
+        } else {
+            doNormalPushNotification(title, message);
+        }
+    }
+
+    private void doVotingNotification(String message){
+        String text = message;
+        try{
+            PushMessage pm = new Gson().fromJson(message, PushMessage.class);
+            text = String.format(getResources().getString(R.string.voting_started), pm.name);
+        } catch(Exception e){ }
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)
-                        .setContentTitle(extras.getString("title"))
-                        .setContentText(extras.getString("message"))
+                        .setContentTitle(getResources().getString(R.string.app_name))
+                        .setContentText(text)
+                        .setAutoCancel(true);
+
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.putExtra("fragmentIndex", 8);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+        mNotificationManager.notify(1, mBuilder.build());
+    }
+
+    private void doNormalPushNotification(String title, String message){
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle(title)
+                        .setContentText(message)
                         .setAutoCancel(true);
 
         Intent resultIntent = new Intent(this, MainActivity.class);

@@ -68,7 +68,7 @@ public class NewsAdapter extends ArrayAdapter {
                 holder.text = (TextView) v.findViewById(R.id.article_textonly_text);
             }
             if (holder.title != null) {
-                holder.title.setText(String.valueOf(item.author));
+                holder.title.setText(String.valueOf(item.title));
             }
             if (holder.text != null) {
                 holder.text.setText(item.text);

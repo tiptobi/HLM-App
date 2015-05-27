@@ -1,5 +1,6 @@
 package com.oztz.hackinglabmobile.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -25,6 +26,7 @@ public class ScoringDetailActivity extends ActionBarActivity implements JsonResu
 
     ChallengeScore[] scores;
     ListView scoresListView;
+    ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class ScoringDetailActivity extends ActionBarActivity implements JsonResu
         scoresListView = (ListView) findViewById(R.id.Scoring_Detail_List_View);
         new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
                 "SlideService/GetCaseAndGroup/" + String.valueOf(App.eventId), "groupChallenges");
+        loading = ProgressDialog.show(this, "Loading", "getting solved challenges...", true, true);
+
     }
 
     private ChallengeScore[] getScores(String challengesJson){
@@ -77,6 +81,7 @@ public class ScoringDetailActivity extends ActionBarActivity implements JsonResu
             ChallengeScoringAdapter adapter = new ChallengeScoringAdapter(getApplicationContext(), R.layout.item_challenges_scoring, scores);
             scoresListView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+            loading.dismiss();
 
         } catch(Exception e){
             Toast.makeText(this, "Error getting data", Toast.LENGTH_SHORT);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HackingLab Mobile</string>
+    <string name="app_name">Conference Fox</string>
 
     <string name="rootURL">https://fix.confoxy.com/hlmng/rest/pub/</string>
     <string name="hackingLabUrl">http://dashboard.hacking-lab.com/REST/</string>
@@ -47,6 +47,8 @@
 
     <!-- Social -->
     <string name="editText_post_hint">Share your status</string>
+    <string name="error_share_failed">Can\'t share the status. Please check your internet connection.</string>
+    <string name="share_success">Thank you for sharing! The redaction will shortly check your post</string>
 
     <!-- Voting -->
     <string name="criterion_speech">Speech</string>
@@ -76,5 +78,8 @@
 
     <!-- ListView -->
     <string name="load_more_data">Load more data</string>
+
+    <!-- Push -->
+    <string name="voting_started">%1$s starts now!</string>
 
 </resources>

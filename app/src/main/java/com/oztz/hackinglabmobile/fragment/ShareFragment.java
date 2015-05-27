@@ -174,7 +174,15 @@ public class ShareFragment extends Fragment implements JsonResult{
                 Log.d("DEBUG", e.getMessage());
             }
         } else if(requestCode.equals("POST")){
-            Toast.makeText(App.getContext(), "Share successful!", Toast.LENGTH_SHORT).show();
+            if(JsonString == null){
+                Toast.makeText(App.getContext(), getResources().getString(R.string.error_share_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(App.getContext(), getResources().getString(R.string.share_success), Toast.LENGTH_SHORT).show();
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, MainFragment.newInstance(1))
+                        .commit();
+            }
+
         }
     }
 }
