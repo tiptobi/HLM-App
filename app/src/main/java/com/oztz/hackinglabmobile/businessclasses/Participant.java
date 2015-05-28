@@ -10,13 +10,14 @@ public class Participant {
     public int modulID;
     public int groupID;
 
-    public String nick;
-    public String firstname;
-    public String lastname;
+    public String strength = "";
+    public String nick = "";
+    public String firstname = "";
+    public String lastname = "";
     public String nationality;
     public String company;
-    public String gender;
-    public String age;
-    public String timesolved;
-    public String groupname;
+    public String gender = "";
+    public String age = "";
+    public String timesolved = "";
+    public String groupname = "";
 }

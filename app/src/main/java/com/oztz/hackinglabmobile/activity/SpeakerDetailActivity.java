@@ -59,16 +59,18 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
         flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
                 + speaker.nationality.toLowerCase()));
         description.setText(speaker.description);
-        imageLoader = ImageLoader.getInstance();
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                .imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
-                .diskCacheFileCount(50)
-                .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
-                        .cacheInMemory(true)
-                        .cacheOnDisk(true).build())
-                .build();
-        imageLoader.init(config);
-        imageLoader.displayImage(speaker.media, speakerImage);
+        if(speaker.media != null && speaker.media.length() > 1){
+            imageLoader = ImageLoader.getInstance();
+            ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                    .imageDownloader(new AuthImageDownloader(getApplicationContext(), 5000, 20000))
+                    .diskCacheFileCount(50)
+                    .defaultDisplayImageOptions(new DisplayImageOptions.Builder()
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true).build())
+                    .build();
+            imageLoader.init(config);
+            imageLoader.displayImage(speaker.media, speakerImage);
+        }
     }
 
     private Speaker loadSpeaker(){

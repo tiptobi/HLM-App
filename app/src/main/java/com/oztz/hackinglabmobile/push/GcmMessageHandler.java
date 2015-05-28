@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
@@ -21,7 +20,6 @@ import com.oztz.hackinglabmobile.businessclasses.PushMessage;
 
 public class GcmMessageHandler extends IntentService {
 
-    String mes;
     private Handler handler;
     public GcmMessageHandler() {
         super("GcmMessageHandler");
@@ -36,18 +34,10 @@ public class GcmMessageHandler extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
-
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
-
         doNotification(extras);
-
-        mes = extras.getString("title");
-        showToast();
         Log.i("GCM", "Received : (" +messageType+")  "+extras.getString("title"));
-
-
-
         GcmBroadcastReceiver.completeWakefulIntent(intent);
 
     }
@@ -120,16 +110,5 @@ public class GcmMessageHandler extends IntentService {
 // mId allows you to update the notification later on.
         mNotificationManager.notify(1, mBuilder.build());
     }
-
-    public void showToast(){
-        handler.post(new Runnable() {
-            public void run() {
-                Toast.makeText(getApplicationContext(),mes , Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-
 
 }

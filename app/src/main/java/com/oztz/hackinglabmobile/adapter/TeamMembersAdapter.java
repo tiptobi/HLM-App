@@ -37,7 +37,7 @@ public class TeamMembersAdapter extends ArrayAdapter {
     }
 
     private static class ViewHolder {
-        TextView name, nick, gender, age;
+        TextView name, nick, gender, age, skills;
         ImageView flag, memberImage;
         int id;
     }
@@ -54,6 +54,7 @@ public class TeamMembersAdapter extends ArrayAdapter {
             holder.nick = (TextView) v.findViewById(R.id.team_member_nickname);
             holder.gender = (TextView) v.findViewById(R.id.team_member_gender);
             holder.age = (TextView) v.findViewById(R.id.team_member_age);
+            holder.skills = (TextView) v.findViewById(R.id.team_member_skills);
             holder.flag = (ImageView) v.findViewById(R.id.team_member_flag);
             holder.memberImage = (ImageView) v.findViewById(R.id.team_member_portrait);
 
@@ -73,6 +74,9 @@ public class TeamMembersAdapter extends ArrayAdapter {
             }
             if(holder.age != null){
                 holder.age.setText(String.valueOf(item.ageAsYear));
+            }
+            if(holder.skills != null){
+                holder.skills.setText(String.valueOf(item.strength));
             }
             if (holder.flag != null) {
                 holder.flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"

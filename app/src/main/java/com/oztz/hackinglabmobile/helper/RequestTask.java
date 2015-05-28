@@ -1,6 +1,7 @@
 package com.oztz.hackinglabmobile.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * Created by Tobi on 25.03.2015.
@@ -20,6 +21,7 @@ public class RequestTask extends AsyncTask<String, String, String> {
             requestCode = uri[1];
         }
         try {
+            Log.d("DEBUG", "Read " + uri[0]);
             result = new JsonHelper().readUrl(uri[0]);
         } catch (Exception e){
             result = null;
