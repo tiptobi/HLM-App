@@ -43,9 +43,10 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         Log.d("DEBUG", "SocialNewsFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
-        updateView(App.db.getContentFromDataBase("news"), "db");
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/socials/newest", "newest");
+        String url = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/socials/newest";
+        updateView(App.db.getContentFromDataBase(url), "db");
+        new RequestTask(this).execute(url, "newest");
 
         return view;
     }
@@ -59,7 +60,6 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(JsonString != null) {
             updateView(JsonString, requestCode);
-            App.db.saveToDataBase("social", JsonString);
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
         }
@@ -105,6 +105,8 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
                     SocialNewsListView.removeFooterView(footer);
                     SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
                     SocialNewsListView.setSelectionFromTop(scrollPosition+1, 0);
+                } else if(requestCode.equals("db")){
+                    SocialNewsListView.setAdapter(new SocialAdapter(getActivity(), R.layout.item_article_textonly, socialnews));
                 }
             } catch (Exception e){
                 Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);

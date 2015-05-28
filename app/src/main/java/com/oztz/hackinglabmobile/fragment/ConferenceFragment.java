@@ -47,8 +47,10 @@ public class ConferenceFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_conference, container, false);
         titleTextView = (TextView)view.findViewById(R.id.conference_title);
         descriptionTextView = (TextView)view.findViewById(R.id.conference_text);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId), "event");
+        String url = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId);
+        updateView(App.db.getContentFromDataBase(url));
+        new RequestTask(this).execute(url, "event");
         return view;
     }
 
@@ -59,16 +61,18 @@ public class ConferenceFragment extends Fragment implements JsonResult {
                 ARG_SECTION_NUMBER));
     }
 
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
-        Event event = null;
+    private void updateView(String JsonString){
         try {
-            event = new Gson().fromJson(JsonString, Event.class);
+            Event event = new Gson().fromJson(JsonString, Event.class);
             titleTextView.setText(event.name);
             descriptionTextView.setText(event.description);
         } catch(Exception e){
-            Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
+            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT);
         }
+    }
 
+    @Override
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        updateView(JsonString);
     }
 }

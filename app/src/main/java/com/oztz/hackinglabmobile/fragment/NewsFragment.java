@@ -39,20 +39,19 @@ public class NewsFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_news, container, false);
         newsListView = (ListView) view.findViewById(R.id.news_listview);
 
-        updateView(App.db.getContentFromDataBase("news"));
-
+        String url = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/news";
+        updateView(App.db.getContentFromDataBase(url));
         requestTask = new RequestTask(this);
-        requestTask.execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/news", "news");
+        requestTask.execute(url, "news");
 
         return view;
     }
 
     @Override
     public void onTaskCompleted(String result, String requestCode) {
-        if(result != null) {
+        if(requestCode.equals("news") && result != null) {
             updateView(result);
-            App.db.saveToDataBase("news", result);
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
         }
@@ -72,7 +71,7 @@ public class NewsFragment extends Fragment implements JsonResult {
                 news = new Gson().fromJson(json, News[].class);
                 newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
             } catch(Exception e){
-                Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity().getApplicationContext(), "Error loading Data",Toast.LENGTH_SHORT);
             }
         }
     }

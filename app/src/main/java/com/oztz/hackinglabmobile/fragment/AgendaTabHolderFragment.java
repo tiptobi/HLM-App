@@ -47,10 +47,19 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
         mTabHost = new FragmentTabHost(getActivity());
         mTabHost.setup(getActivity(), getChildFragmentManager(), R.layout.fragment_main);
 
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/eventrooms", "eventRooms");
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/eventitems", "eventItems");
+        String urlRooms = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/eventrooms";
+        String urlItems = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/eventitems";
+
+        //Load Cached content
+        roomsJson = App.db.getContentFromDataBase(urlRooms);
+        itemsJson = App.db.getContentFromDataBase(urlItems);
+        updateView();
+
+        //Load online content
+        new RequestTask(this).execute(urlRooms, "eventRooms");
+        new RequestTask(this).execute(urlItems, "eventItems");
 
         mTabHost.addTab(mTabHost.newTabSpec("Tab0").setIndicator("Agenda"),
                 AgendaFragment.class, new Bundle());
@@ -101,28 +110,25 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
                 for (int i = 0; i < rooms.length; i++) {
                     rooms[i].color = roomColors[i%roomColors.length];
                 }
-                if(mTabHost.getChildCount() != rooms.length + 1) {
-                    mTabHost.clearAllTabs();
-                    //Load Overview
-                    Bundle overviewArgs = new Bundle();
-                    overviewArgs.putString("eventitems", itemsJson);
-                    overviewArgs.putString("rooms", new Gson().toJson(rooms));
-                    mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
-                            AgendaFragment.class, overviewArgs);
+                mTabHost.clearAllTabs();
+                //Load Overview
+                Bundle overviewArgs = new Bundle();
+                overviewArgs.putString("eventitems", itemsJson);
+                overviewArgs.putString("rooms", new Gson().toJson(rooms));
+                mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
+                        AgendaFragment.class, overviewArgs);
 
-                    //Load room Views if there is more than one room
-                    if(rooms.length > 1) {
-                        for (int i = 0; i < rooms.length; i++) {
-                            EventItem[] roomItems = getRoomItems(items, rooms[i].eventRoomID);
-                            String jsonItems = new Gson().toJson(roomItems);
-                            Bundle args = new Bundle();
-                            args.putString("eventitems", jsonItems);
-                            args.putString("rooms", new Gson().toJson(rooms));
-                            mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i+2)).setIndicator(rooms[i].name),
-                                    AgendaFragment.class, args);
-                        }
+                //Load room Views if there is more than one room
+                if(rooms.length > 1) {
+                    for (int i = 0; i < rooms.length; i++) {
+                        EventItem[] roomItems = getRoomItems(items, rooms[i].eventRoomID);
+                        String jsonItems = new Gson().toJson(roomItems);
+                        Bundle args = new Bundle();
+                        args.putString("eventitems", jsonItems);
+                        args.putString("rooms", new Gson().toJson(rooms));
+                        mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i+2)).setIndicator(rooms[i].name),
+                                AgendaFragment.class, args);
                     }
-
                 }
             } catch(Exception e){
                 Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data", Toast.LENGTH_SHORT);

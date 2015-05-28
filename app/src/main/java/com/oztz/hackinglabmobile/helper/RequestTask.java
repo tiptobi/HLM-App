@@ -26,12 +26,17 @@ public class RequestTask extends AsyncTask<String, String, String> {
         } catch (Exception e){
             result = null;
         }
+
+        if(result != null && App.db != null){
+            App.db.saveToDataBase(uri[0], result);
+        }
         return result;
     }
 
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+
         listener.onTaskCompleted(result, requestCode);
     }
 }
