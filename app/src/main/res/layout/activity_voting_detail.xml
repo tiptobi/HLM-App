@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="00:00"
+            android:text="--:--:--"
             android:id="@+id/voting_countdown"
             style="@style/HackingLabBackgroundLabel"
             android:textStyle="bold"

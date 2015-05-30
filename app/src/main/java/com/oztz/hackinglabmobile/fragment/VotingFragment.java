@@ -91,7 +91,11 @@ public class VotingFragment extends Fragment implements JsonResult {
                 Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
             }
         } else if(requestCode.equals("time")){
-            ServerTime = JsonString;
+            if(JsonString.contains(".")) {
+                ServerTime = JsonString.substring(0, JsonString.indexOf("."));
+            } else {
+                ServerTime = JsonString;
+            }
         }
         if(ServerTime != null && currentVotings.size() > 0){
             votingListView.setAdapter(new VotingAdapter(getActivity(), R.layout.item_voting, currentVotings.toArray(new Voting[currentVotings.size()])));

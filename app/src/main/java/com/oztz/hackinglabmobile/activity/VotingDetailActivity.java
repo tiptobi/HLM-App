@@ -3,6 +3,7 @@ package com.oztz.hackinglabmobile.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Gravity;
@@ -26,17 +27,22 @@ import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.PostTask;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class VotingDetailActivity extends ActionBarActivity implements JsonResult {
 
     Voting voting;
-    TextView title;
+    String serverTime;
+    TextView title, countDown;
     List<TextView> labels;
     List<SeekBar> scrollBars;
     Button voteButton;
     LinearLayout scrollBarHolder;
+    long diff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +51,9 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
         setContentView(R.layout.activity_voting_detail);
         scrollBarHolder = (LinearLayout) findViewById(R.id.voting_detail_scrollbar_holder);
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting/" + voting.votingID + "/sliders", "sliders");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "time", "time");
         title = (TextView) findViewById(R.id.voting_detail_votingName);
+        countDown = (TextView) findViewById(R.id.voting_countdown);
         voteButton = (Button) findViewById(R.id.voting_button_vote);
         voteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +64,50 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
 
         labels = new ArrayList<TextView>();
         scrollBars = new ArrayList<SeekBar>();
+        loadCountdown();
+    }
+
+    private long getTimeDiff(){
+        String[] startParts = serverTime.split(":");
+        String[] endParts = voting.votingEnd.split(":");
+        if(startParts.length == 3 && endParts.length == 3) {
+            long startMillis = Integer.parseInt(startParts[0]) * 3600000 +
+                    Integer.parseInt(startParts[1]) * 60000 +
+                    Integer.parseInt(startParts[2]) * 1000;
+            long endMillis = Integer.parseInt(endParts[0]) * 3600000 +
+                    Integer.parseInt(endParts[1]) * 60000 +
+                    Integer.parseInt(endParts[2]) * 1000;
+            return endMillis - startMillis;
+        }
+        return 0;
+    }
+
+    private String getTimeString(long diff) {
+        Date date = new Date(diff);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return sdf.format(date);
+    }
+
+    private void loadCountdown(){
+        try
+        {
+            diff = getTimeDiff();
+            if(diff > 0){
+                new CountDownTimer(diff, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        countDown.setText(getTimeString(diff));
+                        diff = diff - 1000;
+                    }
+                    public void onFinish() {
+                        countDown.setText("--:--:--");
+                    }
+                }.start();
+
+            }
+        } catch (Exception e){
+
+        }
     }
 
     private void postVoting(){
@@ -154,9 +206,18 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
         try {
-            Slider[] sliders = new Gson().fromJson(JsonString, Slider[].class);
-            //Slider[] sliders = {new Slider(1, 1, 2, "Language"), new Slider(2, 1, 1, "Graphics"), new Slider(3, 1, 3, "Solution")};
-            SetupView(sliders);
+            if(requestCode.equals("sliders")) {
+                Slider[] sliders = new Gson().fromJson(JsonString, Slider[].class);
+                //Slider[] sliders = {new Slider(1, 1, 2, "Language"), new Slider(2, 1, 1, "Graphics"), new Slider(3, 1, 3, "Solution")};
+                SetupView(sliders);
+            } else if(requestCode.equals("time")) {
+                if (JsonString.contains(".")) {
+                    serverTime = JsonString.substring(0, JsonString.indexOf("."));
+                } else {
+                    serverTime = JsonString;
+                }
+                loadCountdown();
+            }
 
         } catch(Exception e){
             Toast.makeText(this, "Error getting data", Toast.LENGTH_SHORT);
