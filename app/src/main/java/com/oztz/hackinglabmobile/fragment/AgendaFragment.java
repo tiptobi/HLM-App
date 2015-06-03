@@ -55,11 +55,9 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
         mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
-        if(eventItems == null){
-            String itemsString = this.getArguments().getString("eventitems", "");
-            String roomsString = this.getArguments().getString("rooms", "");
-            loadItems(itemsString, roomsString);
-        }
+        String itemsString = this.getArguments().getString("eventitems", "");
+        String roomsString = this.getArguments().getString("rooms", "");
+        loadItems(itemsString, roomsString);
 
         return view;
     }
@@ -74,6 +72,7 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
                 }
             });
             eventRooms = new Gson().fromJson(roomsString, EventRoom[].class);
+            eventList.clear();
             for(int i=0;i<eventItems.length;i++){
                 WeekViewEvent e = getEvent(eventItems[i]);
                 eventList.add(e);

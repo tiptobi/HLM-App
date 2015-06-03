@@ -56,6 +56,9 @@
     <string name="criterion_presentation">Presentation</string>
     <string name="vote">Vote!</string>
 
+    <!-- Challenges -->
+    <string name="error_no_challenge_description">No challenge description available</string>
+
     <!-- Team -->
     <string name="name">Name:</string>
     <string name="nickname">Nickname:</string>

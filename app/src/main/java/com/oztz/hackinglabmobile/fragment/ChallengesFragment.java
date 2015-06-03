@@ -71,8 +71,14 @@ public class ChallengesFragment extends Fragment implements JsonResult {
                 @Override
                 public void onItemClick(AdapterView parent, View view, int position, long id) {
                     Intent intent = new Intent(getActivity(), ChallengeDetailActivity.class);
-                    intent.putExtra("challenge", new Gson().toJson(challenges[position], Challenge.class));
-                    startActivity(intent);
+                    if(challenges[position].aboutchallenge != null) {
+                        intent.putExtra("challenge", new Gson().toJson(challenges[position], Challenge.class));
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity().getApplicationContext(),
+                                getResources().getString(R.string.error_no_challenge_description),
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         } catch(Exception e){

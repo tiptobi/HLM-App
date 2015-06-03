@@ -53,9 +53,9 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
                 String.valueOf(App.eventId) + "/eventitems";
 
         //Load Cached content
-        roomsJson = App.db.getContentFromDataBase(urlRooms);
-        itemsJson = App.db.getContentFromDataBase(urlItems);
-        updateView();
+        String roomsJsonCached = App.db.getContentFromDataBase(urlRooms);
+        String itemsJsonCached = App.db.getContentFromDataBase(urlItems);
+        updateView(roomsJsonCached, itemsJsonCached);
 
         //Load online content
         new RequestTask(this).execute(urlRooms, "eventRooms");
@@ -88,7 +88,7 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
             itemsJson = JsonString;
         }
         if(roomsJson != null && itemsJson != null){
-            updateView();
+            updateView(roomsJson, itemsJson);
         }
     }
 
@@ -102,18 +102,18 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
         return list.toArray(new EventItem[list.size()]);
     }
 
-    private void updateView(){
-        if(roomsJson != null && itemsJson != null){
+    private void updateView(String roomsString, String itemsString){
+        if(roomsString != null && itemsString != null){
             try {
-                EventRoom[] rooms = new Gson().fromJson(roomsJson, EventRoom[].class);
-                EventItem[] items = new Gson().fromJson(itemsJson, EventItem[].class);
+                EventRoom[] rooms = new Gson().fromJson(roomsString, EventRoom[].class);
+                EventItem[] items = new Gson().fromJson(itemsString, EventItem[].class);
                 for (int i = 0; i < rooms.length; i++) {
                     rooms[i].color = roomColors[i%roomColors.length];
                 }
                 mTabHost.clearAllTabs();
                 //Load Overview
                 Bundle overviewArgs = new Bundle();
-                overviewArgs.putString("eventitems", itemsJson);
+                overviewArgs.putString("eventitems", itemsString);
                 overviewArgs.putString("rooms", new Gson().toJson(rooms));
                 mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
                         AgendaFragment.class, overviewArgs);

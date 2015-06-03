@@ -1,5 +1,6 @@
 package com.oztz.hackinglabmobile.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -55,17 +56,23 @@ public class DbOperator {
     public boolean saveToDataBase(String key, String json){
         try {
             SQLiteDatabase db = helper.getWritableDatabase();
+            ContentValues cv = new ContentValues();
+            cv.put("content", json);
+
             String content = getContentFromDataBase(key);
             String query;
             if (content != null) {
+                db.update(HackingLabDbHelper.CONTENT_TABLE_NAME,cv, "key = ?", new String[]{key});
                 query = "UPDATE " + HackingLabDbHelper.CONTENT_TABLE_NAME +
                         " SET content = '" + json + "' WHERE key='" + key + "'";
             } else {
+                cv.put("key", key);
+                db.insert(HackingLabDbHelper.CONTENT_TABLE_NAME, null, cv);
                 query = "INSERT INTO " + HackingLabDbHelper.CONTENT_TABLE_NAME + "" +
                         "(key, content) VALUES ('" +
                         key + "', '" + json + "');";
             }
-            db.execSQL(query);
+            //db.execSQL(query);
             Log.d("DEBUG", query);
             return true;
         } catch(Exception e){
@@ -79,7 +86,10 @@ public class DbOperator {
         SQLiteDatabase db = helper.getReadableDatabase();
         String query = "SELECT * FROM " + HackingLabDbHelper.CONTENT_TABLE_NAME +
                 " WHERE key = '" + key + "'";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = db.query(HackingLabDbHelper.CONTENT_TABLE_NAME,
+                new String[]{"key", "content"},
+                "key=?", new String[] { key }, null, null, null);
+        //Cursor c = db.rawQuery(query, null);
         if(c.getCount() > 0){
             c.moveToFirst();
             return c.getString(c.getColumnIndex("content"));

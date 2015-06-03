@@ -33,7 +33,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
     TextView title, description;
     ImageView flag, speakerImage;
     ImageLoader imageLoader;
-    LinearLayout mainLayout;
+    LinearLayout descriptionLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
         description = (TextView) findViewById(R.id.speakerDetail_Description_TextView);
         flag = (ImageView) findViewById(R.id.speakerDetail_Flag_ImageView);
         speakerImage = (ImageView) findViewById(R.id.speakerDetail_speakerImage);
-        mainLayout = (LinearLayout) findViewById(R.id.speaker_detail_main_layout);
+        descriptionLayout = (LinearLayout) findViewById(R.id.speakerDetail_descriptionLayout);
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
                 String.valueOf(App.eventId) + "/eventitems", "eventItems");
         SetupView();
@@ -116,7 +116,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
                     t.setText(getResources().getString(R.string.speeches_by) + " " +
                             title.getText().toString() + ":");
                     t.setTextColor(description.getCurrentTextColor());
-                    mainLayout.addView(t);
+                    descriptionLayout.addView(t);
 
                     for(int i=0; i<eventItems.length; i++){
                         final EventItem item = eventItems[i];
@@ -131,7 +131,7 @@ public class SpeakerDetailActivity extends ActionBarActivity implements JsonResu
                                 startActivity(intent);
                             }
                         });
-                        mainLayout.addView(b);
+                        descriptionLayout.addView(b);
                     }
                 }
 
