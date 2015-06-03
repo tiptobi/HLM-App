@@ -24,6 +24,7 @@ import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Media;
 import com.oztz.hackinglabmobile.businessclasses.Social;
+import com.oztz.hackinglabmobile.database.DbOperator;
 import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.PostMediaTask;
@@ -47,6 +48,7 @@ public class ShareFragment extends Fragment implements JsonResult{
     private String mediaUri;
     private String socialPost;
     private boolean imageUploaded = false;
+    private String qrCode;
 
     public static ShareFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "PlaceholderFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
@@ -126,13 +128,19 @@ public class ShareFragment extends Fragment implements JsonResult{
     }
 
     private void share(){
+        DbOperator operator = new DbOperator(getActivity().getApplicationContext());
+        qrCode = operator.getQrCode("author", App.eventId);
         socialPost = postEditText.getText().toString();
         if(mediaUri != null || (socialPost != null && socialPost.length() > 0)) { // Avoid empty posts
             if (mediaUri != null) {
                 new PostMediaTask(this).execute(getResources().getString(R.string.rootURL) + "media/upload", mediaUri);
             } else {
                 Social s = new Social(socialPost, "pending", null, App.username, App.userId, 0, App.eventId);
-                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+                if(qrCode != null) {
+                    new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s), qrCode);
+                } else {
+                    new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+                }
             }
         }
     }
@@ -169,15 +177,22 @@ public class ShareFragment extends Fragment implements JsonResult{
             try {
                 Media m = new Gson().fromJson(JsonString, Media.class);
                 Social s = new Social(socialPost, "pending", m.link, App.username, App.userId, m.mediaID, App.eventId);
-                new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+
+                if(qrCode != null){
+                    new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s), qrCode);
+                } else {
+                    new PostTask(this).execute(getResources().getString(R.string.rootURL) + "social", new Gson().toJson(s));
+                }
+
+
             } catch (Exception e){
                 Log.d("DEBUG", e.getMessage());
             }
         } else if(requestCode.equals("POST")){
             if(JsonString == null){
-                Toast.makeText(App.getContext(), getResources().getString(R.string.error_share_failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), getResources().getString(R.string.error_share_failed), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(App.getContext(), getResources().getString(R.string.share_success), Toast.LENGTH_SHORT).show();
+                Toast.makeText(App.getContext(), getResources().getString(R.string.share_success), Toast.LENGTH_LONG).show();
                 getFragmentManager().beginTransaction()
                         .replace(R.id.container, MainFragment.newInstance(1))
                         .commit();

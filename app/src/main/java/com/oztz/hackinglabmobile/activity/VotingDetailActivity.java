@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -46,7 +48,9 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        App.loadVariables();
         voting = loadVoting();
+        voting.votingEnd = getEndTime();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting_detail);
         scrollBarHolder = (LinearLayout) findViewById(R.id.voting_detail_scrollbar_holder);
@@ -82,6 +86,23 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
         return 0;
     }
 
+    private String getEndTime() {
+        try {
+            SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
+            Calendar duration = Calendar.getInstance();
+            Calendar c = Calendar.getInstance();
+            duration.setTime(parser.parse(voting.votingDuration));
+            c.setTime(parser.parse(voting.votingStarted));
+            c.add(Calendar.HOUR_OF_DAY, duration.get(Calendar.HOUR_OF_DAY));
+            c.add(Calendar.MINUTE, duration.get(Calendar.MINUTE));
+            c.add(Calendar.SECOND, duration.get(Calendar.SECOND));
+            return parser.format(c.getTime());
+        } catch (Exception e){
+            Log.d("DEBUG", e.getMessage());
+        }
+        return "";
+    }
+
     private String getTimeString(long diff) {
         Date date = new Date(diff);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -96,14 +117,12 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
             if(diff > 0){
                 new CountDownTimer(diff, 1000) {
                     public void onTick(long millisUntilFinished) {
-                        countDown.setText(getTimeString(diff));
-                        diff = diff - 1000;
+                        countDown.setText(getTimeString(millisUntilFinished));
                     }
                     public void onFinish() {
                         countDown.setText("--:--:--");
                     }
                 }.start();
-
             }
         } catch (Exception e){
 

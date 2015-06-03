@@ -39,8 +39,8 @@ public class DbOperator {
 
     public String getQrCode(String role, int eventid){
         SQLiteDatabase db = helper.getReadableDatabase();
-        String query = "SELECT * FROM " + HackingLabDbHelper.QR_TABLE_NAME;/* +
-                " WHERE role = '" + role + "' AND eventid = " + String.valueOf(eventid);*/
+        String query = "SELECT * FROM " + HackingLabDbHelper.QR_TABLE_NAME +
+                " WHERE role = '" + role + "' AND eventid = " + String.valueOf(eventid);
         Cursor c = db.rawQuery(query, null);
         if(c.getCount() > 0){
             c.moveToFirst();

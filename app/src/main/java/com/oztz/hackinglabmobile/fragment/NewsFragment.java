@@ -17,6 +17,9 @@ import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * Created by Tobi on 20.03.2015.
  */
@@ -24,6 +27,7 @@ public class NewsFragment extends Fragment implements JsonResult {
 
     private ListView newsListView;
     private RequestTask requestTask;
+    View footer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,21 +44,26 @@ public class NewsFragment extends Fragment implements JsonResult {
         newsListView = (ListView) view.findViewById(R.id.news_listview);
 
         String url = getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/news";
-        updateView(App.db.getContentFromDataBase(url));
+                String.valueOf(App.eventId) + "/news/newest";
+        updateView(App.db.getContentFromDataBase(url), "db");
         requestTask = new RequestTask(this);
-        requestTask.execute(url, "news");
+        requestTask.execute(url, "newest");
 
         return view;
     }
 
     @Override
     public void onTaskCompleted(String result, String requestCode) {
-        if(requestCode.equals("news") && result != null) {
-            updateView(result);
+        if(result != null) {
+            updateView(result, requestCode);
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data",Toast.LENGTH_SHORT);
         }
+    }
+
+    private void loadMoreData(){
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/news", "all");
     }
 
     @Override
@@ -64,12 +73,37 @@ public class NewsFragment extends Fragment implements JsonResult {
         requestTask.cancel(true);
     }
 
-    private void updateView(String json){
+    private void updateView(String json, String requestCode){
         if(json != null){
-            News[] news = null;
             try {
-                news = new Gson().fromJson(json, News[].class);
-                newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+                News[] news = new Gson().fromJson(json, News[].class);
+                Arrays.sort(news, new Comparator<News>() {
+                    @Override
+                    public int compare(News lhs, News rhs) {
+                        return lhs.newsId - rhs.newsId;
+                    }
+                });
+                if(requestCode.equals("newest")) {
+                    if (newsListView.getFooterViewsCount() == 0) {
+                        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+                        footer = inflater.inflate(R.layout.item_load_more_data, null);
+                        footer.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                loadMoreData();
+                            }
+                        });
+                        newsListView.addFooterView(footer);
+                    }
+                    newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+                } else if(requestCode.equals("all")){
+                    int scrollPosition = newsListView.getFirstVisiblePosition();
+                    newsListView.removeFooterView(footer);
+                    newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+                    newsListView.setSelectionFromTop(scrollPosition+1, 0);
+                } else if(requestCode.equals("db")){
+                    newsListView.setAdapter(new NewsAdapter(getActivity(), R.layout.item_article_textonly, news));
+                }
             } catch(Exception e){
                 Toast.makeText(getActivity().getApplicationContext(), "Error loading Data",Toast.LENGTH_SHORT);
             }
