@@ -85,4 +85,7 @@
     <!-- Push -->
     <string name="voting_started">%1$s starts now!</string>
 
+    <!-- QR-Code -->
+    <string name="qr_successful_notification">You are now %1$s for this event!</string>
+
 </resources>

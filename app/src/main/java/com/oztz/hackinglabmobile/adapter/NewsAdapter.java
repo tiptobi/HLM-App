@@ -55,7 +55,7 @@ public class NewsAdapter extends ArrayAdapter {
         v = inflater.inflate(R.layout.item_article_textonly, null);
 
         if (item != null) {
-            holder.id = item.newsId;
+            holder.id = item.newsID;
             if(item.media != null){
                 v = inflater.inflate(R.layout.item_social_with_media, null);
                 holder.newsImage = (ImageView) v.findViewById(R.id.social_thumbnail);

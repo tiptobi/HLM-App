@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -110,11 +111,15 @@ public class MainActivity extends ActionBarActivity implements
                 currentFragment = new MainFragment();
         }
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.container,
-                        currentFragment).commit();
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container,
+                            currentFragment)
+                    .commit();
+
         currentFragmentPosition = position;
+
+        Log.d("DEBUG", "BackstackCount: "  + fragmentManager.getBackStackEntryCount());
     }
 
     private void getFragmentFromIntent(){
@@ -147,6 +152,15 @@ public class MainActivity extends ActionBarActivity implements
             return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(currentFragmentPosition > 1){
+            loadFragment(0);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -192,8 +206,17 @@ public class MainActivity extends ActionBarActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (scanResult != null) {
+        if (scanResult != null && scanResult.getContents() != null) {
             String payload = scanResult.getContents().trim();
+            if(payload.contains("jury") && payload.contains(String.valueOf(App.eventId))){
+                Toast.makeText(getApplicationContext(),
+                        String.format(getResources().getString(R.string.qr_successful_notification), "jury"),
+                        Toast.LENGTH_SHORT).show();
+            } else if(payload.contains("author") && payload.contains(String.valueOf(App.eventId))){
+                Toast.makeText(getApplicationContext(),
+                        String.format(getResources().getString(R.string.qr_successful_notification), "author"),
+                        Toast.LENGTH_SHORT).show();
+            }
             new DbOperator(getApplicationContext()).addQrCode(payload);
         }
     }

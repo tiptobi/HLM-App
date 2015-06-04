@@ -28,7 +28,7 @@ public class ChallengeDetailActivity extends Activity {
 
     private void setupVideo(){
         if(challenge.aboutchallenge != null && challenge.aboutchallenge.length() > 1){
-            Uri videoUrl = Uri.parse(challenge.aboutchallenge + ".mp4");
+            Uri videoUrl = Uri.parse(challenge.aboutchallenge + ".webm");
             videoView.setVideoURI(videoUrl);
             MediaController mc = new MediaController(this);
             mc.setAnchorView(videoView);

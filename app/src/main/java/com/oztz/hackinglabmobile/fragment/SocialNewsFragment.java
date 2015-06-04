@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ import java.util.List;
 public class SocialNewsFragment extends Fragment implements JsonResult {
 
     ListView SocialNewsListView;
+    ImageButton shareButton;
     View footer;
 
     @Override
@@ -43,6 +45,13 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
         Log.d("DEBUG", "SocialNewsFragment.onCreateView()");
         View view = inflater.inflate(R.layout.fragment_socialnews, container, false);
         SocialNewsListView = (ListView) view.findViewById(R.id.SocialNews_List_View);
+        shareButton = (ImageButton) view.findViewById(R.id.socialNews_imageButton_share);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadShareFragment();
+            }
+        });
         String url = getResources().getString(R.string.rootURL) + "event/" +
                 String.valueOf(App.eventId) + "/socials/newest";
         updateView(App.db.getContentFromDataBase(url), "db");
@@ -54,6 +63,13 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
     private void loadMoreData(){
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
                 String.valueOf(App.eventId) + "/socials", "all");
+    }
+
+    private void loadShareFragment(){
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container,
+                        ShareFragment.newInstance(3))
+                .commit();
     }
 
     @Override
@@ -88,7 +104,7 @@ public class SocialNewsFragment extends Fragment implements JsonResult {
                 });
 
                 if(requestCode.equals("newest")){
-                    if(SocialNewsListView.getFooterViewsCount() == 0){
+                    if(SocialNewsListView.getFooterViewsCount() == 0 && socialnews.length >= App.newestSelectLimit){
                         LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
                         footer = inflater.inflate(R.layout.item_load_more_data, null);
                         footer.setOnClickListener(new View.OnClickListener() {

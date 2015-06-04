@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
+import com.oztz.hackinglabmobile.businessclasses.AppConfig;
 import com.oztz.hackinglabmobile.businessclasses.Event;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
@@ -24,6 +25,7 @@ public class ChooseEventActivity extends Activity implements JsonResult{
 
     LinearLayout loadingHolder, eventsHolder, tryAgainHolder;
     Button tryAgainButton;
+    String eventsString, settingsString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class ChooseEventActivity extends Activity implements JsonResult{
         loadingHolder = (LinearLayout) findViewById(R.id.choose_event_loading_holder);
         eventsHolder = (LinearLayout) findViewById(R.id.choose_event_holder);
         tryAgainHolder = (LinearLayout) findViewById(R.id.choose_event_try_again_holder);
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "settings", "settings");
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event", "events");
     }
 
@@ -75,6 +78,14 @@ public class ChooseEventActivity extends Activity implements JsonResult{
         editor.commit();
     }
 
+    private void setConfig(AppConfig config) {
+        SharedPreferences sharedPref = getSharedPreferences(
+                getString(R.string.preferences_file), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("newestSelectLimit", config.newestSelectLimit);
+        editor.commit();
+    }
+
     private void showRefreshButton(){
         loadingHolder.setVisibility(View.GONE);
         tryAgainHolder.setVisibility(View.VISIBLE);
@@ -90,8 +101,24 @@ public class ChooseEventActivity extends Activity implements JsonResult{
     @Override
     public void onTaskCompleted(String JsonString, String requestCode) {
         if(JsonString != null && requestCode != null && requestCode.equals("events")){
+            eventsString = JsonString;
+
+        } else if (JsonString != null && requestCode != null && requestCode.equals("settings")) {
+                settingsString = JsonString;
+        } else {
+                showRefreshButton(); //No Connection
+        }
+
+        if(settingsString != null && eventsString != null){
+            try {
+                AppConfig config = new Gson().fromJson(settingsString, AppConfig.class);
+                setConfig(config);
+            } catch(Exception e){
+                Log.d("DEBUG", e.getMessage());
+            }
+
             try{
-                final Event[] events = new Gson().fromJson(JsonString, Event[].class);
+                final Event[] events = new Gson().fromJson(eventsString, Event[].class);
                 if(events != null && events.length > 0){
                     List<Event> activeEvents = new ArrayList<Event>();
                     for(int i=0; i<events.length; i++){
@@ -99,7 +126,6 @@ public class ChooseEventActivity extends Activity implements JsonResult{
                             activeEvents.add(events[i]);
                         }
                     }
-
                     if(activeEvents.size() > 1){ //Multiple active Events
                         showEvents(activeEvents);
                     } else if(activeEvents.size() == 1){ //One Active Event
@@ -115,8 +141,6 @@ public class ChooseEventActivity extends Activity implements JsonResult{
             } catch (Exception e){
                 Log.d("DEBUG", e.getMessage());
             }
-        } else {
-            showRefreshButton(); //No Connection
         }
     }
 }

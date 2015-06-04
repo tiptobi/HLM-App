@@ -17,6 +17,7 @@ public class App extends Application {
     public static String deviceId;
     public static int userId;
     public static int eventId;
+    public static int newestSelectLimit;
     public static DbOperator db; //makes all operations on Database
 
     @Override
@@ -32,7 +33,7 @@ public class App extends Application {
         userId = sharedPref.getInt("userId", 0);
         deviceId = sharedPref.getString("deviceId", "");
         eventId = sharedPref.getInt("eventId", 0);
-
+        newestSelectLimit = sharedPref.getInt("newestSelectLimit", 15);
         db = new DbOperator(mContext);
         Log.d("DEBUG", "username=" + username + "; userId=" + String.valueOf(userId) + "; " +
                 "deviceId=" + String.valueOf(deviceId));

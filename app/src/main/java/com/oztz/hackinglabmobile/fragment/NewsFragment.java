@@ -80,11 +80,11 @@ public class NewsFragment extends Fragment implements JsonResult {
                 Arrays.sort(news, new Comparator<News>() {
                     @Override
                     public int compare(News lhs, News rhs) {
-                        return lhs.newsId - rhs.newsId;
+                        return lhs.newsID - rhs.newsID;
                     }
                 });
                 if(requestCode.equals("newest")) {
-                    if (newsListView.getFooterViewsCount() == 0) {
+                    if (newsListView.getFooterViewsCount() == 0 && news.length >= App.newestSelectLimit) {
                         LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
                         footer = inflater.inflate(R.layout.item_load_more_data, null);
                         footer.setOnClickListener(new View.OnClickListener() {
