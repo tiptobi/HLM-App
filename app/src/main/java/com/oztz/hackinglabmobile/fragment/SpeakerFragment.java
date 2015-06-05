@@ -18,6 +18,7 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.activity.SpeakerDetailActivity;
 import com.oztz.hackinglabmobile.adapter.SpeakerAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
+import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -49,7 +50,8 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_speaker, container, false);
         speakerListView = (ListView)view.findViewById(R.id.speaker_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "speaker", "speaker");
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/speakers", "speaker");
         return view;
     }
 

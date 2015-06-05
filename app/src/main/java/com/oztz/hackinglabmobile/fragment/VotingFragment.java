@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Tobi on 20.03.2015.
@@ -36,7 +38,8 @@ public class VotingFragment extends Fragment implements JsonResult {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView votingListView;
     private List<Voting> currentVotings;
-    private String ServerTime;
+    RequestTask rt;
+    Timer timer;
 
     public static VotingFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "ConferenceFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
@@ -59,11 +62,24 @@ public class VotingFragment extends Fragment implements JsonResult {
         View view = inflater.inflate(R.layout.fragment_voting, container, false);
         votingListView = (ListView)view.findViewById(R.id.voting_listview);
         currentVotings = new ArrayList<Voting>();
-        ServerTime = null;
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "" +
-                "event/" + String.valueOf(App.eventId) + "/votings", "voting");
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "time", "time");
+        reloadVotings();
         return view;
+    }
+
+    private void reloadVotings(){
+        rt = new RequestTask(this);
+        rt.execute(getResources().getString(R.string.rootURL) + "" +
+                "event/" + String.valueOf(App.eventId) + "/votings", "voting");
+    }
+
+    private void startReloadTask(){
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                reloadVotings();
+            }
+        }, 0, 5000);
     }
 
     @Override
@@ -90,14 +106,8 @@ public class VotingFragment extends Fragment implements JsonResult {
             } catch (Exception e) {
                 Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
             }
-        } else if(requestCode.equals("time")){
-            if(JsonString.contains(".")) {
-                ServerTime = JsonString.substring(0, JsonString.indexOf("."));
-            } else {
-                ServerTime = JsonString;
-            }
         }
-        if(ServerTime != null && currentVotings.size() > 0){
+        if(currentVotings.size() > 0){
             votingListView.setAdapter(new VotingAdapter(getActivity(), R.layout.item_voting, currentVotings.toArray(new Voting[currentVotings.size()])));
             votingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -108,6 +118,26 @@ public class VotingFragment extends Fragment implements JsonResult {
                 }
             });
         }
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d("DEBUG", "VotingFragment.onPause()");
+        if(rt != null){
+            rt.cancel(true);
+        }
+        if(timer != null){
+            timer.cancel();
+        }
+
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("DEBUG", "VotingFragment.onResume()");
+        startReloadTask();
     }
 
     private String getEndTime(Voting v) throws ParseException {

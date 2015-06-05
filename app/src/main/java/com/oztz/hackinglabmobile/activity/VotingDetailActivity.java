@@ -1,5 +1,6 @@
 package com.oztz.hackinglabmobile.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Slider;
 import com.oztz.hackinglabmobile.businessclasses.Vote;
 import com.oztz.hackinglabmobile.businessclasses.Voting;
-import com.oztz.hackinglabmobile.database.DbOperator;
 import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.JsonResult;
 import com.oztz.hackinglabmobile.helper.PostTask;
@@ -38,19 +38,24 @@ import java.util.TimeZone;
 public class VotingDetailActivity extends ActionBarActivity implements JsonResult {
 
     Voting voting;
-    String serverTime;
+    String serverTime, qrCode;
     TextView title, countDown;
     List<TextView> labels;
     List<SeekBar> scrollBars;
     Button voteButton;
     LinearLayout scrollBarHolder;
+    boolean isJury;
     long diff;
+    ProgressDialog loading;
+    int postCount = 0;
+    boolean successfulVoting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         App.loadVariables();
         voting = loadVoting();
         voting.votingEnd = getEndTime();
+        checkForJury();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting_detail);
         scrollBarHolder = (LinearLayout) findViewById(R.id.voting_detail_scrollbar_holder);
@@ -84,6 +89,11 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
             return endMillis - startMillis;
         }
         return 0;
+    }
+
+    private void checkForJury(){
+        qrCode = App.db.getQrCode("jury", App.eventId);
+        isJury = qrCode != null;
     }
 
     private String getEndTime() {
@@ -121,20 +131,30 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
                     }
                     public void onFinish() {
                         countDown.setText("--:--:--");
+                        if(! isJury){
+                            Toast.makeText(getApplicationContext(), "Time is over!", Toast.LENGTH_SHORT).show();
+                            voteButton.setEnabled(false);
+                        }
                     }
                 }.start();
+            } else if(!isJury){
+                voteButton.setEnabled(false);
+                Toast.makeText(getApplicationContext(), "Time is over!", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e){
 
         }
     }
 
+    private void closeVoting(){
+        this.finish();
+    }
+
     private void postVoting(){
-        DbOperator operator = new DbOperator(getApplicationContext());
-        String qrCode = operator.getQrCode("jury", App.eventId);
+        loading = ProgressDialog.show(this, "Loading", "Send voting...", true, true);
         for(int i=0; i<scrollBars.size(); i++){
             SeekBar s = scrollBars.get(i);
-            if(qrCode != null){ //Ist ein Jurymitglied
+            if(isJury){ //Ist ein Jurymitglied
                 Vote v = new Vote(0, s.getProgress(), false, (int)s.getTag(), App.userId);
                 String json = new Gson().toJson(v, Vote.class);
                 new PostTask(this).execute(getResources().getString(R.string.rootURL) + "vote", json, qrCode);
@@ -236,6 +256,24 @@ public class VotingDetailActivity extends ActionBarActivity implements JsonResul
                     serverTime = JsonString;
                 }
                 loadCountdown();
+            } else if(requestCode.equals("POST")){
+                Log.d("DEBUG", JsonString);
+                if(JsonString.contains("HTTP Status 423")){
+                    successfulVoting = false;
+                }
+                postCount++;
+            }
+
+            if(postCount >= scrollBars.size()){
+                loading.dismiss();
+                if(successfulVoting){
+                    Toast.makeText(getApplicationContext(), "Thank you for your voting!",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "You have already voted!",
+                            Toast.LENGTH_SHORT).show();
+                }
+                this.finish();
             }
 
         } catch(Exception e){
