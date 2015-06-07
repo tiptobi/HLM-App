@@ -19,13 +19,13 @@ import com.oztz.hackinglabmobile.activity.TeamDetailActivity;
 import com.oztz.hackinglabmobile.adapter.TeamsAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Team;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class TeamsFragment extends Fragment implements JsonResult {
+public class TeamsFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView teamsListView;
@@ -50,8 +50,12 @@ public class TeamsFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_teams, container, false);
         teamsListView = (ListView) view.findViewById(R.id.teams_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "WebService/GetGroups/" + String.valueOf(App.eventId), "teams");
+
+        String url = getResources().getString(R.string.hackingLabUrl) +
+                "WebService/GetGroups/" + String.valueOf(App.eventId);
+        updateView(App.db.getContentFromDataBase(url));
+        new RequestTask(this).execute(url, "teams");
+
         return view;
     }
 
@@ -62,8 +66,7 @@ public class TeamsFragment extends Fragment implements JsonResult {
                 ARG_SECTION_NUMBER));
     }
 
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
+    private void updateView(String JsonString){
         try {
             final Team[] teams = new Gson().fromJson(JsonString, Team[].class);
             teamsListView.setAdapter(new TeamsAdapter(getActivity(), R.layout.item_teams, teams));
@@ -77,6 +80,13 @@ public class TeamsFragment extends Fragment implements JsonResult {
             });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        if(requestCode.equals("teams")){
+            updateView(JsonString);
         }
 
     }

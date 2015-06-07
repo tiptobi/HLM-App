@@ -6,17 +6,17 @@ import android.os.AsyncTask;
  * Created by Tobi on 25.03.2015.
  */
 public class PostMediaTask extends AsyncTask<String, String, String> {
-    private JsonResult listener;
+    private HttpResult listener;
     String result;
 
-    public PostMediaTask(JsonResult listener){
+    public PostMediaTask(HttpResult listener){
         this.listener = listener;
     }
 
     @Override
     protected String doInBackground(String... uri) {
         try {
-            result = new JsonHelper().PostMedia(uri[0], uri[1]);
+            result = new HttpHelper().PostMedia(uri[0], uri[1]);
         } catch (Exception e){
             result = null;
         }

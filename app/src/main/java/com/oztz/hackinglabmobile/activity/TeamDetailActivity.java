@@ -16,13 +16,13 @@ import com.oztz.hackinglabmobile.businessclasses.DashboardEvent;
 import com.oztz.hackinglabmobile.businessclasses.Participant;
 import com.oztz.hackinglabmobile.businessclasses.Team;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamDetailActivity extends ActionBarActivity implements JsonResult {
+public class TeamDetailActivity extends ActionBarActivity implements HttpResult {
 
     Team team;
     ListView teamsListView;

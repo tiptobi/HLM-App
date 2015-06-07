@@ -19,12 +19,12 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.gson.Gson;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.User;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.PostTask;
 
 import java.io.IOException;
 
-public class RegisterActivity extends Activity implements JsonResult{
+public class RegisterActivity extends Activity implements HttpResult {
 
     EditText nameEditText;
     TextView messageTextView;

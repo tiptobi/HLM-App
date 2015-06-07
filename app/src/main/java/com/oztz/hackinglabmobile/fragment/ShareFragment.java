@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,16 +27,20 @@ import com.oztz.hackinglabmobile.businessclasses.Media;
 import com.oztz.hackinglabmobile.businessclasses.Social;
 import com.oztz.hackinglabmobile.database.DbOperator;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.PostMediaTask;
 import com.oztz.hackinglabmobile.helper.PostTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class ShareFragment extends Fragment implements JsonResult{
+public class ShareFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -105,10 +110,10 @@ public class ShareFragment extends Fragment implements JsonResult{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            mediaUri = getRealPathFromURI(data.getData());
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            thumbnail.setImageBitmap(imageBitmap);
+            //mediaUri = getRealPathFromURI(data.getData());
+            /*Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");*/
+            thumbnail.setImageURI(Uri.parse(mediaUri));
         }
         else if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             mediaUri = getRealPathFromURI(data.getData());
@@ -126,6 +131,23 @@ public class ShareFragment extends Fragment implements JsonResult{
             thumbnail.setImageBitmap(bitmap);
         }
     }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String imageFileName = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mediaUri = image.getAbsolutePath();
+        return image;
+    }
+
 
     private void share(){
         DbOperator operator = new DbOperator(getActivity().getApplicationContext());
@@ -155,10 +177,23 @@ public class ShareFragment extends Fragment implements JsonResult{
     private void TakePictureIntent() {
         PackageManager pm = getActivity().getPackageManager();
         if(!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)){
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "No camera found!", Toast.LENGTH_SHORT).show();
             return;
         }
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(pm) != null) {
+            File photoFile = null;
+            try{
+                photoFile = createImageFile();
+            } catch (IOException e){
+                Log.d("DEBUG", e.getMessage());
+            }
+
+            if(photoFile != null){
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+            }
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }

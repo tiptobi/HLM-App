@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Conference Fox</string>
+    <string name="app_name">Confoxy</string>
 
     <string name="rootURL">https://fix.confoxy.com/hlmng/rest/pub/</string>
     <string name="hackingLabUrl">http://dashboard.hacking-lab.com/REST/</string>

@@ -21,13 +21,13 @@ import com.oztz.hackinglabmobile.businessclasses.EventItem;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
 import com.oztz.hackinglabmobile.helper.App;
 import com.oztz.hackinglabmobile.helper.AuthImageDownloader;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpeakerDetailActivity extends ActionBarActivity implements JsonResult {
+public class SpeakerDetailActivity extends ActionBarActivity implements HttpResult {
 
     Speaker speaker;
     TextView title, description;

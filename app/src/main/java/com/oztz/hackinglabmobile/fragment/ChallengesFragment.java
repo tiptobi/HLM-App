@@ -19,13 +19,13 @@ import com.oztz.hackinglabmobile.activity.ChallengeDetailActivity;
 import com.oztz.hackinglabmobile.adapter.ChallengesAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Challenge;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class ChallengesFragment extends Fragment implements JsonResult {
+public class ChallengesFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView challengesListView;
@@ -50,8 +50,12 @@ public class ChallengesFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_challenges, container, false);
         challengesListView = (ListView)view.findViewById(R.id.challenges_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "SlideService/GetChallenge/" + String.valueOf(App.eventId), "Challenge");
+
+        String url = getResources().getString(R.string.hackingLabUrl) +
+                "SlideService/GetChallenge/" + String.valueOf(App.eventId);
+        updateView(App.db.getContentFromDataBase(url));
+        new RequestTask(this).execute(url, "Challenge");
+
         return view;
     }
 
@@ -62,8 +66,7 @@ public class ChallengesFragment extends Fragment implements JsonResult {
                 ARG_SECTION_NUMBER));
     }
 
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
+    private void updateView(String JsonString){
         try {
             final Challenge[] challenges = new Gson().fromJson(JsonString, Challenge[].class);
             challengesListView.setAdapter(new ChallengesAdapter(getActivity(), R.layout.item_challenges, challenges));
@@ -83,6 +86,13 @@ public class ChallengesFragment extends Fragment implements JsonResult {
             });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        if(requestCode.equals("Challenge")){
+            updateView(JsonString);
         }
 
     }

@@ -17,10 +17,10 @@ import com.oztz.hackinglabmobile.businessclasses.EventItem;
 import com.oztz.hackinglabmobile.businessclasses.EventRoom;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
 import com.oztz.hackinglabmobile.helper.AuthImageDownloader;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
-public class EventItemDetailActivity extends ActionBarActivity implements JsonResult {
+public class EventItemDetailActivity extends ActionBarActivity implements HttpResult {
 
     EventItem eventItem;
     EventRoom eventRoom;

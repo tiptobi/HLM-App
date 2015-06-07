@@ -20,10 +20,11 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.activity.VotingDetailActivity;
 import com.oztz.hackinglabmobile.businessclasses.PushMessage;
 import com.oztz.hackinglabmobile.businessclasses.Voting;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.App;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
-public class GcmMessageHandler extends IntentService implements JsonResult {
+public class GcmMessageHandler extends IntentService implements HttpResult {
 
     private Handler handler;
     private String message, title;
@@ -34,7 +35,6 @@ public class GcmMessageHandler extends IntentService implements JsonResult {
 
     @Override
     public void onCreate() {
-        // TODO Auto-generated method stub
         super.onCreate();
         handler = new Handler();
     }
@@ -55,7 +55,7 @@ public class GcmMessageHandler extends IntentService implements JsonResult {
         try{
             pm = new Gson().fromJson(message, PushMessage.class);
         } catch(Exception e){ }
-        if(title.equals("voting") && pm != null){
+        if(title.equals("voting") && pm != null && App.username != null){
             new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting/" +
                 String.valueOf(pm.votingID), "voting");
         } else if(title.equals("presentation_end")){

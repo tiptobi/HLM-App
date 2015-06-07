@@ -1,6 +1,7 @@
 package com.oztz.hackinglabmobile.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,27 +16,26 @@ import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.AppConfig;
 import com.oztz.hackinglabmobile.businessclasses.Event;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChooseEventActivity extends Activity implements JsonResult{
+public class ChooseEventActivity extends Activity implements HttpResult {
 
-    LinearLayout loadingHolder, eventsHolder, tryAgainHolder;
+    LinearLayout eventsHolder, tryAgainHolder;
     Button tryAgainButton;
     String eventsString, settingsString;
+    ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_event);
-        loadingHolder = (LinearLayout) findViewById(R.id.choose_event_loading_holder);
         eventsHolder = (LinearLayout) findViewById(R.id.choose_event_holder);
         tryAgainHolder = (LinearLayout) findViewById(R.id.choose_event_try_again_holder);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "settings", "settings");
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event", "events");
+        refresh();
     }
 
     private void startMainActivity(){
@@ -44,14 +44,19 @@ public class ChooseEventActivity extends Activity implements JsonResult{
         this.finish();
     }
 
+
+
     private void refresh(){
+        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "settings", "settings");
         new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event", "events");
         tryAgainHolder.setVisibility(View.GONE);
-        loadingHolder.setVisibility(View.VISIBLE);
+        loading = ProgressDialog.show(this, "Loading", "getting events...", true, true);
     }
 
     private void showEvents(final List<Event> events){
-        loadingHolder.setVisibility(View.GONE);
+        if(loading != null && loading.isShowing()) {
+            loading.dismiss();
+        }
         eventsHolder.setVisibility(View.VISIBLE);
         for(int i=0; i<events.size(); i++) {
             final int index = i;
@@ -87,7 +92,9 @@ public class ChooseEventActivity extends Activity implements JsonResult{
     }
 
     private void showRefreshButton(){
-        loadingHolder.setVisibility(View.GONE);
+        if(loading != null && loading.isShowing()) {
+            loading.dismiss();
+        }
         tryAgainHolder.setVisibility(View.VISIBLE);
         tryAgainButton = (Button) findViewById(R.id.choose_event_btn_try_again);
         tryAgainButton.setOnClickListener(new View.OnClickListener() {

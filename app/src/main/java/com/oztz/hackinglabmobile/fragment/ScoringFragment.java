@@ -19,13 +19,13 @@ import com.oztz.hackinglabmobile.activity.ScoringDetailActivity;
 import com.oztz.hackinglabmobile.adapter.ScoringAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Team;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class ScoringFragment extends Fragment implements JsonResult {
+public class ScoringFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private String groupChallenges;
@@ -51,8 +51,12 @@ public class ScoringFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_scoring, container, false);
         scoringListView = (ListView) view.findViewById(R.id.scoring_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.hackingLabUrl) +
-                "SlideService/GetGroupRanking/" + String.valueOf(App.eventId), "groupRanking");
+
+        String url = getResources().getString(R.string.hackingLabUrl) +
+                "SlideService/GetGroupRanking/" + String.valueOf(App.eventId);
+        updateView(App.db.getContentFromDataBase(url));
+        new RequestTask(this).execute(url, "groupRanking");
+
         return view;
     }
 
@@ -63,24 +67,28 @@ public class ScoringFragment extends Fragment implements JsonResult {
                 ARG_SECTION_NUMBER));
     }
 
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
+    private void updateView(String JsonString){
         try {
-            if(requestCode.equals("groupRanking")) {
-                final Team[] teams = new Gson().fromJson(JsonString, Team[].class);
-                scoringListView.setAdapter(new ScoringAdapter(getActivity(), R.layout.item_scoring,
-                        teams));
-                scoringListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(getActivity(), ScoringDetailActivity.class);
-                        intent.putExtra("team", new Gson().toJson(teams[position], Team.class));
-                        startActivity(intent);
-                    }
-                });
-            }
+            final Team[] teams = new Gson().fromJson(JsonString, Team[].class);
+            scoringListView.setAdapter(new ScoringAdapter(getActivity(), R.layout.item_scoring,
+                    teams));
+            scoringListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(getActivity(), ScoringDetailActivity.class);
+                    intent.putExtra("team", new Gson().toJson(teams[position], Team.class));
+                    startActivity(intent);
+                }
+            });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        if(requestCode.equals("groupRanking")) {
+            updateView(JsonString);
         }
 
     }

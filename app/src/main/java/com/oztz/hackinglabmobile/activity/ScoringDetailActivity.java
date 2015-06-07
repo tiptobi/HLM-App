@@ -16,13 +16,13 @@ import com.oztz.hackinglabmobile.businessclasses.Challenge;
 import com.oztz.hackinglabmobile.businessclasses.ChallengeScore;
 import com.oztz.hackinglabmobile.businessclasses.Team;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScoringDetailActivity extends ActionBarActivity implements JsonResult {
+public class ScoringDetailActivity extends ActionBarActivity implements HttpResult {
 
     ChallengeScore[] scores;
     ListView scoresListView;

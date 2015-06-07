@@ -14,7 +14,7 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.adapter.NewsAdapter;
 import com.oztz.hackinglabmobile.businessclasses.News;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.Arrays;
@@ -23,7 +23,7 @@ import java.util.Comparator;
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class NewsFragment extends Fragment implements JsonResult {
+public class NewsFragment extends Fragment implements HttpResult {
 
     private ListView newsListView;
     private RequestTask requestTask;

@@ -22,6 +22,6 @@ public class AuthImageDownloader extends BaseImageDownloader {
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
         Log.d("DEBUG", "Download Image from " + imageUri);
-        return new JsonHelper().getURLConnection(imageUri);
+        return new HttpHelper().getURLConnection(imageUri);
     }
 }

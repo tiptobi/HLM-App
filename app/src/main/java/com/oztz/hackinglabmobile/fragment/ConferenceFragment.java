@@ -15,13 +15,13 @@ import com.oztz.hackinglabmobile.MainActivity;
 import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.Event;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class ConferenceFragment extends Fragment implements JsonResult {
+public class ConferenceFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private TextView titleTextView, descriptionTextView;

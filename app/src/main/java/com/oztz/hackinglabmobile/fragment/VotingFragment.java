@@ -19,7 +19,7 @@ import com.oztz.hackinglabmobile.activity.VotingDetailActivity;
 import com.oztz.hackinglabmobile.adapter.VotingAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Voting;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.text.ParseException;
@@ -33,7 +33,7 @@ import java.util.TimerTask;
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class VotingFragment extends Fragment implements JsonResult {
+public class VotingFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView votingListView;

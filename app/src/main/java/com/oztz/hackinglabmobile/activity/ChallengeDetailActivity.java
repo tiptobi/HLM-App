@@ -2,9 +2,11 @@ package com.oztz.hackinglabmobile.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.gson.Gson;
@@ -33,6 +35,20 @@ public class ChallengeDetailActivity extends Activity {
             MediaController mc = new MediaController(this);
             mc.setAnchorView(videoView);
             videoView.setMediaController(mc);
+            videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    String message = "Can not play this video!";
+                    if (extra == mp.MEDIA_ERROR_UNSUPPORTED) {
+                        message = "Unsupported file format";
+                    } else if (extra == mp.MEDIA_ERROR_TIMED_OUT) {
+                        message = "No internet connection";
+                    }
+                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                    finish();
+                    return false;
+                }
+            });
             videoView.start();
         }
     }

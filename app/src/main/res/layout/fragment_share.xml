@@ -9,7 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/share_img_thumbnail"
-        android:layout_marginLeft="10dp" />
+        android:maxHeight="100dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true" />
 
     <EditText
         android:layout_width="fill_parent"

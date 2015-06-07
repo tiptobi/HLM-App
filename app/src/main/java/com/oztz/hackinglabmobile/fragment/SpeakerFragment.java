@@ -19,13 +19,13 @@ import com.oztz.hackinglabmobile.activity.SpeakerDetailActivity;
 import com.oztz.hackinglabmobile.adapter.SpeakerAdapter;
 import com.oztz.hackinglabmobile.businessclasses.Speaker;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class SpeakerFragment extends Fragment implements JsonResult {
+public class SpeakerFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private ListView speakerListView;
@@ -50,8 +50,12 @@ public class SpeakerFragment extends Fragment implements JsonResult {
     {
         View view = inflater.inflate(R.layout.fragment_speaker, container, false);
         speakerListView = (ListView)view.findViewById(R.id.speaker_listview);
-        new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "event/" +
-                String.valueOf(App.eventId) + "/speakers", "speaker");
+
+        String url = getResources().getString(R.string.rootURL) + "event/" +
+                String.valueOf(App.eventId) + "/speakers";
+        updateView(App.db.getContentFromDataBase(url));
+        new RequestTask(this).execute(url, "speaker");
+
         return view;
     }
 
@@ -62,8 +66,7 @@ public class SpeakerFragment extends Fragment implements JsonResult {
                 ARG_SECTION_NUMBER));
     }
 
-    @Override
-    public void onTaskCompleted(String JsonString, String requestCode) {
+    private void updateView(String JsonString){
         try {
             final Speaker[] speakers = new Gson().fromJson(JsonString, Speaker[].class);
             speakerListView.setAdapter(new SpeakerAdapter(getActivity(),R.layout.item_speaker,
@@ -78,6 +81,13 @@ public class SpeakerFragment extends Fragment implements JsonResult {
             });
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error getting data", Toast.LENGTH_SHORT);
+        }
+    }
+
+    @Override
+    public void onTaskCompleted(String JsonString, String requestCode) {
+        if(requestCode != null && requestCode == "speaker") {
+            updateView(JsonString);
         }
     }
 }

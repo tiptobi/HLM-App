@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,11 +55,11 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         mWeekView.setOnEventClickListener(this);
         mWeekView.setMonthChangeListener(this);
         mWeekView.setEventLongPressListener(this);
-        mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         String itemsString = this.getArguments().getString("eventitems", "");
         String roomsString = this.getArguments().getString("rooms", "");
         loadItems(itemsString, roomsString);
 
+        goToFirstItem();
         return view;
     }
 
@@ -81,6 +82,31 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
             Log.d("DEBUG", "mWeekView.notifyDatasetChanged()");
         } catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    private void goToFirstItem(){
+        if(eventItems.length > 0){
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date earliest = sdf.parse(eventItems[0].date + " " + eventItems[0].startTime);
+                for (int i = 1; i < eventItems.length; i++) {
+                    EventItem item = eventItems[i];
+                    Date date = sdf.parse(item.date + " " + item.startTime);
+                    if(date.before(earliest)){
+                        earliest = date;
+                    }
+                }
+                Calendar c = Calendar.getInstance();
+                c.setTime(earliest);
+                mWeekView.goToDate(c);
+                mWeekView.goToHour(earliest.getHours());
+                Log.d("DEBUG", "Go To " + sdf.format(c.getTime()));
+            } catch (Exception e){
+                mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
+            }
+        } else {
+            mWeekView.goToHour(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
         }
     }
 

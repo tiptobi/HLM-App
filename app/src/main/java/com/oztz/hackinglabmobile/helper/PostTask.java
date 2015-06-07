@@ -6,10 +6,10 @@ import android.os.AsyncTask;
  * Created by Tobi on 25.03.2015.
  */
 public class PostTask extends AsyncTask<String, String, String> {
-    private JsonResult listener;
+    private HttpResult listener;
     String result;
 
-    public PostTask(JsonResult listener){
+    public PostTask(HttpResult listener){
         this.listener = listener;
     }
 
@@ -17,9 +17,9 @@ public class PostTask extends AsyncTask<String, String, String> {
     protected String doInBackground(String... uri) {
         try {
             if(uri.length == 2) {
-                result = new JsonHelper().doPost(uri[0], uri[1]); //URL & JSONData
+                result = new HttpHelper().doPost(uri[0], uri[1]); //URL & JSONData
             } else if(uri.length == 3){
-                result = new JsonHelper().doPost(uri[0], uri[1], uri[2]); // Contains QR-Code
+                result = new HttpHelper().doPost(uri[0], uri[1], uri[2]); // Contains QR-Code
             }
         } catch (Exception e){
             result = null;

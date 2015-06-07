@@ -24,7 +24,7 @@ import com.oztz.hackinglabmobile.businessclasses.Slider;
 import com.oztz.hackinglabmobile.businessclasses.Vote;
 import com.oztz.hackinglabmobile.businessclasses.Voting;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.PostTask;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
@@ -35,7 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class VotingDetailActivity extends ActionBarActivity implements JsonResult {
+public class VotingDetailActivity extends ActionBarActivity implements HttpResult {
 
     Voting voting;
     String serverTime, qrCode;

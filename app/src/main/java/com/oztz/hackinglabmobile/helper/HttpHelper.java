@@ -53,7 +53,7 @@ import javax.net.ssl.TrustManagerFactory;
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class JsonHelper {
+public class HttpHelper {
 
     /*public void getWebsite(String url){
         new RequestTask().execute(url);

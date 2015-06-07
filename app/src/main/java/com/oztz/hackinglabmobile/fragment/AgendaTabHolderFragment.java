@@ -17,7 +17,7 @@ import com.oztz.hackinglabmobile.R;
 import com.oztz.hackinglabmobile.businessclasses.EventItem;
 import com.oztz.hackinglabmobile.businessclasses.EventRoom;
 import com.oztz.hackinglabmobile.helper.App;
-import com.oztz.hackinglabmobile.helper.JsonResult;
+import com.oztz.hackinglabmobile.helper.HttpResult;
 import com.oztz.hackinglabmobile.helper.RequestTask;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by Tobi on 20.03.2015.
  */
-public class AgendaTabHolderFragment extends Fragment implements JsonResult {
+public class AgendaTabHolderFragment extends Fragment implements HttpResult {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final int[] roomColors = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.CYAN};
@@ -61,8 +61,6 @@ public class AgendaTabHolderFragment extends Fragment implements JsonResult {
         new RequestTask(this).execute(urlRooms, "eventRooms");
         new RequestTask(this).execute(urlItems, "eventItems");
 
-        mTabHost.addTab(mTabHost.newTabSpec("Tab0").setIndicator("Agenda"),
-                AgendaFragment.class, new Bundle());
         return mTabHost;
     }
 

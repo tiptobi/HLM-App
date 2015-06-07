@@ -7,11 +7,11 @@ import android.util.Log;
  * Created by Tobi on 25.03.2015.
  */
 public class RequestTask extends AsyncTask<String, String, String> {
-    private JsonResult listener;
+    private HttpResult listener;
     String result;
     String requestCode;
 
-    public RequestTask(JsonResult listener){
+    public RequestTask(HttpResult listener){
         this.listener = listener;
     }
 
@@ -22,7 +22,7 @@ public class RequestTask extends AsyncTask<String, String, String> {
         }
         try {
             Log.d("DEBUG", "Read " + uri[0]);
-            result = new JsonHelper().readUrl(uri[0]);
+            result = new HttpHelper().readUrl(uri[0]);
         } catch (Exception e){
             result = null;
         }
