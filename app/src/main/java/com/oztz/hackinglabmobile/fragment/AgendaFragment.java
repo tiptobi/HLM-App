@@ -86,7 +86,7 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
     }
 
     private void goToFirstItem(){
-        if(eventItems.length > 0){
+        if(eventItems != null && eventItems.length > 0){
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date earliest = sdf.parse(eventItems[0].date + " " + eventItems[0].startTime);

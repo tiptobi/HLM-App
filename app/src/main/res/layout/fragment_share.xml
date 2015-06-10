@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/share_img_thumbnail"
-        android:maxHeight="100dp"
+        android:maxHeight="150dp"
         android:scaleType="fitCenter"
         android:adjustViewBounds="true" />
 
@@ -22,7 +22,8 @@
         android:gravity="top"
         android:layout_weight="1"
         android:maxHeight="100dp"
-        android:hint="@string/editText_post_hint" />
+        android:hint="@string/editText_post_hint"
+        android:maxLength="140" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -44,6 +45,15 @@
             android:id="@+id/share_button_album"
             android:padding="30dp"
             android:background="@drawable/icon_folder" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0/140"
+            android:id="@+id/share_text_counter"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp" />
 
         <LinearLayout
             android:orientation="horizontal"

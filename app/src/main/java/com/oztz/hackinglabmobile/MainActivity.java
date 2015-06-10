@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity implements
                 .findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         getFragmentFromIntent();
