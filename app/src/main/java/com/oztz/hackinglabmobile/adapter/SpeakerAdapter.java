@@ -2,6 +2,7 @@ package com.oztz.hackinglabmobile.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class SpeakerAdapter extends ArrayAdapter {
         TextView name;
         ImageView flag;
         ImageView speakerImage;
+        int position;
     }
 
     @Override
@@ -50,34 +52,31 @@ public class SpeakerAdapter extends ArrayAdapter {
         View v;
         Speaker item = (Speaker)getItem(position);
 
-        if(convertView == null){
-            LayoutInflater inflater = LayoutInflater.from(context);
-            v = inflater.inflate(R.layout.item_speaker, null);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        v = inflater.inflate(R.layout.item_speaker, null);
+        holder.position = position;
+        holder.flag = (ImageView) v.findViewById(R.id.speaker_flag);
+        holder.flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
+                + item.nationality.toLowerCase()));
 
-            holder.flag = (ImageView) v.findViewById(R.id.speaker_flag);
-            holder.flag.setImageURI(Uri.parse("android.resource://com.oztz.hackinglabmobile/drawable/flag_"
-                    + item.nationality.toLowerCase()));
-
-            holder.name = (TextView) v.findViewById(R.id.speaker_name);
-            if(item.title != null){
-                holder.name.setText(item.title + " " + item.name);
-            } else {
-                holder.name.setText(item.name);
-            }
-
-            holder.speakerImage = (ImageView) v.findViewById(R.id.speaker_portrait);
-            if(item.media != null && item.media.length() > 0){
-                imageLoader.displayImage(item.media, holder.speakerImage);
-            }
-            else{
-                holder.speakerImage.setImageResource(R.drawable.speaker_icon);
-            }
-
-            v.setTag(holder);
+        holder.name = (TextView) v.findViewById(R.id.speaker_name);
+        if(item.title != null){
+            holder.name.setText(item.title + " " + item.name);
+        } else {
+            holder.name.setText(item.name);
         }
-        else {
-            v = convertView;
+
+        Log.d("DEBUG", "Add " + item.name);
+
+        holder.speakerImage = (ImageView) v.findViewById(R.id.speaker_portrait);
+        if(item.media != null && item.media.length() > 0){
+            imageLoader.displayImage(item.media, holder.speakerImage);
         }
+        else{
+            holder.speakerImage.setImageResource(R.drawable.speaker_icon);
+        }
+
+        v.setTag(holder);
         return v;
     }
 }
