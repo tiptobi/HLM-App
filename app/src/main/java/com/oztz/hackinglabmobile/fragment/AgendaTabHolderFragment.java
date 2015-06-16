@@ -105,9 +105,6 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
             try {
                 EventRoom[] rooms = new Gson().fromJson(roomsString, EventRoom[].class);
                 EventItem[] items = new Gson().fromJson(itemsString, EventItem[].class);
-                for (int i = 0; i < rooms.length; i++) {
-                    rooms[i].color = roomColors[i%roomColors.length];
-                }
                 mTabHost.clearAllTabs();
                 //Load Overview
                 Bundle overviewArgs = new Bundle();

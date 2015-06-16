@@ -1,6 +1,7 @@
 package com.oztz.hackinglabmobile.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -136,7 +137,7 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
         return events;
     }
 
-    private int getColor(int roomID){
+    private String getColor(int roomID){
         for(int i=0; i< eventRooms.length; i++){
             if(roomID == eventRooms[i].eventRoomID){
                 return eventRooms[i].color;
@@ -170,7 +171,7 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
             startTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.startTime));
             endTime.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(item.date + " " + item.endTime));
             WeekViewEvent event = new WeekViewEvent(item.eventItemID, item.name, startTime, endTime);
-            event.setColor(getColor(item.roomIDFK));
+            event.setColor(Color.parseColor(getColor(item.roomIDFK)));
             return event;
         } catch(Exception e){
             Toast.makeText(getActivity(), "Error Parsing Dates", Toast.LENGTH_SHORT).show();

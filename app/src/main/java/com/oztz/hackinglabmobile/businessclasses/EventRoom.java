@@ -7,6 +7,6 @@ public class EventRoom {
     public int eventIDFK;
     public int eventRoomID;
     public String location;
+    public String color;
     public String name;
-    public int color;
 }
