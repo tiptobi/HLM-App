@@ -3,6 +3,7 @@ package com.oztz.hackinglabmobile.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +63,7 @@ public class SocialAdapter extends ArrayAdapter {
                 holder.name = (TextView) v.findViewById(R.id.social_title);
                 holder.shareText = (TextView) v.findViewById(R.id.social_text);
                 imageLoader.displayImage(item.media, holder.shareImage);
+                Log.d("DEBUG", "(1)"+ imageLoader.getLoadingUriForView(holder.shareImage));
                 holder.shareImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

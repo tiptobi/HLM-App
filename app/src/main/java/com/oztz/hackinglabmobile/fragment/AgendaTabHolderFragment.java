@@ -131,6 +131,12 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
             } catch(Exception e){
                 Toast.makeText(getActivity().getApplicationContext(), "Error Getting Data", Toast.LENGTH_SHORT);
             }
+        } else {
+            mTabHost.clearAllTabs();
+            //Load Overview
+            Bundle overviewArgs = new Bundle();
+            mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
+                    AgendaFragment.class, overviewArgs);
         }
     }
 }

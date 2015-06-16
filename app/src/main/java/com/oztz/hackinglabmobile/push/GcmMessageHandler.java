@@ -54,15 +54,15 @@ public class GcmMessageHandler extends IntentService implements HttpResult {
         message = extras.getString("message");
         try{
             pm = new Gson().fromJson(message, PushMessage.class);
+            if(title.equals("voting") && pm != null && App.username != null){
+                new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting/" +
+                    String.valueOf(pm.votingID), "voting");
+            } else if(title.equals("presentation_end")){
+                //do nothing at the moment...
+            } else {
+                doNormalPushNotification(title, message);
+            }
         } catch(Exception e){ }
-        if(title.equals("voting") && pm != null && App.username != null){
-            new RequestTask(this).execute(getResources().getString(R.string.rootURL) + "voting/" +
-                String.valueOf(pm.votingID), "voting");
-        } else if(title.equals("presentation_end")){
-            //do nothing at the moment...
-        } else {
-            doNormalPushNotification(title, message);
-        }
     }
 
     private void doVotingNotification(String voting){

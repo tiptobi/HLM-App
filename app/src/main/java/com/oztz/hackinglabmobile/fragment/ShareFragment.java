@@ -1,15 +1,19 @@
 package com.oztz.hackinglabmobile.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,7 +40,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Tobi on 20.03.2015.
@@ -49,11 +53,13 @@ public class ShareFragment extends Fragment implements HttpResult {
     private EditText postEditText;
     private ImageButton cameraButton, galleryButton;
     private Button shareButton;
+    private TextView counter;
     private ImageView thumbnail;
     private String mediaUri;
     private String socialPost;
     private boolean imageUploaded = false;
     private String qrCode;
+    ProgressDialog sending;
 
     public static ShareFragment newInstance(int sectionNumber) {
         Log.d("DEBUG", "PlaceholderFragment.newInstance(" + String.valueOf(sectionNumber) + ")");
@@ -74,7 +80,24 @@ public class ShareFragment extends Fragment implements HttpResult {
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_share, container, false);
+        counter = (TextView) view.findViewById(R.id.share_text_counter);
         postEditText = (EditText) view.findViewById(R.id.social_post_editText);
+        postEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                counter.setText(String.valueOf(s.length()) + "/140");
+            }
+        });
         thumbnail = (ImageView) view.findViewById(R.id.share_img_thumbnail);
         shareButton = (Button) view.findViewById(R.id.share_button_share);
         shareButton.setOnClickListener(new View.OnClickListener() {
@@ -109,26 +132,28 @@ public class ShareFragment extends Fragment implements HttpResult {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            //mediaUri = getRealPathFromURI(data.getData());
-            /*Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");*/
-            thumbnail.setImageURI(Uri.parse(mediaUri));
+            thumbnail.setImageBitmap(getCompressedImage(mediaUri));
         }
-        else if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
-            mediaUri = getRealPathFromURI(data.getData());
-            Uri contentUri = Uri.parse(data.getDataString());
-            List<String> parts = contentUri.getPathSegments();
-            long id = Long.parseLong(parts.get(parts.size() - 1));
-
-            // get a thumbnail for the image
-            Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(
-                    getActivity().getContentResolver(),
-                    id,
-                    MediaStore.Images.Thumbnails.MINI_KIND,
-                    null
-            );
-            thumbnail.setImageBitmap(bitmap);
+        else if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK &&
+                data != null)
+        {
+            try {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor c = getActivity().getContentResolver().query(selectedImage, filePathColumn,
+                        null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePathColumn[0]);
+                mediaUri = c.getString(columnIndex);
+                c.close();
+                thumbnail.setImageBitmap(BitmapFactory.decodeFile(mediaUri));
+            } catch (Exception e){
+                Toast.makeText(getActivity().getApplicationContext(), "Couldn't load image",
+                        Toast.LENGTH_SHORT).show();
+                Log.d("DEBUG", e.getMessage());
+            }
         }
     }
 
@@ -148,8 +173,29 @@ public class ShareFragment extends Fragment implements HttpResult {
         return image;
     }
 
+    private Bitmap getCompressedImage(String mediaPath){
+        File file = new File(mediaPath);
+        Bitmap source = BitmapFactory.decodeFile(mediaPath);
+
+        double sourceWidth = source.getWidth();
+        double sourceHeight = source.getHeight();
+        if(sourceWidth > 1000 || sourceHeight > 1000){
+            double max = Math.max(sourceWidth, sourceHeight);
+            double scaleFactor = 1000 / max;
+            int scaledWidth = (int)(sourceWidth * scaleFactor);
+            int scaledHeight = (int)(sourceHeight * scaleFactor);
+            source = Bitmap.createScaledBitmap(source, scaledWidth, scaledHeight, true);
+        }
+        return source;
+    }
+
 
     private void share(){
+        try {
+            sending = ProgressDialog.show(getActivity(), "Sharing", "Sending your post...", true, true);
+        } catch (Exception e){
+            Log.d("DEBUG", e.getMessage());
+        }
         DbOperator operator = new DbOperator(getActivity().getApplicationContext());
         qrCode = operator.getQrCode("author", App.eventId);
         socialPost = postEditText.getText().toString();
@@ -165,13 +211,6 @@ public class ShareFragment extends Fragment implements HttpResult {
                 }
             }
         }
-    }
-
-    private String getRealPathFromURI(Uri uri){
-        Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
-        cursor.moveToFirst();
-        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-        return cursor.getString(idx);
     }
 
     private void TakePictureIntent() {
@@ -224,6 +263,9 @@ public class ShareFragment extends Fragment implements HttpResult {
                 Log.d("DEBUG", e.getMessage());
             }
         } else if(requestCode.equals("POST")){
+            if(sending != null && sending.isShowing()) {
+                sending.dismiss();
+            }
             if(JsonString == null){
                 Toast.makeText(App.getContext(), getResources().getString(R.string.error_share_failed), Toast.LENGTH_LONG).show();
             } else {
