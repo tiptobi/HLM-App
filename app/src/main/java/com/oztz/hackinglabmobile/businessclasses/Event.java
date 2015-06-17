@@ -8,6 +8,8 @@ public class Event {
     public int eventID;
     public String name;
     public String description;
+    public String media;
+    public int mediaIDFK;
     public String startDate;
     public String endDate;
 }

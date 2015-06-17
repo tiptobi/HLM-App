@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,16 +9,36 @@
     tools:context="com.oztz.hackinglabmobile.fragment.ConferenceFragment"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/ArticleTitle"
-        android:text=""
-        android:id="@+id/conference_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/conference_text" />
-</LinearLayout>
+            style="@style/ArticleTitle"
+            android:text=""
+            android:id="@+id/conference_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/conference_text" />
+
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".07"
+            android:id="@+id/event_picture"
+            android:src="@drawable/empty"
+            android:layout_marginRight="15dp" />
+
+    </LinearLayout>
+
+</ScrollView>
