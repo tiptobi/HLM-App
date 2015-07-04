@@ -57,6 +57,7 @@ public class ChooseEventActivity extends Activity implements HttpResult {
         if(loading != null && loading.isShowing()) {
             loading.dismiss();
         }
+        eventsHolder.removeAllViews();
         eventsHolder.setVisibility(View.VISIBLE);
         for(int i=0; i<events.size(); i++) {
             final int index = i;

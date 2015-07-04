@@ -110,7 +110,7 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
                 Bundle overviewArgs = new Bundle();
                 overviewArgs.putString("eventitems", itemsString);
                 overviewArgs.putString("rooms", new Gson().toJson(rooms));
-                mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
+                mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("All"),
                         AgendaFragment.class, overviewArgs);
 
                 //Load room Views if there is more than one room
@@ -132,7 +132,7 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
             mTabHost.clearAllTabs();
             //Load Overview
             Bundle overviewArgs = new Bundle();
-            mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("Overview"),
+            mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("All"),
                     AgendaFragment.class, overviewArgs);
         }
     }
