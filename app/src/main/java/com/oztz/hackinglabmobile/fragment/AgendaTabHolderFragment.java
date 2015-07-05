@@ -52,12 +52,17 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
         String urlItems = getResources().getString(R.string.rootURL) + "event/" +
                 String.valueOf(App.eventId) + "/eventitems";
 
+
+        Log.d("DEBUG", "Load Cached Content...");
         //Load Cached content
         String roomsJsonCached = App.db.getContentFromDataBase(urlRooms);
         String itemsJsonCached = App.db.getContentFromDataBase(urlItems);
-        updateView(roomsJsonCached, itemsJsonCached);
+        updateView(roomsJsonCached, itemsJsonCached, "cache");
+
+        Log.d("DEBUG", "Loaded Cached Content!");
 
         //Load online content
+        Log.d("DEBUG", "Load Online Content...");
         new RequestTask(this).execute(urlRooms, "eventRooms");
         new RequestTask(this).execute(urlItems, "eventItems");
 
@@ -86,7 +91,7 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
             itemsJson = JsonString;
         }
         if(roomsJson != null && itemsJson != null){
-            updateView(roomsJson, itemsJson);
+            updateView(roomsJson, itemsJson, "online");
         }
     }
 
@@ -100,17 +105,18 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
         return list.toArray(new EventItem[list.size()]);
     }
 
-    private void updateView(String roomsString, String itemsString){
+    private void updateView(String roomsString, String itemsString, String source){
         if(roomsString != null && itemsString != null){
             try {
                 EventRoom[] rooms = new Gson().fromJson(roomsString, EventRoom[].class);
                 EventItem[] items = new Gson().fromJson(itemsString, EventItem[].class);
                 mTabHost.clearAllTabs();
+                mTabHost.invalidate();
                 //Load Overview
                 Bundle overviewArgs = new Bundle();
                 overviewArgs.putString("eventitems", itemsString);
                 overviewArgs.putString("rooms", new Gson().toJson(rooms));
-                mTabHost.addTab(mTabHost.newTabSpec("Tab1").setIndicator("All"),
+                mTabHost.addTab(mTabHost.newTabSpec("Tab1_" + source).setIndicator("All"),
                         AgendaFragment.class, overviewArgs);
 
                 //Load room Views if there is more than one room
@@ -121,7 +127,7 @@ public class AgendaTabHolderFragment extends Fragment implements HttpResult {
                         Bundle args = new Bundle();
                         args.putString("eventitems", jsonItems);
                         args.putString("rooms", new Gson().toJson(rooms));
-                        mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i+2)).setIndicator(rooms[i].name),
+                        mTabHost.addTab(mTabHost.newTabSpec("Tab" + String.valueOf(i+2) + "_" + source).setIndicator(rooms[i].name),
                                 AgendaFragment.class, args);
                     }
                 }

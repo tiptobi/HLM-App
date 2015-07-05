@@ -65,17 +65,12 @@ public class AgendaFragment extends Fragment implements WeekView.MonthChangeList
     public void loadItems(String itemsString, String roomsString) {
         try {
             eventItems = new Gson().fromJson(itemsString, EventItem[].class);
-            /*Arrays.sort(eventItems, new Comparator<EventItem>() {
-                @Override
-                public int compare(EventItem lhs, EventItem rhs) {
-                    return lhs.roomIDFK - rhs.roomIDFK;
-                }
-            });*/
             eventRooms = new Gson().fromJson(roomsString, EventRoom[].class);
             eventList.clear();
             for(int i=0;i<eventItems.length;i++){
                 WeekViewEvent e = getEvent(eventItems[i]);
                 eventList.add(e);
+                Log.d("DEBUG", e.getName() + " added");
             }
             mWeekView.notifyDatasetChanged();
             Log.d("DEBUG", "mWeekView.notifyDatasetChanged()");
